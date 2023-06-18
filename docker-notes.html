@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Docker-Notes"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Docker Notes Docker container is a running instance of Docker image. Commands $docker images For example, it shows available images in the local..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/docker-notes.html" rel="bookmark"
+           title="Permalink to "Docker-Notes"">"Docker-Notes"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-09-18T00:00:00+00:00">
+                Published: Sat 18 September 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Docker Notes</h1>
+<p>Docker container is a running instance of Docker image.</p>
+<h2>Commands</h2>
+<p><code>$docker images</code> For example, it shows available images in the local repo<br>
+<code>docker search &lt;SEARCH_STRING&gt;</code> For example <code>docker search ubuntu</code><br>
+<code>docker pull &lt;IMAGE&gt;</code> For example <code>docker pull ubuntu:latest</code><br>
+<code>docker run -i -t ubuntu</code> To run the image, <code>-i</code> for interactive, <code>-t</code> to attach to the terminal and then the image name or by image id.</p>
+<p><code>docker ps</code> list currently running docker processes<br>
+<code>docker ps -a</code> list docker processes that are running or not</p>
+<p>To rename the docker container, you can use <code>docker rename &lt;DOCKER_NAME&gt; &lt;NEW_NAME&gt;</code> . <code>&lt;DOCKER_NAME&gt;</code> can be obtained from output of <code>docker ps -a</code> command.</p>
+<p>If you run <code>docker run &lt;IMAGE_NAME&gt;</code> again, it will not start the container but create a new instance of the image, so you use <code>docker start &lt;CONTAINER_NAME&gt;</code>.</p>
+<p>To remove a lot of containers, use <code>docker rm $(docker ps -aq)</code></p>
+<p>To remove docker images, use <code>docker rmi &lt;IMAGE_ID/IMAGE_NAME&gt;</code></p>
+<p>To remove all images, use <code>docker rmi $(docker images -q)</code></p>
+<h3>Dockerfile</h3>
+<p><code>docker build Dockerfile</code> or <code>docker build -f &lt;PATH_OF_DOCKERFILE&gt;</code> to build custom docker image.<br>
+<code>docker build -t &lt;DOCKERFILE&gt;</code> , to elevate to sudo before <code>docker build</code>.<br>
+To run the newly built custom docker image, run <code>docker run -p 80:80 -i -t &lt;NAME_OF_CUSTOM_IMAGE&gt;</code></p>
+<p>Example of a Dockerfile</p>
+<div class="highlight"><pre><span></span><code># Add the hello world file and execute upon container launch
+
+FROM ubuntu:latest
+MAINTAINER vgnshlvnz
+RUN apt-get update
+RUN apt-get install python3 python3-pip
+RUN pip install --upgrade pip
+ADD hello.py /home/hello.py
+WORKDIR /home
+CMD python3 hello.py
+</code></pre></div>
+
+<h3>Example Web Server</h3>
+<p>create a docker file with following content:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">#Example of a webserver running Apache serving simple html file  </span>
+
+<span class="n">FROM</span><span class="w"> </span><span class="n">ubuntu</span><span class="p">:</span><span class="n">latest</span><span class="w">  </span>
+<span class="n">MAINTAINER</span><span class="w"> </span><span class="n">vgnshlvnz</span><span class="w">  </span>
+<span class="n">ENV</span><span class="w"> </span><span class="n">DEBIAN_FRONTEND</span><span class="o">=</span><span class="n">noninteractive</span><span class="w">  </span>
+<span class="n">ENV</span><span class="w"> </span><span class="n">APACHE_LYNX</span><span class="o">=</span><span class="n">lynx</span><span class="w">  </span>
+<span class="n">RUN</span><span class="w"> </span><span class="n">apt</span><span class="o">-</span><span class="n">get</span><span class="w"> </span><span class="n">update</span><span class="w">  </span>
+<span class="n">RUN</span><span class="w"> </span><span class="n">apt</span><span class="o">-</span><span class="n">get</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="o">-</span><span class="n">y</span><span class="w"> </span><span class="n">apache2</span><span class="w"> </span><span class="n">apache2</span><span class="o">-</span><span class="n">utils</span><span class="w"> </span><span class="n">php</span><span class="w"> </span><span class="n">libapache2</span><span class="o">-</span><span class="n">mod</span><span class="o">-</span><span class="n">php</span><span class="w"> </span><span class="n">lynx</span><span class="w">  </span>
+<span class="n">RUN</span><span class="w"> </span><span class="n">a2enmod</span><span class="w"> </span><span class="n">php7</span><span class="o">.</span><span class="mi">4</span><span class="w">  </span>
+<span class="n">RUN</span><span class="w"> </span><span class="n">ln</span><span class="w"> </span><span class="o">-</span><span class="n">fs</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">zoneinfo</span><span class="o">/</span><span class="n">Asia</span><span class="o">/</span><span class="n">Kuala_Lumpur</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">localtime</span><span class="w">  </span>
+<span class="n">RUN</span><span class="w"> </span><span class="n">dpkg</span><span class="o">-</span><span class="n">reconfigure</span><span class="w"> </span><span class="o">--</span><span class="n">frontend</span><span class="w"> </span><span class="n">noninteractive</span><span class="w"> </span><span class="n">tzdata</span><span class="w">  </span>
+<span class="n">ENV</span><span class="w"> </span><span class="n">APACHE_LOG_DIR</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">apache2</span><span class="w">  </span>
+<span class="n">COPY</span><span class="w"> </span><span class="n">index</span><span class="o">.</span><span class="n">html</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="w">  </span>
+<span class="n">EXPOSE</span><span class="w"> </span><span class="mi">80</span><span class="w">  </span>
+<span class="n">CMD</span><span class="w"> </span><span class="n">apachectl</span><span class="w"> </span><span class="o">-</span><span class="n">D</span><span class="w"> </span><span class="n">FOREGROUND</span>
+</code></pre></div>
+
+<p>create a file called index.html in the same directory and put simple html content.</p>
+<p>now run <code>docker build -t &lt;IMAGE_NAME&gt; .</code>. You can also specify <code>-f</code> parameter and pass the location of your docker file if it is in a different location.</p>
+<h3>Docker Swarm</h3>
+<p>to have a working docker swarm you will need least 2 or 3 virtual machines.</p>
+<p>one the first virtual machine type <code>docker swarm init --advertise-addr=&lt;IP_ADDR_OF_HOST&gt;</code>. first virtual machine will become manager node<br>
+will give you output to add worker to the swarm, something like following <code>docker swarm join --token &lt;TOKEN_STRING&gt; &lt;IP_ADDR_OF_MANAGER_NODE&gt;:2377</code>. Paste the string in second and third virtual machine.</p>
+<p>on the master node, type <code>docker node ls</code> and you should see 3 nodes with one node as leader and the rest as worker nodes.</p>
+<p>To create a service, type following command in your manager node: <code>docker service create --replicas 2 -p 80:80 --name &lt;NAME_OF_SERVICE&gt; nginx</code> . What this command will do is it will create 2 replicas, expose port 80 to host port 80 based on <code>nginx</code> image.</p>
+<p>Type <code>docker service ls</code> again to see newly created Docker service.</p>
+<p>To see the processes related to newly created service, type <code>docker service ps &lt;NAME_OF_SERVICE&gt;</code></p>
+<h3>Docker Registry</h3>
+<p><code>docker pull registry</code> it will be part of a image</p>
+<p><code>docker run -d -p 5000:5000 --name &lt;NAME_OF_CONTAINER&gt; registry</code> this will start a container with port 5000 exposed</p>
+<p><code>docker pull busybox:latest</code> will pull latest busybox image</p>
+<p>run <code>docker images</code> to see the newly downloaded image</p>
+<p><code>docker tag busybox:latest &lt;IP_ADDR_OF_HOST&gt;:5000/busybox:latest</code> to push the image to local repository</p>
+<p>to scale your node, run following command <code>docker service scale &lt;NAME_OF_SERVICE&gt;=3</code></p>
+<p>To verify, type <code>docker service ps web</code> you should see 3 nodes set up.</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

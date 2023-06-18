@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Quickstart - gcloud compute"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Install Google Cloud SDK from [here]. Make sure following are selected: Start Google Cloud SDK Shell Run 'gcloud init' Initialize the SDK Use the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/quickstart-gcloud-compute.html" rel="bookmark"
+           title="Permalink to "Quickstart - gcloud compute"">"Quickstart - gcloud compute"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Install Google Cloud SDK from <em><a href="https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe">[here]</a>.</em></p>
+<p>Make sure following are selected:</p>
+<ul>
+<li><strong>Start Google Cloud SDK Shell</strong></li>
+<li><strong>Run 'gcloud init'</strong></li>
+</ul>
+<p>Initialize the SDK</p>
+<p>Use the <code>gcloud init</code> command to perform several common SDK setup tasks. These include authorizing the SDK tools to access Google Cloud Platform using your user account credentials and setting up the default SDK configuration.</p>
+<p>To initialize the SDK:</p>
+<ol>
+<li>
+<p>Run the following at a command prompt:</p>
+<p><code>gcloud init</code></p>
+</li>
+<li>
+<p>Accept the option to log in using your Google user account:</p>
+<p>To continue, you must log in. Would you like to log in (Y/n)? Y</p>
+</li>
+<li>
+<p>In your browser, log in to your Google user account when prompted and click <strong>Allow</strong> to grant permission to access Google Cloud Platform resources.</p>
+</li>
+<li>
+<p>At the command prompt, select a Cloud Platform project from the list of those where you have <strong>Owner</strong>, <strong>Editor</strong> or <strong>Viewer</strong> permissions:</p>
+<p>Pick cloud project to use:
+ [1] [my-project-1]
+ [2] [my-project-2]
+ ...
+ Please enter your numeric choice:</p>
+<p>If you only have one project, <code>gcloud init</code> selects it for you.
+5. If you have the Google Compute Engine API enabled, <code>gcloud init</code> allows you to choose a default Compute Engine zone:</p>
+</li>
+</ol>
+<p>Which compute zone would you like to use as project default?
+ [1] [asia-east1-a]
+ [2] [asia-east1-b]
+ ...
+ [14] Do not use default zone
+ Please enter your numeric choice</p>
+<p><code>gcloud init</code> confirms that you have complete the setup steps successfully:</p>
+<p><code>gcloud init</code> confirms that you have complete the setup steps successfully:</p>
+<p>Your active configuration is: [default]</p>
+<h2>Run core gcloud commands</h2>
+<p>Run these <code>gcloud</code> commands to view information about your SDK installation:</p>
+<ol>
+<li>
+<p>To list accounts whose credentials are stored on the local system:</p>
+<p><code>gcloud auth list</code></p>
+<p><code>gcloud</code> displays a list of credentialed accounts:</p>
+<p>Credentialed accounts:
+ - xxx@gmail.com (active)</p>
+<p>To set the active account, run:
+ $ gcloud config set account `ACCOUNT`</p>
+</li>
+<li>
+<p>To list the properties in your active SDK configuration:</p>
+<p><code>gcloud config list</code></p>
+<p><code>gcloud</code> displays the list of properties:</p>
+<p>Your active configuration is: [default]</p>
+<p>[compute]
+region = asia-east1
+zone = asia-east1-a
+[core]
+account = xxx@gmail.com
+disable_usage_reporting = False
+project = impactful-veld-xxxxxx</p>
+</li>
+<li>
+<p>To view information your Cloud SDK installation and the active SDK configuration:</p>
+<p><code>gcloud info</code></p>
+<p><code>gcloud</code> displays a summary of information about your Cloud SDK installation. This includes information about your system, the installed SDK components, the active user account and current project, and the properties in the active SDK configuration.
+4. To view information about <code>gcloud</code> commands and other topics from the command line:</p>
+<p><code>gcloud help</code></p>
+<p>For example, to view the help for <code>gcloud compute instances create</code>:</p>
+<p><code>gcloud help compute instances create</code></p>
+<p><code>gcloud</code> displays a help topic that contains a description of the command, a list of command flags and arguments, and examples of how to use it.</p>
+</li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

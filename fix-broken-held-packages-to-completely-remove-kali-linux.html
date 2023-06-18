@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Fix broken held packages (to completely remove kali-linux)"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Run gksu gedit /etc/*release Change the file like this (depending on your release): DISTRIB_ID=Ubuntu DISTRIB_RELEASE=16.04..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/fix-broken-held-packages-to-completely-remove-kali-linux.html" rel="bookmark"
+           title="Permalink to "Fix broken held packages (to completely remove kali-linux)"">"Fix broken held packages (to completely remove kali-linux)"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-05-14T00:00:00+00:00">
+                Published: Mon 14 May 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ul>
+<li>
+<p>Run</p>
+<p><code>gksu gedit /etc/*release</code></p>
+<p>Change the file like this (depending on your release):</p>
+<p><code>DISTRIB_ID=Ubuntu  
+DISTRIB_RELEASE=16.04  
+DISTRIB_CODENAME=Xenial Xerus  
+DISTRIB_DESCRIPTION="Ubuntu 16.04"</code></p>
+<p>Save and close the file.
+- Run</p>
+<p><code>gksu gedit /etc/*issue</code></p>
+<p>Change the file like this (depending on your release):</p>
+<p><code>Ubuntu 16.04 \n \l</code></p>
+<p>Save and close the file.
+- <code>sudo apt-get install --reinstall software-center</code></p>
+</li>
+</ul>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

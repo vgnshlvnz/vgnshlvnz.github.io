@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Unetbootin not working, must be run as root"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="if you encounter problem while running Unetbootin, that an error will prompt you to run a piece of code. Run the code in su(sudo should work too),..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/unetbootin-not-working-must-be-run-as-root.html" rel="bookmark"
+           title="Permalink to "Unetbootin not working, must be run as root"">"Unetbootin not working, must be run as root"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-08-31T00:00:00+00:00">
+                Published: Fri 31 August 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>if you encounter problem while running Unetbootin, that an error will prompt you to run a piece of code. Run the code in su(sudo should work too), because it worked for me. This happens when you install Unetbootin from distribution's package. Compiling would work fine?</p>
+<p>dnf install unetbootin</p>
+<p>su -c 'QT_X11_NO_MITSHM=1 /usr/bin/unetbootin'</p>
+<p>OR</p>
+<p>sudo 'QX_X11_NO_MITSHM=1 /usr/bin/unetbootin'</p>
+<p>running:</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

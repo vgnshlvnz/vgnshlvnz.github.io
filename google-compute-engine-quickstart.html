@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Google Compute Engine - Quickstart"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Quickstart with MongoDB Once you have obtained your account with Google Cloud Console, proceed to do the following: [Create an Instance] Name the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/google-compute-engine-quickstart.html" rel="bookmark"
+           title="Permalink to "Google Compute Engine - Quickstart"">"Google Compute Engine - Quickstart"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Quickstart with MongoDB</p>
+<p>Once you have obtained your account with Google Cloud Console, proceed to do the following:</p>
+<p><a href="https://console.cloud.google.com/compute/instances?project=impactful-veld-136223&amp;graph=GCE_CPU&amp;duration=PT1H">[Create an Instance]</a></p>
+<ul>
+<li><em>Name</em> the instance. Name must start with a lowercase letter followed by up to 62 lowercase letters, numbers, or hyphens, and cannot end with a hyphen. In this case, name it <strong>back-end</strong>.</li>
+<li>Select <em>Zone</em> of your choice. it can be any from asia, europe or us.</li>
+<li>Then proceed to select <em>Machine Type.</em> Select <em>f1-micro.</em></li>
+<li>Then select <em>Boot disk</em> image. In this case , select <em>Ubuntu 14.04 LTS.</em> </li>
+<li>Then proceed to <em>Firewall</em> and tick <em>Allow HTTP traffic</em> to allow VMs to interact in between them.</li>
+<li>Finally, click Create VM.</li>
+</ul>
+<p>Create another VM e.g front-end following steps above.</p>
+<p>Once you're done, proceed to ssh into back-end VM you have created earlier.</p>
+<p>Proceed to install and run the back-end database. Enter these commands to install and run MongoDB.</p>
+<ul>
+<li>sudo apt-get update</li>
+<li>sudo apt-get install mongodb</li>
+<li>sudo service mongodb stop # The mongodb service started when you installed it. you would need to stop it.</li>
+<li>sudo mkdir $HOME/db ; sudo mongod --dbpath $HOME/db --port 80 --fork --logpath /var/tmp/mongodb #Create a directory for MongoDB and then run the MongoDB service in the background on port 80.</li>
+</ul>
+<p>Now install and run the web app on your front-end VM.</p>
+<p>Proceed by SSH into the VM.</p>
+<p>Follow steps below to install and run the app.</p>
+<ul>
+<li>sudo apt-get update</li>
+<li>sudo apt-get install git nodejs npm</li>
+<li>git clone https://github.com/GoogleCloudPlatform/todomvc-mongodb.git #Clone the sample application and install application dependencies.</li>
+<li>cd todomvc-mongodb; npm install</li>
+<li>nohup nodejs server.js --be_ip 10.128.0.2 --fe_ip 10.140.0.2 &amp; #Start the todo web application. Note: The IP addresses below are internal IPs for communication between servers. You can find these IP addresses on each server’s details page.</li>
+</ul>
+<p>Proceed to open the app in new browser window:</p>
+<p>http://<FRON\95END\95VM>:8080</p>
+<p>You will find your new app running.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

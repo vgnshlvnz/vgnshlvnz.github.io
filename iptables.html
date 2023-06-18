@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"iptables"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="- "blog-posts" iptables for GNU/Linux client machine Note: This article is written for fully patched Ubuntu 18.04 LTS GNU/Linux machine running..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/iptables.html" rel="bookmark"
+           title="Permalink to "iptables"">"iptables"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h2>- "blog-posts"</h2>
+<h1><code>iptables</code> for GNU/Linux client machine</h1>
+<p><strong>Note:</strong> This article is written for fully patched <code>Ubuntu 18.04 LTS GNU/Linux</code> machine running latest kernel. The ruleset that comes with this article should work with other <code>GNU/Linux</code> derivatives.</p>
+<p>This article assumes reader has some knowledge in Firewalls and it’s concepts, OSI Model, TCP/IP stack, and network related tools such as Wireshark and tcpdump.</p>
+<h2><code>iptables</code> Introduction</h2>
+<p>The <code>iptables</code> firewall was developed by the Netfilter Project<a href="#fn1">1</a> and has been available to the masses as part of GNU/Linux since the release of the Linux 2.4 kernel in January 2001. Over the years, <code>iptables</code> has evolved into a formidable firewall with functionalities typically found in proprietary commercial firewalls. <code>iptables</code> provide comprehensive protocol state tracking, packet application layer inspection, rate limiting, and powerful mechanism to specify a filtering policy(Rash, M., 2007).</p>
+<p>For more information on <code>iptables</code>, read page 10 in Linux Firewalls by No Starch Press.</p>
+<h2>Packet Filtering with <code>iptables</code></h2>
+<p><code>iptables</code> can be a a powerful tool if understood well. A powerful policy can be implemented within <code>iptables</code> and not a single packet will be left checked unless a targeted attack happens to your machine/server.</p>
+<p>An <code>iptables</code> policy is built from ordered set of <code>rules</code>, which tells the kernel what to do with the packet. Each <code>iptables</code> rule is then applied to a <code>chain</code> within a <code>table</code>. An <code>iptables</code> <code>chain</code> is a collection of <code>rules</code> that are compared(Rash, M., 2007).</p>
+<h3>Tables</h3>
+<p>A <code>table</code> is an <code>iptables</code> construct that outline broad categories of functionality, such as packet filtering or NAT (Network Address Translation). There are 4 tables: <code>filter</code>,<code>nat</code>,<code>mangle</code> and <code>raw</code>. Filtering rules are applied to the <code>filter</code> table, NAT rules are applied to the <code>nat</code> table, special rules that alter packet data are applied to <code>mangle</code> table and rules that are independent of the Netfilter connection-tracking subsystem are applied to the <code>raw</code> table(Rash, M., 2007).</p>
+<h3>Chains</h3>
+<p>Each table has its own set of built-in chains, and user-defined chains can also be added. This can be expended with common tags such as DMZ_NETWORK. The most important built-in chains are the <code>INPUT</code>, <code>OUTPUT</code> and <code>FORWARD</code> chains.</p>
+<ul>
+<li><code>INPUT</code> chain is crossed by packets that are destined for the local Linux System.</li>
+<li><code>OUTPUT</code> chain is reserved for packets that goes out of the Linux system.</li>
+<li><code>FORWARD</code> chain determine packets that are routed through the Linux system. For example, when the <code>iptables</code> firewall is used to connect one network to another and packets between the two networks must flow through the firewall.</li>
+</ul>
+<p>There are two additional chains that are important for any <strong>serious</strong> <code>iptables</code> deployment. They are <code>PREROUTING</code> &amp; <code>POSTROUTING</code>, found in <code>nat</code> table, which used to modify packet headers before and after IP routing calculation is made within the kernel.</p>
+<p>Image below illustrates how a packet passes through the <code>nat</code> and <code>filter</code> tables within the kernel.</p>
+<p><img alt="Alt" src="iptables-packet-flow.png"></p>
+<h3>Matches</h3>
+<p>Every <code>iptables</code> rule has a set of matches along with a <em>target</em> that tells <code>iptables</code> what to do with the packet that obey to the rule. An <code>iptables</code> <em>match</em> is a condition that must be met by any packet in order for <code>iptables</code> to process the packet according to the step specified by the rule target. For example, to apply a rule only to TCP packets, you can use the <code>--protocol</code> match. Each match is specified on the <code>iptables</code> command line. The most important <code>iptables</code> matches are listed below. For more <code>matches</code>, refer to the <code>man</code> page or read <em>Linux Firewalls</em> by Michael Rash.</p>
+<ul>
+<li><code>--source (-s)</code> - Match on a source IP Address or network</li>
+<li>`–destination (-d) - Match on a destination IP Address or network</li>
+<li><code>--protocol (-p)</code> - Match on an IP protocol such as TCP or UDP</li>
+<li><code>--in-interface (-i)</code> - Input interface</li>
+<li><code>--out-interface (-o)</code> - Output interface</li>
+<li><code>--state</code> - Match on a set of connection states</li>
+</ul>
+<h3>Targets</h3>
+<p>Finally, <code>iptables</code> takes care of a set of targets that trigger an action when a packet matches a rule. The most important targets are as follows:</p>
+<ul>
+<li><code>ACCEPT</code> - Allows a packet to continue on its way</li>
+<li><code>DROP</code> - Drops a packet</li>
+<li><code>LOG</code> - Logs a packet to <code>syslog</code></li>
+<li><code>REJECT</code> - Drops a packet and at the same time sends an appropriate response packet.</li>
+<li><code>RETURN</code> - Continues processing a packet within the calling chain.</li>
+</ul>
+<h4>Author Note</h4>
+<p>Following <code>sh</code> script is built by using rules from the book <em>Linux Firewall</em> by Michael Rash and 3 additional rules pertaining to DHCP DORA cycle request by the author of this article. Bear in mind that this rule works for a <code>GNU/Linux</code> client machine having DHCP address set.</p>
+<p>Reader of this article encouraged to put in his/her effort to google the parameters used besides the one explained earlier.</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env sh  </span>
+
+
+<span class="c1">### Variable initialization  </span>
+<span class="nv">IPTABLES</span><span class="o">=</span>/sbin/iptables<span class="w">  </span>
+<span class="nv">IP6TABLES</span><span class="o">=</span>/sbin/ip6tables<span class="w">  </span>
+<span class="nv">MODPROBE</span><span class="o">=</span>/sbin/modprobe<span class="w">  </span>
+<span class="nv">INTNET</span><span class="o">=</span><span class="m">192</span>.168.1.0/24<span class="w">  </span>
+<span class="nv">INTF</span><span class="o">=</span>eth0<span class="w">  </span>
+<span class="nv">GATEWAY</span><span class="o">=</span><span class="m">192</span>.168.1.254<span class="w">  </span>
+
+<span class="c1">### Flushing existing rules and setting DROP on chain policies ###  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Flushing existing iptables rules&quot;</span><span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-F<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-F<span class="w"> </span>-t<span class="w"> </span>nat<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-X<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-P<span class="w"> </span>INPUT<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-P<span class="w"> </span>OUTPUT<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-P<span class="w"> </span>FORWARD<span class="w"> </span>DROP<span class="w">  </span>
+
+<span class="c1">### this policy does not handle IPv6 traffic except to drop it.  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Disabling IPv6 traffic&quot;</span><span class="w">  </span>
+<span class="nv">$IP6TABLES</span><span class="w"> </span>-P<span class="w"> </span>INPUT<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IP6TABLES</span><span class="w"> </span>-P<span class="w"> </span>OUTPUT<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IP6TABLES</span><span class="w"> </span>-P<span class="w"> </span>FORWARD<span class="w"> </span>DROP<span class="w">  </span>
+
+<span class="c1">### load connection-tracking modules  </span>
+<span class="nv">$MODPROBE</span><span class="w"> </span>ip_conntrack<span class="w">  </span>
+<span class="nv">$MODPROBE</span><span class="w"> </span>iptable_nat<span class="w">  </span>
+<span class="nv">$MODPROBE</span><span class="w"> </span>ip_conntrack_ftp<span class="w">  </span>
+<span class="nv">$MODPROBE</span><span class="w"> </span>ip_nat_ftp<span class="w">  </span>
+
+
+<span class="c1">###### INPUT chain ######  </span>
+<span class="c1">#  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Setting up INPUT chain&quot;</span><span class="w">  </span>
+
+<span class="c1">### state tracking rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP INVALID &quot;</span><span class="w"> </span>--log-ip-opt<span class="w">  </span>
+ions<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>ESTABLISHED,RELATED<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### anti-spoofing rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>!<span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;SPOOFED PKT &quot;</span><span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>!<span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>-j<span class="w"> </span>DROP<span class="w">  </span>
+
+<span class="c1">### ACCEPT rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">22</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="c1">#### DHCPOFFER rule  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-t<span class="w"> </span>filter<span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-p<span class="w"> </span>udp<span class="w"> </span>-s<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--sport<span class="w"> </span><span class="m">68</span><span class="w"> </span>-d<span class="w"> </span><span class="m">255</span>.255.255.255<span class="w"> </span>--dport<span class="w"> </span><span class="m">67</span><span class="w"> </span>-<span class="w"> </span>
+j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-t<span class="w"> </span>filter<span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-p<span class="w"> </span>udp<span class="w"> </span>-s<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--sport<span class="w"> </span><span class="m">67</span><span class="w"> </span>-d<span class="w"> </span><span class="m">255</span>.255.255.255<span class="w"> </span>--dport<span class="w"> </span><span class="m">68</span><span class="w"> </span>-<span class="w"> </span>
+j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">#Allow ICMP echo request  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-p<span class="w"> </span>icmp<span class="w"> </span>--icmp-type<span class="w"> </span>echo-request<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### default INPUT LOG rule  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>!<span class="w"> </span>-i<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP &quot;</span><span class="w"> </span>--log-ip-options<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+
+<span class="c1">### make sure that loopback traffic is accepted  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>INPUT<span class="w"> </span>-i<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">###### OUTPUT chain ######  </span>
+<span class="c1">#  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Setting up OUTPUT chain&quot;</span><span class="w">  </span>
+
+<span class="c1">### state tracking rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP INVALID &quot;</span><span class="w"> </span>--log-ip-op<span class="w">  </span>
+tions<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>ESTABLISHED,RELATED<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### ACCEPT rules for allowing connections out  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">21</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">22</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">25</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">43</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="c1">## To allow outbound connection to gateway for DHCP request  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-t<span class="w"> </span>filter<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>udp<span class="w"> </span>--sport<span class="w"> </span><span class="m">68</span><span class="w"> </span>-d<span class="w"> </span><span class="nv">$GATEWAY</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">67</span><span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">4321</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">53</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>udp<span class="w"> </span>--dport<span class="w"> </span><span class="m">53</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>icmp<span class="w"> </span>--icmp-type<span class="w"> </span>echo-request<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### default OUTPUT LOG rule  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>!<span class="w"> </span>-o<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP &quot;</span><span class="w"> </span>--log-ip-options<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+
+<span class="c1">### make sure that loopback traffic is accepted  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-o<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">###### FORWARD chain ######  </span>
+<span class="c1">#  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Setting up FORWARD chain&quot;</span><span class="w">  </span>
+
+<span class="c1">### state tracking rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP INVALID &quot;</span><span class="w"> </span>--log-ip-o<span class="w">  </span>
+ptions<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>INVALID<span class="w"> </span>-j<span class="w"> </span>DROP<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>ESTABLISHED,RELATED<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### anti-spoofing rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>!<span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;SPOOFED PKT &quot;</span><span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>!<span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>-j<span class="w"> </span>DROP<span class="w">  </span>
+
+<span class="c1">### ACCEPT rules  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">21</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">22</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">25</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">43</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-i<span class="w"> </span><span class="nv">$INTF</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$INTNET</span><span class="w"> </span>--dport<span class="w"> </span><span class="m">4321</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">53</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>udp<span class="w"> </span>--dport<span class="w"> </span><span class="m">53</span><span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>NEW<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>-p<span class="w"> </span>icmp<span class="w"> </span>--icmp-type<span class="w"> </span>echo-request<span class="w"> </span>-j<span class="w"> </span>ACCEPT<span class="w">  </span>
+
+<span class="c1">### default LOG rule  </span>
+<span class="nv">$IPTABLES</span><span class="w"> </span>-A<span class="w"> </span>FORWARD<span class="w"> </span>!<span class="w"> </span>-i<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>LOG<span class="w"> </span>--log-prefix<span class="w"> </span><span class="s2">&quot;DROP &quot;</span><span class="w"> </span>--log-ip-options<span class="w"> </span>--log-tcp-options<span class="w">  </span>
+
+<span class="c1">###### forwarding ######  </span>
+<span class="c1">#  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;[+] Enabling IP forwarding&quot;</span><span class="w">  </span>
+<span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/net/ipv4/ip_forward
+</code></pre></div>
+
+<p>Read through the rules and add/remove the ones you think important and save it in a file that ends in <code>.sh</code>. Make sure the variables are changed accordingly. Also make sure the file containing the rule is executable.</p>
+<p>Execute the file in a local session on your <code>GNU/Linux</code> machine, and the rules should be applied successfully. After applying the rule, you can remotely access your <code>GNU/Linux</code> machine from your network.</p>
+<p>To test it out, issue <code>nc -v &lt;TARGET_HOST&gt; 5500</code> and grep port 5500 from <code>/var/log/kern.log</code> for Ubuntu machines and <code>/var/log/messages</code> for RHEL/CentOS like machines. You can also test various other protocols.</p>
+<p>As the author is still reading the book <em>Linux Firewalls</em> by Michael Rash, this article will be updated periodically.</p>
+<h2>References</h2>
+<p>Rash, M., 2007. <em>Linux Firewalls: Attack Detection And Response With Iptables, Psad, And Fwsnort</em>. 1st ed. San Francisco, California: No Starch Press, p.10.</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+<hr>
+<ol>
+<li><a href="http://www.netfilter.org">NetFilter Project</a> <a href="#fnref1">↩︎</a></li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

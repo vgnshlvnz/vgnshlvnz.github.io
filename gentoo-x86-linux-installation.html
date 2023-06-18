@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"# Gentoo x86 Linux Installation"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Gentoo x86 Linux Installation This article will guide you on installing Gentoo GNU/Linux for x86 system. This guide was written based on official..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/gentoo-x86-linux-installation.html" rel="bookmark"
+           title="Permalink to "# Gentoo x86 Linux Installation"">"# Gentoo x86 Linux Installation"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-09T00:00:00+00:00">
+                Published: Fri 09 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Gentoo x86 Linux Installation</h1>
+<p>This article will guide you on installing <code>Gentoo</code> <strong>GNU/Linux</strong> for x86 system. This guide was written based on official documentation available <a href="https://wiki.gentoo.org/wiki/Handbook:X86/Full/Installation#Optional:_Building_an_initramfs">here</a>. At the end of this guide, you should have working <strong>GNU/Linux</strong> operating system. For this installation, I have made several assumptions, which you will encounter while installing operating system.</p>
+<p>****NOTE**: Certain initial configurations such as network configuration omitted under assumption that default network configuration used. You can choose to refer [official documentation] for more information.</p>
+<h3>General Note</h3>
+<p>You can choose to install on a real hardware or virtual machine, choice is yours, while this guide was produced for virtual machine with network adapter bridged to host adapter, so no network configurations needed at this point.</p>
+<p><code>Gentoo</code> has several installation media. To follow this guide, I have downloaded <code>Minimal Installation CD</code> for x86 from here. Later, you would require to download desired <code>Stage 3</code> archive file to continue installation. More information on <code>Stage 3</code> archive file can be found here. This guide used <code>Hardened stage 3 - i686</code> archive file.</p>
+<h2>Initial Install Configuration</h2>
+<h3>Boot</h3>
+<p>Once you have prepared your machine, loaded <code>Installation CD</code>, you should be prompted with following:</p>
+<p>[code lang=text] boot: [/code]</p>
+<ul>
+<li>Type following and press Enter:</li>
+<li><code>gentoo acpi=off nosound nousb nohutplug nofirewire noapic docache scandelay password=password</code></li>
+</ul>
+<h3>Default Keymap</h3>
+<p>You will be prompted to select keymap. Hit Enter or select desired keymap.</p>
+<h3>Create New User</h3>
+<p>While it is not necessary to create new user now, you can choose to skip this and continue and create users at the end of installation</p>
+<h4>To create new user:</h4>
+<ul>
+<li><code>#useradd &amp;lt;USERNAME&amp;gt;</code></li>
+<li><code>#useradd -m -G wheel &amp;lt;USERNAME&amp;gt;</code></li>
+</ul>
+<h3>Sync Network Time</h3>
+<p>It is assumed that network-provided time and local time be out of sync. In order to sync, type following command: - <code>ntp -q -g</code></p>
+<h3>Partition HardDisk</h3>
+<p>Typical GNU/Linux installation require <code>/</code> &amp; <code>/swap</code> partition to be created. For this article, while referring to <a href="https://wiki.gentoo.org/wiki/Handbook:X86/Full/Installation#Optional:_Building_an_initramfs">official documentation</a>, I am going to create 4 partitions: - grub - bootloader partiton - 2 MiB - boot - boot partition - 128 MiB - swap - swap partition - rule of thumb: swap size = RAM*2 - rootfs - root partiton - rest of hard disk</p>
+<p>To list attached hard disk, type: - <code>#fdisk -l</code></p>
+<p>This article is going to use <code>parted</code> to partition the hard disk. Type the following command, you will fall into <code>parted</code> shell: - <code>#parted</code></p>
+<p>Once you fall into <code>parted</code> shell, type following commands: - <code>mklabel gpt</code> - <code>unit mib</code> - <code>mkpart primary 1 3</code> - <code>name 1 grub</code> - <code>set 1 bios_grub on</code> - <code>mkpart primary 3 131</code> - <code>name 2 boot</code> - <code>mkpart primary 131 1155</code> - <code>name 3 swap</code> - <code>mkpart primary 1155 -1</code> - <code>name 4 rootfs</code> - <code>set 2 boot on</code> - <code>print</code> - <code>quit</code></p>
+<p>Once you have exited <code>parted</code> shell, you can view partitioned hard disk by typing <code>#fdisk -l</code> .</p>
+<h3>Formart Hard Disk Partition</h3>
+<p>Most GNU/Linux operating systems use <code>ext2/3/4</code> filesystem for hard disk partitions. If you have installed Fedora/Ubuntu/Mint, you might find partition scheme slightly different.</p>
+<p>Type following command to format <code>/dev/sda2</code> &amp; <code>/dev/sda4</code> into <code>ext4</code> filesystem: - <code>#mkfs.ext4 /dev/sda2</code> - boot partition - <code>#mkfs.ext4 /dev/sda4</code> - root partition</p>
+<h3>Activate Swap partition</h3>
+<p>To activate <code>swap</code> partition, type following command: - <code>#mkswap /dev/sda3</code> - <code>#swapon /dev/sda3</code></p>
+<h2>Stage 3 installation</h2>
+<h3>Download &amp; Configure</h3>
+<p>This article uses <code>Hardened stage 3 - i686</code> archive file to continue with installation. To proceed with installation, type following commands: - <code>#mount /dev/sda4 /mnt/gentoo</code> - <code>#cd /mnt/gentoo</code> - <code>#cd /mnt/gentoo</code> - <code>#wget &amp;lt;HARDENED_STAGE_3_FILE_URL&amp;gt;</code> - <code>#tar xpvf stage3-*.tar.bz2 --xattrs-include='*.*' --numeric-owner</code> - <code>#nano -w /mnt/gentoo/etc/portage/make.conf</code> - to add following lines into the file. To exit, hold CTRL and X keys.</p>
+<p>-</p>
+<hr>
+<p>[code lang=text] CFLAGS="-march=native -O1 -pipe CXXFLAGS="${CFLAGS}" MAKEOPTS="-j1" [/code]</p>
+<hr>
+<h4>Configuring mirrors</h4>
+<p>Following configuration is optional as per official documentation but you can follow to get rough idea on <code>Portage</code> package manager.</p>
+<ul>
+<li><code>#mirrorselect -i -o &amp;gt;&amp;gt; /mnt/gentoo/etc/portage/make.conf</code></li>
+<li><code>mkdir --parents /mnt/gentoo/etc/portage/repos.conf</code></li>
+<li><code>cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf</code></li>
+<li><code>cp --dereference /etc/resolv.conf /mnt/gentoo/etc</code></li>
+</ul>
+<h4>Mount <code>proc</code>, <code>sys</code>, <code>dev</code> &amp; <code>boot</code> partitions</h4>
+<p>To mount the partitions, type following command: - <code>#mount --types proc /proc /mnt/gento/proc</code> - <code>#mount --rbind /sys /mnt/gentoo/sys</code> - <code>#mount --make-rslave /mnt/gentoo/dev</code> - <code>#mount --make-rslave /mnt/gentoo/dev</code></p>
+<h4><code>chroot</code> Into Installation &amp; mount <code>boot</code> partition</h4>
+<ul>
+<li><code>#chroot /mnt/gentoo /bin/bash</code></li>
+<li><code>#source /etc/profile</code></li>
+<li><code>#export PS1="(chroot) ${PS1}"</code></li>
+<li><code>#mkdir /boot</code></li>
+<li><code>mount /dev/sda2 /boot</code></li>
+</ul>
+<h3>Configuring <code>Portage</code> package manager</h3>
+<p>Following commands will ensure that latest snapshot of <code>ebuild</code> repository installed. - <code>#emerge-webrsync</code></p>
+<h4>Choosing profile</h4>
+<p>According to official documentation, a <code>profile</code> is a building block for any <code>Gentoo GNU/Linux</code> system. This article uses <code>hardened/linux/x86</code> . You are free to choose any profile you desire. Type following commands to view &amp; select profile: - <code>#eselect profile list</code> - <code>#eselect profile set &amp;lt;PROFILE_NUM&amp;gt;</code></p>
+<h4>Update <code>@world</code> set</h4>
+<p>@world set is a combination of <code>system</code> set &amp; selected set. Type in following command to update <code>@world</code> set: - <code>#emerge --ask --verbose --update --deep --newuse @world</code></p>
+<h4>Configure <code>timezone</code> &amp; <code>locale</code></h4>
+<p>To get your desired timezone, visit this link and copy. The format will be following: - <code>Asia/Singapore</code></p>
+<p>Type following commands to configure <code>timezone</code>: - <code>#echo 'Asia/Singapore' &amp;gt; /etc/timezone</code> - <code>#emerge --config sys-libs/timezone-data</code></p>
+<p>Locales are languages a system support. Besides that it also specify rules on how strings, numerals are displayed. For this article, I have assumed following locale:</p>
+<p>[code lang=text] en_US ISO-8859-1 en_US.UTF-8 UTF-8 [/code]</p>
+<p>Type following command and insert above locales into the file. - <code>#nano -w /etc/locale.gen</code> Hit <code>CTRL + X</code> key to save &amp; exit.</p>
+<p>Next set of commands will generate locales for the system. - <code>#locale-gen</code> - <code>#locale -a</code> - <code>#eselect locale list</code> - <code>#eselect locale set &amp;lt;NUM&amp;gt;</code> - <code>#echo 'LC_COLLATE="C"'&amp;gt;&amp;gt;/etc/env.d/02locale</code> - <code>#env-update &amp;amp;&amp;amp; source /etc/profile &amp;amp;&amp;amp; export PS1="(chroot) $PS1"</code></p>
+<h4>Configure &amp; Install Kernel</h4>
+<p>The most interesting part of this article, that is configuring &amp; installing The Kernel. For this article, I will be using <code>emerge</code> to get latest kernel sources from gentoo. Following commands will achieve aforementioned task. - <code>#emerge --ask sys-kernel/gentoo-sources</code> - <code>#cd /usr/src/linux</code> -<code>#make menuconfig</code></p>
+<p>3rd command <code>#make menuconfig</code> will ask for set of options for the kernel. This article used generic + disabling IPv6 support. You can look at here for reference.</p>
+<p>[code lang=text] Activating Required Options</p>
+<p>Enabling devtmpfs support Device Drivers ---&gt; Generic Driver Options ---&gt; [*] Maintain a devtmpfs filesystem to mount at /dev [ ] Automount devtmpfs at /dev, after the kernel mounted the rootfs</p>
+<p>Enabling SCSI disk support Device Drivers ---&gt; SCSI device support ---&gt; &lt;*&gt; SCSI disk support</p>
+<p>Selecting necessary file systems File systems ---&gt; &lt;*&gt; Second extended fs support &lt;*&gt; The Extended 3 (ext3) filesystem &lt;*&gt; The Extended 4 (ext4) filesystem &lt;*&gt; Reiserfs support &lt;*&gt; JFS filesystem support &lt;*&gt; XFS filesystem support &lt;*&gt; Btrfs filesystem support DOS/FAT/NT Filesystems ---&gt; &lt;*&gt; MSDOS fs support &lt;*&gt; VFAT (Windows-95) fs support</p>
+<p>Pseudo Filesystems ---&gt; [*] /proc file system support [*] Tmpfs virtual memory file system support (former shm fs) Activating SMP support Processor type and features ---&gt; [*] Symmetric multi-processing support</p>
+<p>Enable support for GPT -*- Enable the block layer ---&gt; Partition Types ---&gt; [*] Advanced partition selection [*] EFI GUID Partition support</p>
+<p>[/code]</p>
+<p>Following commands will build &amp; install the kernel and modules. - <code>#make &amp;amp;&amp;amp; make modules_install &amp;amp;&amp;amp; make install</code></p>
+<p>To speed up above process, following program can be used to generate kernel and additional files required for the system to boot. Following command will install <code>genkernel</code> program. -<code>#emerge --ask sys-kernel/genkernel</code> -<code>#genkernel --install all</code></p>
+<h4>Filesystem configuration</h4>
+<p>Under GNU/Linux, all partitions used by the system must be listed in <code>/etc/fstab</code> file. In this article guide, I have created 4 partitions for the system. It is logical that these partitions be listed in the file in order for the system to boot. Below is generic configuration that is used for this guide.</p>
+<p>[code lang=text] /dev/sda2 /boot ext4 defaults,noatime 0 2 /dev/sda3 none swap sw 0 0 /dev/sda4 / ext4 noatime 0 1</p>
+<p>/dev/cdrom /mnt/cdrom auto noauto,user 0 0 [/code]</p>
+<p>By now, you must be familiar with editing files using <code>nano</code>. Execute following command and insert excerpt into <code>/etc/fstab</code> file. -<code>#nano -w /etc/fstab</code></p>
+<h4>Network Configuration</h4>
+<p>Following commands will help you set hostname &amp; interface you would be using later. - <code>#echo 'hostname="gentoo-x86"'&amp;gt; /etc/conf.d/hostname</code> - <code>#echo 'config_&amp;lt;INTERFACE_NAME&amp;gt;="dhcp"'&amp;gt; /etc/conf.d/net</code></p>
+<p>To find interface name, type <code>ifconfig</code> and you will see output for interface, should be something like <code>enp0s3/enp3s0</code> &amp; localhost, which is <code>lo</code>. Older GNU/Linux had <code>eth0</code> like interface name. You can refer to online guides on changing to <code>eth0</code> like name. For Ubuntu, Fedora like distributions, you can modify <code>grub.cfg/grub2.cfg</code> file to change the interface name. For Gentoo, especially <code>sysvinit/openrc</code> like systems, <code>udev</code> can be set to change interface name.</p>
+<p>Next set of commands will link and update with <code>openrc</code> to start up with the system. - <code>#cd /etc/init.d/</code> - <code>#ln -s net.lo net.&amp;lt;INTERFACE_NAME&amp;gt;</code> - <code>#rc-update add net.&amp;lt;INTERFACE_NAME&amp;gt; default</code></p>
+<p>Next, edit <code>hosts</code> file to add hostname &amp; ip address of your choice. Below excerpt shows an example of <code>/etc/hosts</code> file.</p>
+<p>[code lang=text] ###/etc/hostsFilling in the networking information ####### This defines the current system and must be set 127.0.0.1 tux.homenetwork tux localhost</p>
+<h6># Optional definition of extra systems on the network 192.168.0.5 jenny.homenetwork jenny 192.168.0.6 benny.homenetwork benny [/code]</h6>
+<h4>Optional : Install System Tools</h4>
+<p>In this section, you will be installing some system management tools to manage the operating system. Following set of commands will achieve that. -<code>#emerge --ask app-admin/sysklogd</code> -<code>#emerge --ask sys-process/cronie</code> -<code>#emerge --ask sys-apps/mlocate</code> -<code>#emerge --ask net-misc/dhcpcd</code> -<code>#rc-update add sysklogd default</code> -<code>#rc-update add cronie default</code> -<code>#rc-update add sshd default</code></p>
+<h4>Install GRUB</h4>
+<p>This section will help you to install <code>grub</code> bootloader program, which will be used to generate bootmenu at machine startup. Following commands will install grub and generate necessary grub files. -```#emerge --ask --newuse --verbose sys-boot/grub:2<code>-</code>#grub-install /dev/sda<code>-</code>#grub-mkconfig -o /boot/grub/grub.cfg``</p>
+<p>Once you're done, run following commands to exit <code>chroot</code> and unmount necessary file systems: -<code>#exit</code> -<code>#cd</code> -<code>#umount -l /mnt/gentoo/dev{/shm,/pts,}</code> -<code>#umount -R /mnt/gentoo</code></p>
+<p>you can choose to reboot the system to see <code>grub</code> menu appearing with newly install Gentoo/Linux system.</p>
+<p>Resource: https://wiki.gentoo.org/wiki/Handbook:X86/Full/Installation</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

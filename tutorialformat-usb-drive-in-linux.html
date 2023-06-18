@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[Tutorial]Format USB Drive in Linux"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="[Tutorial]Format USB Drive in Linux To format your usb drive in linux, first you need to find out where the usb drive is mounted. To find out the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorialformat-usb-drive-in-linux.html" rel="bookmark"
+           title="Permalink to "[Tutorial]Format USB Drive in Linux"">"[Tutorial]Format USB Drive in Linux"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-20T00:00:00+00:00">
+                Published: Wed 20 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>[Tutorial]Format USB Drive in Linux</h1>
+<p>To format your usb drive in linux, first you need to find out where the usb drive is mounted. To find out the device, type <code>dmesg</code> . At the very end of <code>dmesg</code> output, you will see some messages relating to the usb drive you have inserted just now. You should see something like this: <code>sdX</code> . Remember the drive. Before formatting your usb drive, you need to create partition table. To create partition table, run <code>fdisk -l /dev/sdX</code> where <code>/dev/sdX</code> is your usb drive. You will enter <code>fdisk</code> command mode. In command mode, type <code>p</code> and press enter. You will see <code>/dev/sdX</code> information with available partition table. Then type <code>d</code> and type <code>1</code> . To see the changes, type <code>p</code> again. Then type <code>n</code> and type <code>p</code> . Just enter all the way until you see <code>command(m for help):``` again. Finally, type</code>w<code>to write changes to your usb drive and type</code>q<code>to exit the program. Then, run this command :</code>mkfs.vfat -n "USB Drive" -I /dev/sdX``` . You should see some output on your terminal window. Voila, you have formatted your usb drive.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

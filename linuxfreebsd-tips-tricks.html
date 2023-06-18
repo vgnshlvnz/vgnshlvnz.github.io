@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Linux/FreeBSD Tips & Tricks"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="FreeBSD is started up by the program 'init'. The first thing init does when starting multiuser mode (ie, starting the computer up for normal use)..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/linuxfreebsd-tips-tricks.html" rel="bookmark"
+           title="Permalink to "Linux/FreeBSD Tips & Tricks"">"Linux/FreeBSD Tips &amp; Tricks"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-15T00:00:00+00:00">
+                Published: Sat 15 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ul>
+<li>FreeBSD is started up by the program 'init'. The first thing init does when starting multiuser mode (ie, starting the computer up for normal use) is to run the shell script /etc/rc. By reading /etc/rc and the /etc/rc.d/ scripts, you can learn a lot about how the system is put together, which again will make you more confident about what happens when you do something with it.</li>
+<li>sh (the default Bourne shell in FreeBSD) supports command-line editing. Just ``set -o emacs'' or ``set -o vi'' to enable it.</li>
+<li>When you have made modifications to a file in vi, and then find that you can't write it, type "<ESC>!rm -f %" then ":w!" to force the write. This won't work if you don't have write permissions to the directory and probably won't be suitable if you're editing through a symbolic link.</li>
+<li>If you accidentally end up inside vi, you can quit it by pressing Escape, colon (:), q (q), bang (!) and pressing return.</li>
+<li>If you write part of a filename in tcsh, pressing TAB will show you the available choices when there is more than one, or complete the filename if there's only one match.</li>
+<li>nc(1) or netcat is useful not only for redirecting input/output to tcp or udp connections, but also for proxying them with inetd(8)</li>
+<li>Simple tcsh prompt: set prompt = '%#'</li>
+</ul>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

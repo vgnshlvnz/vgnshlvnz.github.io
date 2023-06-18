@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[TUTORIAL]Install Oracle JDK on Linux"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Install Oracle JDK on Linux Most linux distributions come with OpenJDK installed. This tutorial was written to teach how to install Oracle JDK on..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorialinstall-oracle-jdk-on-linux.html" rel="bookmark"
+           title="Permalink to "[TUTORIAL]Install Oracle JDK on Linux"">"[TUTORIAL]Install Oracle JDK on Linux"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-17T00:00:00+00:00">
+                Published: Sun 17 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Install Oracle JDK on Linux</h1>
+<p>Most linux distributions come with OpenJDK installed. This tutorial was written to teach how to install Oracle JDK on Linux.</p>
+<p>1)Remove OpenJDK Installation <code>apt-get update &amp;amp;&amp;amp; apt-get autoremove --purge openjdk*</code></p>
+<p>2)Download latest Oracle JDK. Look for linux version ending with tar.gz. Download for 32-bit or 64-bit.</p>
+<p>3)Change into Downloads directory <code>cd Downloads/</code></p>
+<p>4)Extract tarball(downloaded file) <code>tar -xvzf jdk*</code></p>
+<p>5)As a root, create <em>java</em> folder in /opt <code>sudo mkdir -p /opt/java</code></p>
+<p>6)Move extracted folder into created folder <code>mv jdk /opt/java</code></p>
+<p>7)Make Oracle JDK as default <code>sudo update-alternatives --install "/usr/bin/java" "java" "/opt/java/jdk/bin/java" 1</code> <code>sudo update-alternatives --set java /opt/java/jdk/bin/java</code></p>
+<p>Test your installation by running following command: <code>java --version</code></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

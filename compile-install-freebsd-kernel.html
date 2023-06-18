@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Compile & Install FreeBSD kernel"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Compile & Installing your own kernel in FreeBSD is not that difficult, as long as you follow the process properly. I managed to compile and..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/compile-install-freebsd-kernel.html" rel="bookmark"
+           title="Permalink to "Compile & Install FreeBSD kernel"">"Compile &amp; Install FreeBSD kernel"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-14T00:00:00+00:00">
+                Published: Fri 14 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Compile &amp; Installing your own kernel in FreeBSD is not that difficult, as long as you follow the process properly. I managed to compile and install my own kernel using DigitalOcean's kernel configuration example. I will most mine as an example as it was done in VMware. Following is the kernel configuration example:</p>
+<p>[code lang=text] cpu I486_CPU cpu I586_CPU cpu I686_CPU ident CUSTOM</p>
+<p>makeoptions DEBUG=-g makeoptions WITH_CTF=1</p>
+<p>options SCHED_ULE # ULE scheduler options PREEMPTION # Enable kernel thread preemption options INET # InterNETworking options INET6 # IPv6 communications protocols options TCP_OFFLOAD # TCP offload options SCTP # Stream Control Transmission Protocol options FFS # Berkeley Fast Filesystem options SOFTUPDATES # Enable FFS soft updates support options UFS_ACL # Support for access control lists options UFS_DIRHASH # Improve performance on big directories options UFS_GJOURNAL # Enable gjournal-based UFS journaling options QUOTA # Enable disk quotas for UFS options MD_ROOT # MD is a potential root device options NFSCL # New Network Filesystem Client options NFSD # New Network Filesystem Server options NFSLOCKD # Network Lock Manager options NFS_ROOT # NFS usable as /, requires NFSCL options CD9660 # ISO 9660 Filesystem options PROCFS # Process filesystem (requires PSEUDOFS) options PSEUDOFS # Pseudo-filesystem framework options GEOM_PART_GPT # GUID Partition Tables. options GEOM_RAID # Soft RAID functionality. options GEOM_LABEL # Provides labelization options SCSI_DELAY=5000 # Delay (in ms) before probing SCSI options KTRACE # ktrace(1) support options STACK # stack(9) support options SYSVSHM # SYSV-style shared memory options SYSVMSG # SYSV-style message queues options SYSVSEM # SYSV-style semaphores options _KPOSIX_PRIORITY_SCHEDULING # POSIX P1003_1B real-time extensions options PRINTF_BUFR_SIZE=128 # Prevent printf output being interspersed. options KBD_INSTALL_CDEV # install a CDEV entry in /dev options HWPMC_HOOKS # Necessary kernel hooks for hwpmc(4) options AUDIT # Security event auditing options CAPABILITY_MODE # Capsicum capability mode options CAPABILITIES # Capsicum capabilities #options PROCDESC # Support for process descriptors options MAC # TrustedBSD MAC Framework options KDTRACE_FRAME # Ensure frames are compiled in options KDTRACE_HOOKS # Kernel DTrace hooks options DDB_CTF # Kernel ELF linker loads CTF data options INCLUDE_CONFIG_FILE # Include this file in kernel</p>
+<p>options KDB # Enable kernel debugger support. options KDB_TRACE # Print a stack trace for a panic.</p>
+<p>options SMP # Symmetric MultiProcessor Kernel device apic device cpufreq</p>
+<p>device acpi options ACPI_DMAR device pci</p>
+<p>device ata # Legacy ATA/SATA controllers options ATA_STATIC_ID # Static device numbering</p>
+<p>device scbus # SCSI bus (required for ATA/SCSI) device da # Direct Access (disks) device cd # CD device pass # Passthrough device (direct ATA/SCSI access)</p>
+<p>device atkbdc # AT keyboard controller device atkbd # AT keyboard</p>
+<p>device vga # VGA video card driver</p>
+<p>device splash # Splash screen and screen saver support</p>
+<p>device sc options SC_PIXEL_MODE # add support for the raster text mode</p>
+<p>device uart # Generic UART driver device em device loop # Network loopback device random # Entropy device device padlock_rng # VIA Padlock RNG device rdrand_rng # Intel Bull Mountain RNG device ether # Ethernet support device vlan # 802.1Q VLAN support device tun # Packet tunnel. device md # Memory "disks" device gif # IPv6 and IPv4 tunneling #device faith # IPv6-to-IPv4 relaying (translation) device firmware # firmware assist module</p>
+<p>device bpf # Berkeley packet filter</p>
+<p>options USB_DEBUG # enable debug msgs device uhci # UHCI PCI-&gt;USB interface device usb # USB Bus (required)</p>
+<p>device virtio # Generic VirtIO bus (required) device virtio_pci # VirtIO PCI device device vtnet # VirtIO Ethernet device device virtio_blk # VirtIO Block device device virtio_scsi # VirtIO SCSI device device virtio_balloon # VirtIO Memory Balloon device</p>
+<p>device pf # Enables PF in kernel device pflog # PF logging interface</p>
+<p>options ALTQ options ALTQ_CBQ # Class Based Queuing (CBQ) options ALTQ_RED # Random Early Detection (RED) options ALTQ_RIO # RED In/Out options ALTQ_HFSC # Hierarchical Packet Scheduler (HFSC) options ALTQ_PRIQ # Priority Queuing (PRIQ)</p>
+<p>device crypto # Enables kernel crypto device aesni # Intel driver for hardware crypto options GEOM_ELI # GELI Option for FDE options IPSEC # IPSEC Option options IPSEC_DEBUG # Debug option for IPSEC</p>
+<p>[/code]</p>
+<p>Before you do any compiling, installing and such, make sure you have your <code>/usr/src</code> directory. Execute following command to install that directory if you don't have:</p>
+<blockquote>
+<p>svn co https://svn0.us-east.FreeBSD.org/base/stable/<FreeBSD\95ver> /usr/src</p>
+</blockquote>
+<p>Copy my kernel configuration above and paste it in your favorite editor, make sure file name is <code>CUSTOM</code> .</p>
+<p>Change to <code>/usr/src</code> directory and execute following commands in order:</p>
+<blockquote>
+<p>make buildkernel KERNCONF=CUSTOM</p>
+<p>make cleandepend</p>
+<p>make depend</p>
+<p>make installkernel KERNCONF=CUSTOM</p>
+</blockquote>
+<p>Reboot your VM.</p>
+<p>Once your machine restarts, simply execute:</p>
+<p><code>uname -a</code> and check if the word CUSTOM anywhere in the line</p>
+<p>Or</p>
+<p><code>sysctl kern.conftxt | grep ident</code></p>
+<p>Either command will do.</p>
+<p>Source:</p>
+<p>1)https://www.digitalocean.com/community/tutorials/how-to-customize-and-recompile-your-kernel-on-freebsd-10-1</p>
+<p>2)https://www.freebsd.org/doc/handbook/kernelconfig-building.html</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[QUICKSTART] Learn Node in no time"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Question 1: Write a program that prints the text "HELLO WORLD" to the console (stdout). Hint: To make a Node.js program, create a new file with a..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/quickstart-learn-node-in-no-time.html" rel="bookmark"
+           title="Permalink to "[QUICKSTART] Learn Node in no time"">"[QUICKSTART] Learn Node in no time"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p><strong>Question 1</strong>:</p>
+<p>Write a program that prints the text "HELLO WORLD" to the console (stdout).</p>
+<p><strong>Hint:</strong></p>
+<p>To make a Node.js program, create a new file with a .js extension and start writing JavaScript! Execute your program by running it with the node command. e.g.:</p>
+<p>$ node program.js</p>
+<p>You can write to the console in the same way as in the browser:</p>
+<p>console.log("text")</p>
+<p><strong>Answer:</strong></p>
+<blockquote>
+<p><strong>console.log("Hello World");</strong></p>
+</blockquote>
+<p><strong>Question 2:</strong></p>
+<p>Write a program that accepts one or more numbers as command-line arguments and prints the sum of those numbers to the console (stdout).</p>
+<p><strong>Hint:</strong></p>
+<p>You can access command-line arguments via the global process object. The process object has an argv property which is an array containing the complete command-line. i.e. process.argv.</p>
+<p>To get started, write a program that simply contains:</p>
+<p>console.log(process.argv)</p>
+<p>Run it with node program.js and some numbers as arguments. e.g:</p>
+<p>$ node program.js 1 2 3</p>
+<p>In which case the output would be an array looking something like:</p>
+<p>[ 'node', '/path/to/your/program.js', '1', '2', '3' ]</p>
+<p>You'll need to think about how to loop through the number arguments so you can output just their sum. The first element of the process.argv array is always 'node', and the second element is always the path to your program.js file, so you need to start at the 3rd element (index 2), adding each item to the total until you reach the end of the array.</p>
+<p>Also be aware that all elements of process.argv are strings and you may need to coerce them into numbers. You can do this by prefixing the property with + or passing it to Number(). e.g. +process.argv[2] or Number(process.argv[2]).</p>
+<p><strong>Answer:</strong></p>
+<blockquote>
+<p>var sum=0; var i = 0;</p>
+<p>process.argv.forEach(function(data) { i++; if(i&gt;=3) { sum+=Number(data) } });</p>
+<p>console.log(sum);</p>
+</blockquote>
+<p><strong>Question 3:</strong></p>
+<p>Write a program that uses a single synchronous filesystem operation to read a file and print the number of newlines (\n) it contains to the console (stdout), similar to running cat file | wc -l.</p>
+<p>The full path to the file to read will be provided as the first command-line argument (i.e., process.argv[2]). You do not need to make your own test file.</p>
+<p><strong>Hint:</strong></p>
+<p>To perform a filesystem operation you are going to need the fs module from the Node core library. To load this kind of module, or any other "global" module, use the following incantation:</p>
+<p>var fs = require('fs')</p>
+<p>Now you have the full fs module available in a variable named fs.</p>
+<p>All synchronous (or blocking) filesystem methods in the fs module end with 'Sync'. To read a file, you'll need to use fs.readFileSync('/path/to/file'). This method will return a Buffer object containing the complete contents of the file.</p>
+<p>Documentation on the fs module can be found by pointing your browser here: file://C:\Users\Vigneshwaran\AppData\Roaming\npm\node_modules\learnyounode \node_apidoc\fs.html</p>
+<p>Buffer objects are Node's way of efficiently representing arbitrary arrays of data, whether it be ascii, binary or some other format. Buffer objects can be converted to strings by simply calling the toString() method on them. e.g. var str = buf.toString().</p>
+<p>Documentation on Buffers can be found by pointing your browser here: file://C:\Users\Vigneshwaran\AppData\Roaming\npm\node_modules\learnyounode \node_apidoc\buffer.html</p>
+<p>If you're looking for an easy way to count the number of newlines in a string, recall that a JavaScript String can be .split() into an array of substrings and that '\n' can be used as a delimiter. Note that the test file does not have a newline character ('\n') at the end of the last line, so using this method you'll end up with an array that has one more element than the number of newlines.</p>
+<p><strong>Answer:</strong></p>
+<blockquote>
+<p>var fs = require('fs') var content = fs.readFileSync(process.argv[2]) var lines = content.toString().split('\n').length - 1 console.log(lines)</p>
+</blockquote>
+<p><strong>note:</strong></p>
+<blockquote>
+<p>// note you can avoid the .toString() by passing 'utf8' as the // second argument to readFileSync, then you'll get a String! // // fs.readFileSync(process.argv[2], 'utf8').split('\n').length - 1</p>
+</blockquote>
+<p><strong>Question 4:</strong></p>
+<p>Write a program that uses a single asynchronous filesystem operation to read a file and print the number of newlines it contains to the console (stdout), similar to running cat file | wc -l.</p>
+<p>The full path to the file to read will be provided as the first command-line argument.</p>
+<p><strong>Hint:</strong></p>
+<p>The solution to this problem is almost the same as the previous problem except you must now do it the Node.js way: asynchronous.</p>
+<p>Instead of fs.readFileSync() you will want to use fs.readFile() and instead of using the return value of this method you need to collect the value from a callback function that you pass in as the second argument. To learn more about callbacks, check out: [https://github.com/maxogden/art-of-node#callbacks](https://github.com/max ogden/art-of-node#callbacks).</p>
+<p>Remember that idiomatic Node.js callbacks normally have the signature:</p>
+<p>function callback (err, data) { /* ... */ }</p>
+<p>so you can check if an error occurred by checking whether the first argument is truthy. If there is no error, you should have your Buffer object as the second argument. As with readFileSync(), you can supply 'utf8' as the second argument and put the callback as the third argument and you will get a String instead of a Buffer.</p>
+<p>Documentation on the fs module can be found by pointing your browser here: file://C:\Users\Vigneshwaran\AppData\Roaming\npm\node_modules\learnyounode \node_apidoc\fs.html</p>
+<p><strong>Answer:</strong></p>
+<blockquote>
+<p>var fs = require('fs')</p>
+<p>var sum=0; fs.readFile(process.argv[2], function(err,data) { if(err) throw err; console.log(data.toString().split('\n').length - 1); });</p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p>var fs = require('fs') var file = process.argv[2]</p>
+<p>fs.readFile(file, function (err, contents) { // fs.readFile(file, 'utf8', callback) can also be used var lines = contents.toString().split('\n').length - 1 console.log(lines) })</p>
+</blockquote>
+<p><strong>Question 5:</strong></p>
+<p>Create a program that prints a list of files in a given directory, filtered by the extension of the files. You will be provided a directory name as the first argument to your program (e.g. '/path/to/dir/') and a file extension to filter by as the second argument.</p>
+<p>For example, if you get 'txt' as the second argument then you will need to filter the list to only files that end with .txt. Note that the second argument will not come prefixed with a '.'.</p>
+<p>Keep in mind that the first arguments of your program are not the first values of the process.argv array, as the first two values are reserved for system info by Node.</p>
+<p>The list of files should be printed to the console, one file per line. You must use asynchronous I/O.</p>
+<p><strong>Hint:</strong></p>
+<p>The fs.readdir() method takes a pathname as its first argument and a callback as its second. The callback signature is:</p>
+<p>function callback (err, list) { /* ... */ }</p>
+<p>where list is an array of filename strings.</p>
+<p>Documentation on the fs module can be found by pointing your browser here: file://C:\Users\Vigneshwaran\AppData\Roaming\npm\node_modules\learnyounode \node_apidoc\fs.html</p>
+<p>You may also find node's path module helpful, particularly the extname method.</p>
+<p>Documentation on the path module can be found by pointing your browser here: file://C:\Users\Vigneshwaran\AppData\Roaming\npm\node_modules\learnyounode \node_apidoc\path.html</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

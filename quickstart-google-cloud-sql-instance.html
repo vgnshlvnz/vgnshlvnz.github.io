@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Quickstart - Google Cloud SQL instance"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This page describes how to create a Google Cloud SQL instance (either First Generation or Second Generation). A Google Cloud SQL instance is a..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/quickstart-google-cloud-sql-instance.html" rel="bookmark"
+           title="Permalink to "Quickstart - Google Cloud SQL instance"">"Quickstart - Google Cloud SQL instance"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This page describes how to create a Google Cloud SQL instance (either First Generation or Second Generation). A Google Cloud SQL instance is a MySQL database hosted in Google's cloud.</p>
+<p>For information about installing and getting started with the Cloud SDK, see <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>. For information about the Cloud Shell, see <a href="https://cloud.google.com/shell/docs">Google Cloud Shell</a>.</p>
+<ol>
+<li>
+<p>Show the list of potential machine types:</p>
+<p>gcloud sql tiers list</p>
+<p>Note the values that begin with <code>db-</code>. You must choose one of these values to create a Second Generation instance. Choosing one of the other values, such as <code>D1</code>, results in creating a First Generation instance.</p>
+<p>For information about the different machine types, their capabilities, and their effect on instance pricing, see the <a href="https://cloud.google.com/sql/pricing#2nd-gen-pricing">Pricing page</a>.
+2. Create the instance:</p>
+<p>gcloud sql instances create [INSTANCE_NAME] --tier\=[MACHINE_TYPE] --activation-policy\=ALWAYS</p>
+<p>Where MACHINE_TYPE is one of the values from the previous step that starts with <code>db-</code>.</p>
+<p>For example, the following command creates a Second Generation instance called instance1 with the machine type of <code>db-n1-standard-8</code>:</p>
+<p>gcloud sql instances create instance1 --tier=db-n1-standard-8 --activation-policy=ALWAYS</p>
+<p>You do not need to prepend the project ID onto the instance ID. This is done automatically where appropriate (for example, in the log files). ...see naming guidelinesFor information about other available parameters, see the <a href="https://cloud.google.com/sdk/gcloud/reference/sql/instances/create">gcloud sql instances create</a>command reference and <a href="https://cloud.google.com/sql/docs/instance-settings#settings-v2">Instance Settings</a>.
+3. Set the password for the "root@%" MySQL user:</p>
+<p>gcloud sql instances set-root-password [INSTANCE_NAME] --password [PASSWORD]</p>
+</li>
+<li>
+<p>Retrieve the automatically assigned IPv4 address:</p>
+<p>gcloud sql instances describe [INSTANCE_NAME]</p>
+<p>In the output, find the <strong>ipAddress</strong> field. You can use this as the IP address your applications or tools use to connect to the instance.</p>
+</li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

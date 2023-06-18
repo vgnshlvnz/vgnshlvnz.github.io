@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"A brief Introduction on Unix"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content=""computer" "information-technology" "linux" "self-effort" "understanding" "unix" What is Unix? UNIX is an operating system which was first..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/a-brief-introduction-on-unix.html" rel="bookmark"
+           title="Permalink to "A brief Introduction on Unix"">"A brief Introduction on Unix"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-11-28T00:00:00+00:00">
+                Published: Thu 28 November 2013
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ul>
+<li>"computer"</li>
+<li>"information-technology"</li>
+<li>"linux"</li>
+<li>"self-effort"</li>
+<li>"understanding"</li>
+<li>"unix"</li>
+</ul>
+<hr>
+<p><strong>What is Unix?</strong></p>
+<p>UNIX is an operating system which was first developed in the 1960s, and has been under constant development ever since. By operating system, we mean the suite of programs which make the computer work. It is a stable, multi-user, multi-tasking system for servers, desktops and laptops.</p>
+<p>UNIX systems also have a graphical user interface (GUI) similar to Microsoft Windows which provides an easy to use environment. However, knowledge of UNIX is required for operations which aren't covered by a graphical program, or for when there is no windows interface available, for example, in a telnet session.</p>
+<p><strong>Types of Unix</strong></p>
+<p>There are many different versions of UNIX, although they share common similarities. The most popular varieties of UNIX are Sun Solaris, GNU/Linux, and MacOS X.</p>
+<p><strong>The Unix Operating System</strong></p>
+<p>The UNIX operating system is made up of three parts; the kernel, the shell and the programs.</p>
+<h3>The kernel</h3>
+<p>The kernel of UNIX is the hub of the operating system: it allocates time and memory to programs and handles the filestore and communications in response to system calls.</p>
+<p>As an illustration of the way that the shell and the kernel work together, suppose a user types <strong>rm myfile</strong> (which has the effect of removing the file <strong>myfile</strong>). The shell searches the filestore for the file containing the program <strong>rm</strong>, and then requests the kernel, through system calls, to execute the program <strong>rm</strong> on <strong>myfile</strong>. When the process <strong>rm myfile</strong> has finished running, the shell then returns the UNIX prompt % to the user, indicating that it is waiting for further commands.</p>
+<h3>The shell</h3>
+<p>The shell acts as an interface between the user and the kernel. When a user logs in, the login program checks the username and password, and then starts another program called the shell. The shell is a command line interpreter (CLI). It interprets the commands the user types in and arranges for them to be carried out. The commands are themselves programs: when they terminate, the shell gives the user another prompt (% on our systems). The adept user can customise his/her own shell, and users can use different shells on the same machine.</p>
+<p><strong>Files and Processes</strong> </p>
+<p>Everything in UNIX is either a file or a process. A process is an executing program identified by a unique PID (process identifier). A file is a collection of data. They are created by users using text editors, running compilers etc.</p>
+<p>Examples of files:</p>
+<ul>
+<li>a document (report, essay etc.)</li>
+<li>the text of a program written in some high-level programming language</li>
+<li>instructions comprehensible directly to the machine and incomprehensible to a casual user, for example, a collection of binary digits (an executable or binary file);</li>
+<li>a directory, containing information about its contents, which may be a mixture of other directories (subdirectories) and ordinary files.</li>
+</ul>
+<p><strong>The Directory Structure</strong></p>
+<p>All the files are grouped together in the directory structure. The file-system is arranged in a hierarchical structure, like an inverted tree. The top of the hierarchy is traditionally called <strong>root</strong> (written as a slash / )</p>
+<p><a href="http://vigneshwaranravichandran.files.wordpress.com/2013/11/unix-tree.png"><img alt="Image" src="http://vigneshwaranravichandran.files.wordpress.com/2013/11/unix-tree.png?w=550"></a></p>
+<p>In the diagram above, we see that the home directory of the undergraduate student "<strong>ee51vn</strong>" contains two sub-directories (<strong>docs</strong> and <strong>pics</strong>) and a file called <strong>report.doc</strong>.</p>
+<p>The full path to the file <strong>report.doc</strong> is <strong>"</strong><strong>/home/its/ug1/ee51vn/report.doc"</strong></p>
+<p><strong>End-Note</strong></p>
+<p>Although it is just a mere understanding what is Unix is all about, I encourage readers to take extra initiative to know about it by Googling about Unix. You can find tons of articles, guides, cheat-sheets for your understandingand reference. Always remember, self-effort pays more than anything else.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

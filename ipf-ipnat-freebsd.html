@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"ipf & ipnat - freebsd"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Following firewall rules work for a jailed environment . the rest is self explanatory for readers who have experience with ipf. If you would like..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/ipf-ipnat-freebsd.html" rel="bookmark"
+           title="Permalink to "ipf & ipnat - freebsd"">"ipf &amp; ipnat - freebsd"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-22T00:00:00+00:00">
+                Published: Fri 22 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Following firewall rules work for a jailed environment . the rest is self explanatory for readers who have experience with ipf. If you would like to read more on ipf, follow this <a href="https://www.freebsd.org/doc/handbook/firewalls-ipf.html">link</a>.</p>
+<p>[code lang=text] <br />pass in quick on lo0 all pass out quick on lo0 all</p>
+<p># outbound connection pass out log first quick on vtnet0 all</p>
+<h1>Allow internal traffic pass in quick on vtnet0 from 10.0.0.0/16 to 10.0.0.0/16 pass out quick on vtnet0 from 10.0.0.0/16 to 10.0.0.0/16</h1>
+<h1>Allow nat traffic in pass in quick on vtnet0 proto tcp/udp from 10.0.0.1 to any port = domain keep state # interface facing Internet (inbound) # Block all inbound traffic from non-routable or reserved address spaces block in quick on vtnet0 from 192.168.0.0/16 to any block in quick on vtnet0 from 172.16.0.0/12 to any #RFC 1918 private IP #block in quick on vtnet0 from 10.0.0.0/8 to any #RFC 1918 private IP block in quick on vtnet0 from 127.0.0.0/8 to any #loopback block in quick on vtnet0 from 0.0.0.0/8 to any #loopback block in quick on vtnet0 from 169.254.0.0/16 to any #DHCP auto-config block in quick on vtnet0 from 192.0.2.0/24 to any #reserved for docs block in quick on vtnet0 from 204.152.64.0/23 to any #Sun cluster interconnect block in quick on vtnet0 from 224.0.0.0/3 to any #Class D &amp; E multicast</h1>
+<p># Block fragments and too short tcp packets block in quick on vtnet0 all with frags block in quick on vtnet0 proto tcp all with short</p>
+<p># block source routed packets block in quick on vtnet0 all with opt lsrr block in quick on vtnet0 all with opt ssrr</p>
+<p># Block OS fingerprint attempts and log first occurrence block in log first quick on vtnet0 proto tcp from any to any flags FUP</p>
+<p># Block anything with special options block in quick on vtnet0 all with ipopts</p>
+<p># Block public pings and ident block in quick on vtnet0 proto icmp all icmp-type 8 block in quick on vtnet0 proto tcp from any to any port = 113</p>
+<p># Block incoming Netbios services block in log first quick on vtnet0 proto tcp/udp from any to any port = 137 block in log first quick on vtnet0 proto tcp/udp from any to any port = 138 block in log first quick on vtnet0 proto tcp/udp from any to any port = 139 block in log first quick on vtnet0 proto tcp/udp from any to any port = 81</p>
+<p># Allow traffic in from ISP's DHCP server. Replace z.z.z.z with # the same IP address used in the outbound section. pass in quick on vtnet0 proto udp from 140.82.50.1/32 to any port = 68 keep state</p>
+<p># Allow public connections to specified internal web server pass in quick on vtnet0 proto tcp from any to 140.82.51.110/32 port = 80 flags S keep state</p>
+<p># Allow webmin connection pass in quick on vtnet0 proto tcp from any to 140.82.51.110/32 port = 10000 flags S keep state</p>
+<p># Allow ssh connection pass in quick on vtnet0 proto tcp from any to 140.82.51.110/32 port = 22 flags S keep state</p>
+<p># Allow port 53 pass in quick on vtnet0 proto tcp from any to 140.82.51.110/32 port = 53 flags S keep state</p>
+<p># allow port 53 udp pass in quick on vtnet0 proto udp from any to 140.82.51.110/32 port = 53 keep state</p>
+<p>pass in quick on vtnet0 from any to 10.0.0.0/16</p>
+<p># Block and log only first occurrence of all remaining traffic. block in log first quick on vtnet0 all</p>
+<p>[/code]</p>
+<p>this is for ipnat</p>
+<p>[code lang=text] <br /># from to map vtnet0 10.0.0.0/16 -&gt; 140.82.51.110/32 portmap tcp/udp auto</p>
+<p>map vtnet0 10.0.0.0/16 -&gt; 0.0.0.0/32 portmap tcp/udp 40000:65000 frag map vtnet0 10.0.0.1/32 -&gt; 0/32 proxy port ftp ftp/tcp map vtnet0 10.0.0.1/32 -&gt; 0/32 portmap tcp/udp 10000:40000 map vtnet0 10.0.0.1/32 -&gt; 0/32 rdr vtnet0 140.82.51.110/32 port 80 -&gt; 10.0.0.1 port 80 rdr vtnet0 140.82.51.110/32 port 53 -&gt; 10.0.0.1 port 53</p>
+<p>[/code]</p>
+<p>reference: https://www.freebsd.org/doc/handbook/firewalls-ipf.html</p>
+<p>https://www.symantec.com/connect/articles/solaris-and-ip-filter-how-make-them-your-nat-solution</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

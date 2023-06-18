@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>A Pelican Blog - content</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/explaining-tcp-packet.html">Explaining TCP Packet</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2023-06-16T00:00:00+00:00">
+                Published: Fri 16 June 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info --><h2>Which RFCs cover all the aspects of a TCP packet?</h2>
+<ol>
+<li>
+<p>RFC 793 - Transmission Control Protocol: This is the fundamental RFC for TCP and describes the core protocol, including the format of the TCP header, the state machine, and the mechanisms for establishing and closing connections, transmitting data, and handling retransmissions.</p>
+</li>
+<li>
+<p>RFC 1122 - Requirements for Internet Hosts - Communication Layers: This RFC provides clarification and updates to RFC 793. It covers the requirements for all Internet hosts, including those related to TCP.</p>
+</li>
+<li>
+<p>RFC 1323 - TCP Extensions for High Performance: This RFC covers extensions to TCP for high-performance networks, such as windows scaling, timestamps, and protection against wrapped sequence numbers (PAWS).</p>
+</li>
+<li>
+<p>RFC 2018 - TCP Selective Acknowledgment Options: This RFC describes the use of Selective Acknowledgments (SACKs) to improve performance on lossy links.</p>
+</li>
+<li>
+<p>RFC 2581 - TCP Congestion Control: This RFC outlines the four congestion control algorithms (Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery) that are required to be implemented in TCP.</p>
+</li>
+<li>
+<p>RFC 5681 - TCP Congestion Control: This RFC obsoletes RFC 2581 and provides an updated description of the TCP congestion control algorithms.</p>
+</li>
+<li>
+<p>RFC 6824 - TCP Extensions for Multipath Operation with Multiple Addresses: This RFC describes extensions to TCP that enable the simultaneous use of multiple IP addresses/paths.</p>
+</li>
+<li>
+<p>RFC 7323 - TCP Extensions for High Performance: This RFC obsoletes RFC 1323 and provides updates to the windows scaling and timestamps extensions.</p>
+</li>
+</ol>
+<h2>Example TCP Header Format</h2>
+<p>TCP Header Format</p>
+<div class="highlight"><pre><span></span><code><span class="mf">0</span><span class="w">                   </span><span class="mf">1</span><span class="w">                   </span><span class="mf">2</span><span class="w">                   </span><span class="mf">3</span>
+<span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span>
+</code></pre></div>
+
+<p>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |          Source Port          |       Destination Port        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                        Sequence Number                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Acknowledgment Number                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Data |           |U|A|P|R|S|F|                               |
+   | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+   |       |           |G|K|H|T|N|N|                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Checksum            |         Urgent Pointer        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Options                    |    Padding    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             data                              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<div class="highlight"><pre><span></span><code>                        TCP Header Format
+</code></pre></div>
+
+<p>TBC ..</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linuxrhel-rhcsa-exam-objectives.html" rel="bookmark"
+                           title="Permalink to "Linux/RHEL - RHCSA Exam Objectives"">"Linux/RHEL - RHCSA Exam Objectives"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-03-10T00:00:00+00:00">
+                Published: Fri 10 March 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p># RHEL - RHCSA Exam Objectives</p>
+<p>RHCSA exam candidates should be able to accomplish the tasks below without assistance. These have been grouped into several categories.</p>
+<p>Understand and use essential tools</p>
+<p>- Access a shell prompt and issue commands with correct syntax - Use input-output redirection (&gt;, &gt;&gt;, |, 2&gt;, etc.) - Use grep and regular expressions to …</p>
+                <a class="readmore" href="/linuxrhel-rhcsa-exam-objectives.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linuxrhel-rhcsa-practice-tasks.html" rel="bookmark"
+                           title="Permalink to "Linux/RHEL RHCSA Practice Tasks"">"Linux/RHEL RHCSA Practice Tasks"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-03-10T00:00:00+00:00">
+                Published: Fri 10 March 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>## RHEL TASKS</p>
+<p>Task 01: Assuming the root user password is lost, and your system is running in multi-user target with no current root session open. Reboot the system into an appropriate target level, and reset the root user password to root1234. (Exercise 11-2). After completing this task, log in as …</p>
+                <a class="readmore" href="/linuxrhel-rhcsa-practice-tasks.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/telecommunication-notes.html" rel="bookmark"
+                           title="Permalink to "Telecommunication Notes"">"Telecommunication Notes"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-12-20T00:00:00+00:00">
+                Published: Tue 20 December 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h2>- "telecommunications"</h2>
+<p>Circuit Switched Calls</p>
+<p>Question:</p>
+<p>Explain circuit switched Calls</p>
+<p>Answer:</p>
+<p>A circuit-switched call is a type of telephone call that is established by setting up a dedicated connection, or circuit, between the two parties for the duration of the call. In a circuit-switched call, the connection is maintained until the …</p>
+                <a class="readmore" href="/telecommunication-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/freebsd-mysql-backup.html" rel="bookmark"
+                           title="Permalink to "[FreeBSD] MySQL Backup"">"[FreeBSD] MySQL Backup"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-06-28T00:00:00+00:00">
+                Published: Tue 28 June 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[FreeBSD] MySQL Backup</h1>
+<p>This article is adapted from <a href="https://spinupwp.com/incremental-mysql-backups/">SpinupWP</a> - How to Set Up MySQL Incremental Backups.</p>
+<p>By end of this article, you should be able to set up Incremental backup for your MySQL instance and restore the database. Please read aforementioned article on snapshot backup and incremental backup.</p>
+<p>This article …</p>
+                <a class="readmore" href="/freebsd-mysql-backup.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/rhel-rhcsa-container-notes.html" rel="bookmark"
+                           title="Permalink to "RHEL RHCSA Container notes"">"RHEL RHCSA Container notes"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-04-23T00:00:00+00:00">
+                Published: Sat 23 April 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This article will serve as notes on container management. This article will not delve into containers in RHEL-like systems as it is up to the reader to research about it. This article will see how to check container tools, inspect images, download and run. Also removing a container and images …</p>
+                <a class="readmore" href="/rhel-rhcsa-container-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/mysql-master-slave-replication.html" rel="bookmark"
+                           title="Permalink to "MySQL Master-Slave Replication"">"MySQL Master-Slave Replication"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-02-18T00:00:00+00:00">
+                Published: Fri 18 February 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This article explores the opportunity of a Master-Slave replication on MySQL 8. The underlying OS is FreeBSD 13.</p>
+<p>On the Master server install and start the MySQL service. Log into MySQL as root and perform following steps:</p>
+<p><code>create user 'replicate'@'%' identified with mysql_native_password by 'tryhackme';</code></p>
+<p><code>grant replication slave, replication client …</code></p>
+                <a class="readmore" href="/mysql-master-slave-replication.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/freebsd-snmp-mrtg.html" rel="bookmark"
+                           title="Permalink to "[FreeBSD] SNMP & MRTG"">"[FreeBSD] SNMP & MRTG"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-01-07T00:00:00+00:00">
+                Published: Fri 07 January 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[FreeBSD] SNMP &amp; MRTG</h1>
+<p>This article was written using FreeBSD 11.3-RELEASE. Assumption is made such that reader knows what is SNMP (Simple Network Management Protocol). At the end of the article, you should have working setup of SNMP &amp; MRTG (Multi Router Traffic Graph) .</p>
+<p>There are two packages available for SNMP …</p>
+                <a class="readmore" href="/freebsd-snmp-mrtg.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/freebsd-sftp.html" rel="bookmark"
+                           title="Permalink to "FreeBSD-SFTP"">"FreeBSD-SFTP"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-09-26T00:00:00+00:00">
+                Published: Sun 26 September 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ol>
+<li>Update <code>pkg</code> to latest</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="nv">@freebsd</span><span class="o">-</span><span class="nl">sftp</span><span class="p">:</span><span class="o">~</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">repos</span>
+<span class="n">root</span><span class="nv">@freebsd</span><span class="o">-</span><span class="nl">sftp</span><span class="p">:</span><span class="o">~</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">vi</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">FreeBSD</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>```
+FreeBSD:<span class="w"> </span>{
+<span class="w">  </span>url:<span class="w"> </span>&quot;pkg+http://pkg.FreeBSD.org/<span class="cp">${</span><span class="n">ABI</span><span class="cp">}</span>/latest&quot;
+}
+```
+</code></pre></div>
+
+<ol>
+<li>FreeBSD update<br>
+<code>freebsd-update fetch install</code><br>
+<code>pkg</code> update<br>
+<code>pkg update -f</code> &amp;&amp; <code>pkg upgrade -f</code></li>
+<li>Firewall Setup - PF …</li></ol>
+                <a class="readmore" href="/freebsd-sftp.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/docker-notes.html" rel="bookmark"
+                           title="Permalink to "Docker-Notes"">"Docker-Notes"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-09-18T00:00:00+00:00">
+                Published: Sat 18 September 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Docker Notes</h1>
+<p>Docker container is a running instance of Docker image.</p>
+<h2>Commands</h2>
+<p><code>$docker images</code> For example, it shows available images in the local repo<br>
+<code>docker search &lt;SEARCH_STRING&gt;</code> For example <code>docker search ubuntu</code><br>
+<code>docker pull &lt;IMAGE&gt;</code> For example <code>docker pull ubuntu:latest</code><br>
+<code>docker run -i -t ubuntu</code> To run the image …</p>
+                <a class="readmore" href="/docker-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/dns-resolution.html" rel="bookmark"
+                           title="Permalink to "dns-resolution"">"dns-resolution"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-08-03T00:00:00+00:00">
+                Published: Tue 03 August 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>DNS Resolution Checking Script</h1>
+<p>This script is meant to be used once you have delegated your nameservers to the ones you control. It will take a while to have it delegated so this small script is to help you check if the resolution is successful. The output of the script …</p>
+                <a class="readmore" href="/dns-resolution.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/go-programming-basics.html" rel="bookmark"
+                           title="Permalink to "Go Programming - basics"">"Go Programming - basics"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-06-21T00:00:00+00:00">
+                Published: Mon 21 June 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Go Programming - basics</h1>
+<h2><code>golang</code> Installation - Linux</h2>
+<p>This guide/article was written for <code>Debian 10 GNU/Linux</code> running latest updates. Before you begin, run following command to update your system.</p>
+<ul>
+<li><code>#apt update &amp;&amp; apt upgrade -y</code></li>
+</ul>
+<p>Once you have completed above step, now it’s time to install <code>Go Programming Language</code> or …</p>
+                <a class="readmore" href="/go-programming-basics.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/snort-3-on-freebsd-114-release.html" rel="bookmark"
+                           title="Permalink to "Snort 3 on FreeBSD 11.4-RELEASE"">"Snort 3 on FreeBSD 11.4-RELEASE"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-13T00:00:00+00:00">
+                Published: Sun 13 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"freebsd"</li>
+<li>"ids"</li>
+<li>"ips"</li>
+<li>"snort3"</li>
+</ul>
+<hr>
+<h1>SNORT 3 on FreeBSD 11.4-RELEASE</h1>
+<p><strong>note</strong>: This article was achieved on a FreeBSD 11.4-RELEASE host parked in the cloud. This guide should work for anyone who is willing to put in their commitment to work. Make sure your FreeBSD host is up …</p>
+                <a class="readmore" href="/snort-3-on-freebsd-114-release.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/iptables.html" rel="bookmark"
+                           title="Permalink to "iptables"">"iptables"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h2>- "blog-posts"</h2>
+<h1><code>iptables</code> for GNU/Linux client machine</h1>
+<p><strong>Note:</strong> This article is written for fully patched <code>Ubuntu 18.04 LTS GNU/Linux</code> machine running latest kernel. The ruleset that comes with this article should work with other <code>GNU/Linux</code> derivatives.</p>
+<p>This article assumes reader has some knowledge in Firewalls and it …</p>
+                <a class="readmore" href="/iptables.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/metasploit.html" rel="bookmark"
+                           title="Permalink to "metasploit"">"metasploit"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h2>- "blog-posts"</h2>
+<h1>Metasploit Beginner Quick Start</h1>
+<p>This article is for beginner pentesters who are struggling in getting their own <code>Metasploit</code> installation up and running. Also I realized some struggle when it comes to generating the payload or executing the exploit. This article will touch on the basics of working payload generation …</p>
+                <a class="readmore" href="/metasploit.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/net-snmp-mrtg-freebsd.html" rel="bookmark"
+                           title="Permalink to "net-snmp-mrtg-freebsd"">"net-snmp-mrtg-freebsd"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"freebsd"</li>
+<li>"freebsd-jails"</li>
+<li>"mrtg"</li>
+<li>"net-snmp"</li>
+<li>"network"</li>
+<li>"network-monitoring"</li>
+</ul>
+<hr>
+<h1>[FreeBSD] SNMP &amp; MRTG</h1>
+<p>This article was written using FreeBSD 11.3-RELEASE. Assumption is made such that reader knows what is SNMP (Simple Network Management Protocol). At the end of the article, you should have working setup of SNMP &amp; MRTG (Multi Router Traffic …</p>
+                <a class="readmore" href="/net-snmp-mrtg-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/run-tor-browser-as-non-root-user-in-kali-linux.html" rel="bookmark"
+                           title="Permalink to "RUN TOR BROWSER AS NON-ROOT USER IN KALI LINUX"">"RUN TOR BROWSER AS NON-ROOT USER IN KALI LINUX"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"howto"</li>
+<li>"kalilinux"</li>
+<li>"kalilinuxhowto"</li>
+<li>"tor"</li>
+<li>"tor-browser"</li>
+<li>"tor-kalilinux"</li>
+<li>"torbrowser"</li>
+</ul>
+<hr>
+<p>This article is a simple trick to have Tor Browser running as non-root user in Kali Linux. A lot of programs in Kali Linux requires you to run as root user, and Tor Browser does not like it run with root …</p>
+                <a class="readmore" href="/run-tor-browser-as-non-root-user-in-kali-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/creating-freebsd-jails-the-freebsd-way.html" rel="bookmark"
+                           title="Permalink to "CREATING FREEBSD JAILS THE FREEBSD WAY"">"CREATING FREEBSD JAILS THE FREEBSD WAY"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-06T00:00:00+00:00">
+                Published: Sun 06 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"freebsd"</li>
+<li>"freebsd-jails"</li>
+<li>"jails"</li>
+<li>"jails-networking"</li>
+</ul>
+<hr>
+<p><em><strong>note</strong></em>: This guide would roughly give you idea setting up a proper jail with networking enabled.</p>
+<p><strong>update</strong>: You can install jail packages from the host without having to download and install <code>pkg</code> for your jails.</p>
+<p>This article is written for people who would like …</p>
+                <a class="readmore" href="/creating-freebsd-jails-the-freebsd-way.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linux-notes.html" rel="bookmark"
+                           title="Permalink to "Linux-Notes"">"Linux-Notes"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-03-03T00:00:00+00:00">
+                Published: Tue 03 March 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Linux notes</h1>
+<p>This note will be updated from time to time as I am currently in the process of self studying for RHEL RHCSA certification. The notes should be clear to understand. If you do not understand, contact me.</p>
+<h2>Users &amp; Groups</h2>
+<h3><code>/etc/passwd</code></h3>
+<p>The password aka <code>passwd</code> file holds information …</p>
+                <a class="readmore" href="/linux-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/run-latest-pkg-binaries-freebsd.html" rel="bookmark"
+                           title="Permalink to "Run latest pkg binaries #FreeBSD"">"Run latest pkg binaries #FreeBSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-01-01T00:00:00+00:00">
+                Published: Wed 01 January 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This article is written for those who would like to switch from quarterly package management to latest package management in FreeBSD operating system.</p>
+<p>In order to do so, first you need to do the following:</p>
+<p><code>vim /usr/local/etc/pkg/repos/FreeBSD.conf</code></p>
+<p>Inside that file, enter following contents:</p>
+<blockquote>
+<p>FreeBSD …</p></blockquote>
+                <a class="readmore" href="/run-latest-pkg-binaries-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/welcome-file.html" rel="bookmark"
+                           title="Permalink to "Welcome file"">"Welcome file"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-11-30T00:00:00+00:00">
+                Published: Sat 30 November 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Welcome to StackEdit!</h1>
+<p>Hi! I’m your first Markdown file in <strong>StackEdit</strong>. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the <strong>file explorer …</strong></p>
+                <a class="readmore" href="/welcome-file.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/ipf-ipnat-freebsd.html" rel="bookmark"
+                           title="Permalink to "ipf & ipnat - freebsd"">"ipf &amp; ipnat - freebsd"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-22T00:00:00+00:00">
+                Published: Fri 22 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Following firewall rules work for a jailed environment . the rest is self explanatory for readers who have experience with ipf. If you would like to read more on ipf, follow this <a href="https://www.freebsd.org/doc/handbook/firewalls-ipf.html">link</a>.</p>
+<p>[code lang=text] <br />pass in quick on lo0 all pass out quick on lo0 all</p>
+<p># outbound connection pass …</p>
+                <a class="readmore" href="/ipf-ipnat-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/ipfw-freebsd.html" rel="bookmark"
+                           title="Permalink to "ipfw - freebsd"">"ipfw - freebsd"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-18T00:00:00+00:00">
+                Published: Mon 18 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>following configurations should work with nat environment</p>
+<p>[code lang=text] <br />#!/usr/local/bin/env sh #flush out the list before we begin ipfw -q -f flush</p>
+<h1>set rules command prefix cmd="ipfw -q add" pif="vtnet0" # Interface name of NIC attached to Internet</h1>
+<h1>No restrictions on Loopback Interface $cmd 00010 …</h1>
+                <a class="readmore" href="/ipfw-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/gcc-generate-assembly-and-compile-into-program.html" rel="bookmark"
+                           title="Permalink to "GCC - Generate assembly and compile into program"">"GCC - Generate assembly and compile into program"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-11T00:00:00+00:00">
+                Published: Mon 11 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>To generate assembly code out of your C program, type following command:</p>
+<p>$gcc -S <source\95code></p>
+<p>Then to generate object file out of the assembly file, type following command:</p>
+<p>$gcc -c <assembly\95file>.s -o <object\95file>.o</p>
+<p>Then to compile it into a program will be following:</p>
+<p>$gcc <object\95file>.o -o <program>.exe</p>
+                <a class="readmore" href="/gcc-generate-assembly-and-compile-into-program.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/update-wordpress-unable-to-locate-wordpress-root-directory.html" rel="bookmark"
+                           title="Permalink to "Update WordPress Unable To Locate WordPress Root Directory"">"Update WordPress Unable To Locate WordPress Root Directory"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-05T00:00:00+00:00">
+                Published: Tue 05 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>If you encounter this issue after ftp connections working fine, you need to add following code into <code>​wp-config.php</code></p>
+<p>[code lang=text] <pre>if(is_admin()) { add_filter('filesystem_method', create_function('$a', 'return "direct";' )); define( 'FS_CHMOD_DIR', 0751 ); }</pre> [/code]</p>
+<p>Give appropriate permission to apache24 root folders and its subfolders by executing <code>chown -R www:www …</code></p>
+                <a class="readmore" href="/update-wordpress-unable-to-locate-wordpress-root-directory.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/pf-firewall-configuration-freebsd.html" rel="bookmark"
+                           title="Permalink to "PF Firewall Configuration - FreeBSD"">"PF Firewall Configuration - FreeBSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-02-26T00:00:00+00:00">
+                Published: Tue 26 February 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>pf.conf below allows NAT connection to jail if you have any. Below configuration worked for me. To monitor using pflog0, refer to the example below.</p>
+<h1>Update</h1>
+<p>PF is a good firewall solution for FreeBSD. It was first appeared in OpenBSD, then ported to FreeBSD and other platforms such as …</p>
+                <a class="readmore" href="/pf-firewall-configuration-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/virtualbox-post-setup-trueosfreebsd.html" rel="bookmark"
+                           title="Permalink to "VirtualBox post-setup TrueOS/FreeBSD"">"VirtualBox post-setup TrueOS/FreeBSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-22T00:00:00+00:00">
+                Published: Sat 22 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Load VirtualBox:</p>
+<p>\==============</p>
+<p>You need to load the vboxdrv kernel module via /boot/loader.conf:</p>
+<p>vboxdrv_load="YES"</p>
+<p>You also have to add all users to your vboxusers group in order to use vbox.</p>
+<p>% pw groupmod vboxusers -m</p>
+<p>Reboot the machine to load the needed kernel modules.</p>
+<p>Bridging Support:</p>
+<p>\=================</p>
+<p>For bridged networking …</p>
+                <a class="readmore" href="/virtualbox-post-setup-trueosfreebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/fedorarhelcentos-some-lvm-command-examples.html" rel="bookmark"
+                           title="Permalink to "FEDORA/RHEL/CENTOS - some LVM command examples"">"FEDORA/RHEL/CENTOS - some LVM command examples"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-17T00:00:00+00:00">
+                Published: Mon 17 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>NOTE: This guide serves as tutorial to claim free space in my machine. I will attempt to explain what I am doing. Assumption is made such that there are 5 partitions in <code>/dev/sda</code> at the time of writing. I was trying to claim <code>/dev/sda2</code> to extend <code>/dev/sda5 …</code></p>
+                <a class="readmore" href="/fedorarhelcentos-some-lvm-command-examples.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/pf-freebsd-solaris-firewall-working-configuration.html" rel="bookmark"
+                           title="Permalink to "PF - FreeBSD, Solaris Firewall working configuration"">"PF - FreeBSD, Solaris Firewall working configuration"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-09T00:00:00+00:00">
+                Published: Sun 09 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>PF is a complete, full-featured firewall that appeared since FreeBSD 5.3. It has optional support for ALTQ (Alternate Queuing) which provides QoS (Quality of Service). Visit <a href="https://www.freebsd.org/doc/handbook/firewalls-pf.html">here</a> for more details.</p>
+<p>Below configuration should work for typical 2-NIC set up.</p>
+<div class="highlight"><pre><span></span><code><span class="err">#################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Packet</span><span class="w"> </span><span class="nx">Firewall</span><span class="w"> </span><span class="nx">Ruleset</span><span class="w"> </span><span class="err">####</span>
+<span class="err">#################################</span>
+
+<span class="err">###################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Variables</span><span class="w"> </span><span class="err">####</span>
+<span class="err">###################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">External</span><span class="w"> </span><span class="kd">interface</span>
+<span class="nx">ext_if</span><span class="p">=</span><span class="s">&quot;CHANGEME&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Internal</span><span class="w"> </span><span class="kd">interface …</span></code></pre></div>
+                <a class="readmore" href="/pf-freebsd-solaris-firewall-working-configuration.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/openvpn-on-freebsd-112-release.html" rel="bookmark"
+                           title="Permalink to "OpenVPN on FreeBSD 11.2-RELEASE"">"OpenVPN on FreeBSD 11.2-RELEASE"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-05T00:00:00+00:00">
+                Published: Wed 05 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This guide was written based on result from a vps server. After following this guide, you should have working OpenVPN server and client.</p>
+<h2>### Update, Install &amp; Copy OpenVPN configuration files</h2>
+<p>First we need to update <code>pkg</code> manager and then install <code>openvpn</code> package.</p>
+<p><code>#sh</code></p>
+<p><code>#pkg update &amp;amp;&amp;amp; pkg install openvpn</code></p>
+<p>Next …</p>
+                <a class="readmore" href="/openvpn-on-freebsd-112-release.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/run-linuxr-binaries-in-bsd.html" rel="bookmark"
+                           title="Permalink to "Run Linux® binaries in BSD"">"Run Linux® binaries in BSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-19T00:00:00+00:00">
+                Published: Mon 19 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This guide was written to setup Linux® compatibility for FreeBSD. This guide was done in GhostBSD, should work for FreeBSD and other BSD derivatives.</p>
+<p>In order to load Linux kernel module, run the following command:</p>
+<p><code>#kldload linux</code> # you can load <code>linux64</code> kernel module as well</p>
+<p>To check if aforementioned module …</p>
+                <a class="readmore" href="/run-linuxr-binaries-in-bsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/diskpart-create-format-parition-windows.html" rel="bookmark"
+                           title="Permalink to "[DISKPART] CREATE & FORMAT PARITION - WINDOWS"">"[DISKPART] CREATE &amp; FORMAT PARITION - WINDOWS"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-18T00:00:00+00:00">
+                Published: Sun 18 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This guide is written to assist users in creating partition for disk, usb drives etc. Assumption is made that you are comfortable in command-line tasks and roughly understand the process of identifying partition, deletion, create new partition and format the partition.</p>
+<p>Start command-prompt as Administrator.</p>
+<p>Type <code>diskpart</code> and you will …</p>
+                <a class="readmore" href="/diskpart-create-format-parition-windows.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/gentoo-x86-linux-installation.html" rel="bookmark"
+                           title="Permalink to "# Gentoo x86 Linux Installation"">"# Gentoo x86 Linux Installation"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-09T00:00:00+00:00">
+                Published: Fri 09 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Gentoo x86 Linux Installation</h1>
+<p>This article will guide you on installing <code>Gentoo</code> <strong>GNU/Linux</strong> for x86 system. This guide was written based on official documentation available <a href="https://wiki.gentoo.org/wiki/Handbook:X86/Full/Installation#Optional:_Building_an_initramfs">here</a>. At the end of this guide, you should have working <strong>GNU/Linux</strong> operating system. For this installation, I have made several assumptions, which …</p>
+                <a class="readmore" href="/gentoo-x86-linux-installation.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/unixfreebsd-compile-install-kernel-world-optional-112-release.html" rel="bookmark"
+                           title="Permalink to "[UNIX/FreeBSD] Compile & Install kernel, @world (optional) - 11.2-RELEASE"">"[UNIX/FreeBSD] Compile &amp; Install kernel, @world (optional) - 11.2-RELEASE"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-09T00:00:00+00:00">
+                Published: Fri 09 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>GENERAL NOTE</h1>
+<p>This article is written for 11.2-RELEASE. This is the production release. There are other releases such as -STABLE, -CURRENT. Kindly read through official documentation on the differences between these releases and how,where you can use these releases. This article also assumes that you have perquisite as …</p>
+                <a class="readmore" href="/unixfreebsd-compile-install-kernel-world-optional-112-release.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/hide-files-in-docx.html" rel="bookmark"
+                           title="Permalink to "hide files in .docx"">"hide files in .docx"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-09-20T00:00:00+00:00">
+                Published: Thu 20 September 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>You can try this too, intended for educational purposes only. I am not responsible for any damage caused.</p>
+<p>As per some documents online, you can extract contents of .docx file into a folder, add any file(I added 7-zip installer file) into it, and compress the file back to .docx …</p>
+                <a class="readmore" href="/hide-files-in-docx.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/install-pi-hole-raspberry-pi-3.html" rel="bookmark"
+                           title="Permalink to "Install pi-hole - raspberry pi 3"">"Install pi-hole - raspberry pi 3"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-09-07T00:00:00+00:00">
+                Published: Fri 07 September 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Install PiHole - Raspberry Pi 3 The installation may fail, work. Suppose it does not work, visit discource.pi-hole.net for troubleshooting by the devs. Update &amp; Upgrade (if there is) $apt-get update $apt-get upgrade</p>
+<p>change raspi hostname $hostnamectl set-hostname <YOUR\95HOSTNAME></p>
+<p>ip command - set a default router <GATEWAY\95ADDR> $ip route add default via <ROUTER\95ADDR> route …</router\95addr></gateway\95addr></p>
+                <a class="readmore" href="/install-pi-hole-raspberry-pi-3.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/cryptography-fundamentals-notes.html" rel="bookmark"
+                           title="Permalink to "Cryptography fundamentals - notes"">"Cryptography fundamentals - notes"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-09-04T00:00:00+00:00">
+                Published: Tue 04 September 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1819382482739702504912688.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1819181285948234040570560.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1818162279748527881750567.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1817434431502064701429781.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1817156292308703481276428.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1816471750630975522364591.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1816306747289862792478433.jpg"></p>
+<p><img alt="" src="https://vigneshwaranravichandran.files.wordpress.com/2018/09/img_20180904_1815394183812753665313350.jpg"></p>
+                <a class="readmore" href="/cryptography-fundamentals-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/unetbootin-not-working-must-be-run-as-root.html" rel="bookmark"
+                           title="Permalink to "Unetbootin not working, must be run as root"">"Unetbootin not working, must be run as root"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-08-31T00:00:00+00:00">
+                Published: Fri 31 August 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>if you encounter problem while running Unetbootin, that an error will prompt you to run a piece of code. Run the code in su(sudo should work too), because it worked for me. This happens when you install Unetbootin from distribution's package. Compiling would work fine?</p>
+<p>dnf install unetbootin</p>
+<p>su …</p>
+                <a class="readmore" href="/unetbootin-not-working-must-be-run-as-root.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/.html" rel="bookmark"
+                           title="Permalink to """>""</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-08-30T00:00:00+00:00">
+                Published: Thu 30 August 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>[gallery ids="911,912" type="rectangular"]</p>
+                <a class="readmore" href="/.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/systemd-resolve.html" rel="bookmark"
+                           title="Permalink to "systemd-resolve"">"systemd-resolve"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-27T00:00:00+00:00">
+                Published: Fri 27 July 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>you may encounter systemd-resolve if you're using Ubuntu etc</p>
+<p>systemd-resolve --status</p>
+<p>*to retrieve information on systemd-resolve</p>
+<p>refer to following link on troubleshooting (un-tested) -&gt;https://askubuntu.com/questions/907246/how-to-disable-systemd-resolved-in-ubuntu</p>
+                <a class="readmore" href="/systemd-resolve.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/vi-cheat-sheet.html" rel="bookmark"
+                           title="Permalink to "vi --cheat-sheet"">"vi  --cheat-sheet"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-27T00:00:00+00:00">
+                Published: Fri 27 July 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p><img alt="a5b8dd595bf5eedaf95d4b402ad4526c" src="https://vigneshwaranravichandran.files.wordpress.com/2018/07/a5b8dd595bf5eedaf95d4b402ad4526c.jpg"></p>
+                <a class="readmore" href="/vi-cheat-sheet.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/ss-examples.html" rel="bookmark"
+                           title="Permalink to "ss - examples"">"ss - examples"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-05-18T00:00:00+00:00">
+                Published: Fri 18 May 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>it tells you domain</p>
+<p>ss -lp 'sport = :domain' </p>
+<p>expected output</p>
+<p>[code lang=text] Netid State Recv-Q Send-Q Local Address:Port Peer Address:Port udp UNCONN 0 0 127.0.0.53%lo:domain 0.0.0.0:* users:(("systemd-resolve",pid=768,fd=12)) tcp LISTEN 0 128 127.0.0 …</p>
+                <a class="readmore" href="/ss-examples.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/fix-broken-held-packages-to-completely-remove-kali-linux.html" rel="bookmark"
+                           title="Permalink to "Fix broken held packages (to completely remove kali-linux)"">"Fix broken held packages (to completely remove kali-linux)"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-05-14T00:00:00+00:00">
+                Published: Mon 14 May 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>
+<p>Run</p>
+<p><code>gksu gedit /etc/*release</code></p>
+<p>Change the file like this (depending on your release):</p>
+<p><code>DISTRIB_ID=Ubuntu  
+DISTRIB_RELEASE=16.04  
+DISTRIB_CODENAME=Xenial Xerus  
+DISTRIB_DESCRIPTION="Ubuntu 16.04"</code></p>
+<p>Save and close the file.
+- Run</p>
+<p><code>gksu gedit /etc/*issue</code></p>
+<p>Change the file like this (depending on your release):</p>
+<p><code>Ubuntu 16.04 \n \l …</code></p></li></ul>
+                <a class="readmore" href="/fix-broken-held-packages-to-completely-remove-kali-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/how-to-setup-asterisk-voip-server-over-openvpn-in-tor-hidden-service-on-freebsd.html" rel="bookmark"
+                           title="Permalink to "How To setup Asterisk VoIP server over OpenVPN in Tor hidden service on FreeBSD"">"How To setup Asterisk VoIP server over OpenVPN in Tor hidden service on FreeBSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-02-18T00:00:00+00:00">
+                Published: Sun 18 February 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>First create OpenSSL CA with easy-rsa or OpenSSL for OpenVPN.</p>
+<p>This is OpenVPN server configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="n">tls</span><span class="o">-</span><span class="n">server</span>
+<span class="n">port</span><span class="w"> </span><span class="mi">1194</span>
+<span class="n">proto</span><span class="w"> </span><span class="n">tcp</span>
+<span class="n">dev</span><span class="w"> </span><span class="n">tun</span>
+<span class="n">ca</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">ca</span><span class="o">.</span><span class="n">crt</span>
+<span class="n">cert</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+<span class="n">key</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+<span class="n">dh</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">dh2048</span><span class="o">.</span><span class="n">pem</span>
+<span class="n">topology</span><span class="w"> </span><span class="n">subnet</span>
+<span class="n">server</span><span class="w"> </span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0 …</span></code></pre></div>
+                <a class="readmore" href="/how-to-setup-asterisk-voip-server-over-openvpn-in-tor-hidden-service-on-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/change-funny-net-name-to-eth-like-linux-grub2-fedora.html" rel="bookmark"
+                           title="Permalink to "change funny net name to eth-like -- linux| grub2 | fedora"">"change funny net name to eth-like -- linux| grub2 | fedora"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-17T00:00:00+00:00">
+                Published: Thu 17 August 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>update:</p>
+<p>5:03AM - adding note for fedora</p>
+<p>ORIGINAL: WRITTEN FOR UBUNTU/LINUX MINT</p>
+<p>suppose you encounter funny network interface names, such as:</p>
+<p>enp2s0 etc etc</p>
+<p>filename: grub2.cfg/grub.cfg</p>
+<p>you can change them by adding following</p>
+<div class="highlight"><pre><span></span><code>GRUB_CMDLINE_LINUX=&quot;net.ifnames=0 biosdevname=0&quot;
+</code></pre></div>
+
+<p>Update:</p>
+<p>5:03AM - 28th August 2018 -</p>
+<ul>
+<li>-  all …</li></ul>
+                <a class="readmore" href="/change-funny-net-name-to-eth-like-linux-grub2-fedora.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/curl-dd-gzip-tar-sed-mkfs-command-will-be-updated-from-time-to-time.html" rel="bookmark"
+                           title="Permalink to "curl dd gzip tar sed mkfs command **will be updated from time to time"">"curl dd gzip tar sed mkfs command **will be updated from time to time"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-15T00:00:00+00:00">
+                Published: Tue 15 August 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This dd command will help you to backup large file/partition etc etc. Use with care! Stolen off stackoverflow (credits to the guy(s) who answered)</p>
+<p>** I am still struggling to merge those split files into one huge file. If you have answer, post it to message boards</p>
+<p>tar --extract …</p>
+                <a class="readmore" href="/curl-dd-gzip-tar-sed-mkfs-command-will-be-updated-from-time-to-time.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/go-installation-set-path-environment-variable-windows-10-via-cmd.html" rel="bookmark"
+                           title="Permalink to "Go Installation Set PATH environment variable - Windows 10 - via CMD"">"Go Installation Set PATH environment variable - Windows 10 - via CMD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-14T00:00:00+00:00">
+                Published: Mon 14 August 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This tutorial is written for those who are struggling to add new tools such ask android/sdk, android/platform-tools and golang installation. This tutorial should work on windows 7,8,10. This tutorial was written while installing <a href="https://golang.org/dl/">Golang</a> on Windows 10 Machine.</p>
+<p>Proceed by starting command-line prompt with "Run As …</p>
+                <a class="readmore" href="/go-installation-set-path-environment-variable-windows-10-via-cmd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/qemu-kvm-example-linux.html" rel="bookmark"
+                           title="Permalink to "Qemu kvm example - linux"">"Qemu kvm example - linux"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-28T00:00:00+00:00">
+                Published: Fri 28 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>To create virtual image with 20GB space: $ qemu-img create ubuntu.img 20G</p>
+<p>To boot created image with iso and 512mb ram $ qemu-system-i386 -drive format=raw,media=cdrom,file=ubuntu.img -cdrom ../Downloads/mini.iso -m 1024</p>
+<p>To boot image with 1GB ram: $ qemu-system-i386 -hda ubuntu.img -m 1024</p>
+                <a class="readmore" href="/qemu-kvm-example-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/android-studio-setting-proper-path-for-command-prompt-cmd-use.html" rel="bookmark"
+                           title="Permalink to "Android Studio - Setting proper path for command-prompt (cmd) use"">"Android Studio - Setting proper path for command-prompt (cmd) use"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-22T00:00:00+00:00">
+                Published: Sat 22 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Following path should be available in your <code>Environment Variables</code> so that you will be able to use android tools from command-prompt.</p>
+<p>Following pictures will describe paths needed.</p>
+<p><img alt="android_home" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/android_home.png"></p>
+<p><img alt="studio_grade_path" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/studio_grade_path1.png"></p>
+<p>This will allow you to build applications using frameworks such as Apache Cordova.</p>
+                <a class="readmore" href="/android-studio-setting-proper-path-for-command-prompt-cmd-use.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/microsoft-virtual-hard-disk-attachdetach-using-powershell.html" rel="bookmark"
+                           title="Permalink to "Microsoft - Virtual Hard Disk attach/detach using powershell"">"Microsoft - Virtual Hard Disk attach/detach using powershell"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-21T00:00:00+00:00">
+                Published: Fri 21 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>You can create Virtual Hard Disk by accessing <code>diskmgmt.msc</code> and attach as if it is actual hard disk drive. Only difference is it is virtual. It should be easy to move those files around, from one computer to another.</p>
+<p>Note: Be sure to try this with appropriate user permissions …</p>
+                <a class="readmore" href="/microsoft-virtual-hard-disk-attachdetach-using-powershell.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linuxtargz-related-command-examples.html" rel="bookmark"
+                           title="Permalink to "Linux|.tar.gz related command examples"">"Linux|.tar.gz related command examples"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-19T00:00:00+00:00">
+                Published: Wed 19 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>You can play following commands using URL: https://www.phrack.org/archives/tgz/</p>
+<p>To download archives, you can use download manager or following loop:</p>
+<p>[code lang=text] for i in {1..69}</p>
+<p>do</p>
+<p>wget http://phrack.org/archive/tgz/phrack$i.tar.gz</p>
+<p>done</p>
+<p>[/code]</p>
+<p>List contents of tar.gz …</p>
+                <a class="readmore" href="/linuxtargz-related-command-examples.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/installing-freebsd-110-release-in-virtual-machine.html" rel="bookmark"
+                           title="Permalink to "Installing FreeBSD 11.0-RELEASE in virtual machine"">"Installing FreeBSD 11.0-RELEASE in virtual machine"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-17T00:00:00+00:00">
+                Published: Mon 17 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This tutorial will guide you on how to install FreeBSD in virtual machine.</p>
+<p>You will be prompted with Keyboard Selection. Select your desired keyboard layout.</p>
+<p><img alt="Keyboard_selection" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/keyboard_selection.png"></p>
+<p>Next you will be presented with Set Hostname. Set your hostname. You can follow mine for example.</p>
+<p><img alt="set_hostname" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/set_hostname.png"></p>
+<p>Then you will be prompted with Distribution Select …</p>
+                <a class="readmore" href="/installing-freebsd-110-release-in-virtual-machine.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/windows-create-system-image-backup.html" rel="bookmark"
+                           title="Permalink to "Windows - Create System Image Backup"">"Windows - Create System Image Backup"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-16T00:00:00+00:00">
+                Published: Sun 16 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This tutorial will explain how to create system image backup for Windows 10 in same hard disk. Before you begin, make sure I am no responsible if you lose your data in the process. Follow carefully and you should be able to reset Windows 10 installation with disk/usb installation …</p>
+                <a class="readmore" href="/windows-create-system-image-backup.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/windows-devicecredential-guard-issue-during-vmware-workstation-launch.html" rel="bookmark"
+                           title="Permalink to "Windows - Device/Credential Guard issue during VMware Workstation launch"">"Windows - Device/Credential Guard issue during VMware Workstation launch"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-16T00:00:00+00:00">
+                Published: Sun 16 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>If you are prompted with following error:</p>
+<p><img alt="devicecredentialguard" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/devicecredentialguard.png"></p>
+<p>Determine if you are running EFI or BIOS: launching cmd as administrator type msinfo32 in the prompt</p>
+<p>I am using legacy BIOS so the fix will be running following command at prompt: bcdedit /set hypervisorlaunchtype off</p>
+<p>For EFI visit following link:https://kb …</p>
+                <a class="readmore" href="/windows-devicecredential-guard-issue-during-vmware-workstation-launch.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linuxfreebsd-tips-tricks.html" rel="bookmark"
+                           title="Permalink to "Linux/FreeBSD Tips & Tricks"">"Linux/FreeBSD Tips &amp; Tricks"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-15T00:00:00+00:00">
+                Published: Sat 15 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>FreeBSD is started up by the program 'init'. The first thing init does when starting multiuser mode (ie, starting the computer up for normal use) is to run the shell script /etc/rc. By reading /etc/rc and the /etc/rc.d/ scripts, you can learn a lot about how …</li></ul>
+                <a class="readmore" href="/linuxfreebsd-tips-tricks.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/compile-install-freebsd-kernel.html" rel="bookmark"
+                           title="Permalink to "Compile & Install FreeBSD kernel"">"Compile &amp; Install FreeBSD kernel"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-14T00:00:00+00:00">
+                Published: Fri 14 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Compile &amp; Installing your own kernel in FreeBSD is not that difficult, as long as you follow the process properly. I managed to compile and install my own kernel using DigitalOcean's kernel configuration example. I will most mine as an example as it was done in VMware. Following is the kernel …</p>
+                <a class="readmore" href="/compile-install-freebsd-kernel.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/kali-linux-foremost-example.html" rel="bookmark"
+                           title="Permalink to "Kali Linux - Foremost example"">"Kali Linux - Foremost example"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-14T00:00:00+00:00">
+                Published: Fri 14 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Foremost is a forensic tool used to recover lost files based on:</p>
+<ul>
+<li>headers</li>
+<li>footers</li>
+<li>internal data structures</li>
+</ul>
+<p>Foremost can work with DD image type as well.</p>
+<p>Link: http://foremost.sourceforge.net</p>
+<p>Example command:</p>
+<h1>foremost -t pdf,exe -i (/path/to/recover|image.dd)</h1>
+<p>Source:https://tools.kali.org/forensics/foremost …</p>
+                <a class="readmore" href="/kali-linux-foremost-example.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/maintaining-ports-tree-freebsd.html" rel="bookmark"
+                           title="Permalink to "Maintaining Ports Tree - FreeBSD"">"Maintaining Ports Tree - FreeBSD"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-14T00:00:00+00:00">
+                Published: Fri 14 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>FreeBSD has its own package management which is the ports tree. Ports tree has all the packages you need to build/run application such as subversion, git and others.</p>
+<p>To check when you last updated ports tree, execute following command:</p>
+<blockquote>
+<p>stat -x /usr/ports/UPDATING</p>
+</blockquote>
+<p>Output will show you the …</p>
+                <a class="readmore" href="/maintaining-ports-tree-freebsd.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/recover-from-dirty-boot-kali-linux.html" rel="bookmark"
+                           title="Permalink to "Recover from dirty boot - Kali Linux"">"Recover from dirty boot - Kali Linux"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-13T00:00:00+00:00">
+                Published: Thu 13 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Should you ever fall into initramfs after restarting from fresh kali linux installation,</p>
+<p>try cleaning boot partition,</p>
+<p>if it is not install in sda1, check in /dev</p>
+<p>and execute file cleaning <code>fsck.ext4 -f /dev/sd{a,b}</code></p>
+<p>and reboot your machine/virtual machine.</p>
+<p>You should be able to boot …</p>
+                <a class="readmore" href="/recover-from-dirty-boot-kali-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/setup-freebsd-virtual-machine-image.html" rel="bookmark"
+                           title="Permalink to "Setup FreeBSD Virtual Machine Image"">"Setup FreeBSD Virtual Machine Image"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-09T00:00:00+00:00">
+                Published: Sun 09 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Setting up FreeBSD is fun, especially when you are performing clean installation. We are going to cover setting up FreeBSD virtual machine file download from <a href="https://download.freebsd.org/ftp/releases/VM-IMAGES/11.0-RELEASE/i386/Latest/FreeBSD-11.0-RELEASE-i386.vhd.xz">this link.</a></p>
+<p>Take Note: If you are using Virtualbox to boot up FreeBSD, select <code>NAT</code> . I have not tried other network configuration options as of …</p>
+                <a class="readmore" href="/setup-freebsd-virtual-machine-image.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/unixlinux-format-usb-stick-to-fat32.html" rel="bookmark"
+                           title="Permalink to "UNIX/LINUX FORMAT USB STICK TO FAT32"">"UNIX/LINUX FORMAT USB STICK TO FAT32"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-08T00:00:00+00:00">
+                Published: Sat 08 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Following guide will teach you how to format your USB STICK.</p>
+<p>hit <code>fdisk -l</code> / <code>fdisk -s</code> to determine usb drive path.</p>
+<p>hit <code>fdisk /dev/sdaX</code> to enter fdisk program with device attached</p>
+<p>press <code>d</code> to delete existing partitions.</p>
+<p>press <code>n</code> to create new partition</p>
+<p>press <code>p</code> for primary partition</p>
+<p>Hit …</p>
+                <a class="readmore" href="/unixlinux-format-usb-stick-to-fat32.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/english-vocabulary-tbu.html" rel="bookmark"
+                           title="Permalink to "English Vocabulary (TBU)"">"English Vocabulary (TBU)"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-03T00:00:00+00:00">
+                Published: Mon 03 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This article to be updated from time to time.</p>
+<p>1)Unscrupulous</p>
+<p>Definition:</p>
+<ul>
+<li>having/showing no moral principles</li>
+<li>not honest or fair</li>
+</ul>
+<p>Synonym:</p>
+<ul>
+<li>unethical</li>
+<li>conscienceless</li>
+</ul>
+<p>2) Embolism (Medical Term)</p>
+<p>Definition:</p>
+<ul>
+<li>obstruction of an artery, typically by a clot of blood or an air bubble</li>
+<li>the periodic intercalation of days or a …</li></ul>
+                <a class="readmore" href="/english-vocabulary-tbu.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/miscellaneous-windows-10-one-liners-to-be-updated-from-time-2-time.html" rel="bookmark"
+                           title="Permalink to "Miscellaneous Windows 10 One Liners ** to be updated from time 2 time"">"Miscellaneous Windows 10 One Liners ** to be updated from time 2 time"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-06-24T00:00:00+00:00">
+                Published: Sat 24 June 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Miscellaneous Windows 10 One liners</h1>
+<p>Note: This blog post was written using StackEdit (Online Markdown Editor). You may see some errors.</p>
+<p>** if you do not get what you are looking for, kindly look at Microsoft Support Documents, also utilize powershell's built-in feature to spit some common examples which is super …</p>
+                <a class="readmore" href="/miscellaneous-windows-10-one-liners-to-be-updated-from-time-2-time.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/command-prompt-with-administrator-shortcut.html" rel="bookmark"
+                           title="Permalink to "Command Prompt with Administrator shortcut"">"Command Prompt with Administrator shortcut"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-01-23T00:00:00+00:00">
+                Published: Mon 23 January 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Command Prompt with Administrator privileges shortcut</h1>
+<p>This quickstart shows you how to create a command prompt (cmd) with administrator privileges shortcut in your desktop.</p>
+<p>To create a shortcut, on your desktop, <code>right click</code> then, select <code>new</code>. It show expand to another view with bunch of options. Select <code>Shortcut</code>.</p>
+<p>You will …</p>
+                <a class="readmore" href="/command-prompt-with-administrator-shortcut.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorialbuilding-rpm-package-using-gnu-hello-fedora-2324.html" rel="bookmark"
+                           title="Permalink to "[Tutorial]Building RPM package using GNU Hello - Fedora 23/24"">"[Tutorial]Building RPM package using GNU Hello - Fedora 23/24"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-25T00:00:00+00:00">
+                Published: Mon 25 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[Tutorial]Building RPM package using GNU Hello - Fedora 23/24</h1>
+<p>This tutorial was written to guide users in creating RPM package using GNU Hello source.</p>
+<ul>
+<li>1) run <code># dnf install fedora-packager @development-tools</code></li>
+<li>2) run <code># usermod -a -G mock</code></li>
+<li>3) run the command from user-space (hint: '$') <code>$ rpmdev-setuptree</code></li>
+<li>4) change directory into <code>~/rpmbuild …</code></li></ul>
+                <a class="readmore" href="/tutorialbuilding-rpm-package-using-gnu-hello-fedora-2324.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorialformat-usb-drive-in-linux.html" rel="bookmark"
+                           title="Permalink to "[Tutorial]Format USB Drive in Linux"">"[Tutorial]Format USB Drive in Linux"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-20T00:00:00+00:00">
+                Published: Wed 20 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[Tutorial]Format USB Drive in Linux</h1>
+<p>To format your usb drive in linux, first you need to find out where the usb drive is mounted. To find out the device, type <code>dmesg</code> . At the very end of <code>dmesg</code> output, you will see some messages relating to the usb drive you …</p>
+                <a class="readmore" href="/tutorialformat-usb-drive-in-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorialgit-github-distributed-version-control-system.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL]Git & Github - distributed version control system"">"[TUTORIAL]Git &amp; Github - distributed version control system"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-20T00:00:00+00:00">
+                Published: Wed 20 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[TUTORIAL]Git &amp; Github</h1>
+<h2>Step 1: Install Git</h2>
+<p><strong>Windows</strong>:It's recommended to download GitHub for Windows, which includes Git<a href="#fn-424-Git">1</a> and has an easier install : <a href="http://windows.github.com/">windows.github.com</a>Use the <strong>Git Shell</strong> for your terminal. <strong>Linux</strong><a href="#fn-424-linux">2</a>: Debian-like-Distro: - <code>$ sudo apt install git</code> RPM-like-Distro: - <code>$ sudo dnf install git</code>(<strong>Fedora23/24</strong>) or - <code>sudo …</code></p>
+                <a class="readmore" href="/tutorialgit-github-distributed-version-control-system.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-install-vnc-server-fedora-2324.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL] Install VNC Server - Fedora 23/24"">"[TUTORIAL] Install VNC Server - Fedora 23/24"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-19T00:00:00+00:00">
+                Published: Tue 19 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This tutorial was written to guide users in installing VNC Server in their Fedora workstation.</p>
+<h2>Install VNC Server</h2>
+<ul>
+<li>First, run <strong><code>dnf update</code></strong></li>
+<li>Second, run <strong><code>dnf install tigervnc-server</code></strong></li>
+</ul>
+<h2>Configuring VNC Server</h2>
+<ul>
+<li>Third, copy following files <strong><code>cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</code></strong> Edit the file replacing `````` with …</li></ul>
+                <a class="readmore" href="/tutorial-install-vnc-server-fedora-2324.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-install-xfce4-on-linux-debian.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL] Install Xfce4 on Linux-Debian"">"[TUTORIAL] Install Xfce4 on Linux-Debian"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-17T00:00:00+00:00">
+                Published: Sun 17 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Update</p>
+<p>Wrote this article when I was using Linux Mint</p>
+<hr>
+<p>This tutorial is written on how to remove existing desktop environment and install xfce4.</p>
+<h2>Brief Introduction</h2>
+<p>Xfce4 is a light weight desktop environment with low memory footprint. Using Xfce4 is somewhat like using a mac, just a little bit older …</p>
+                <a class="readmore" href="/tutorial-install-xfce4-on-linux-debian.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorialinstall-dart_sdk-on-linux-debian_like_systems.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL]INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS"">"[TUTORIAL]INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-17T00:00:00+00:00">
+                Published: Sun 17 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS</h1>
+<p>This tutorial was written to guide users in installing dartlang in their linux workstation.</p>
+<ul>
+<li>
+<p>Update <code>sudo apt-get update</code></p>
+</li>
+<li>
+<p>Install <strong>apt-transport-https</strong> <code>sudo apt-get install apt-transport-https</code></p>
+</li>
+<li>
+<p>Get Google Linux package signing key <code>sudo sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'</code></p>
+</li>
+<li>
+<p>Set up the …</p></li></ul>
+                <a class="readmore" href="/tutorialinstall-dart_sdk-on-linux-debian_like_systems.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorialinstall-oracle-jdk-on-linux.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL]Install Oracle JDK on Linux"">"[TUTORIAL]Install Oracle JDK on Linux"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-17T00:00:00+00:00">
+                Published: Sun 17 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Install Oracle JDK on Linux</h1>
+<p>Most linux distributions come with OpenJDK installed. This tutorial was written to teach how to install Oracle JDK on Linux.</p>
+<p>1)Remove OpenJDK Installation <code>apt-get update &amp;amp;&amp;amp; apt-get autoremove --purge openjdk*</code></p>
+<p>2)Download latest Oracle JDK. Look for linux version ending with tar.gz …</p>
+                <a class="readmore" href="/tutorialinstall-oracle-jdk-on-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-bash-examples.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL] Bash Examples"">"[TUTORIAL] Bash Examples"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-14T00:00:00+00:00">
+                Published: Thu 14 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Bash Examples</h1>
+<p>This tutorial was written for those who wish to get involved in Linux environment. This tutorial will be <code>updated</code> from <code>time</code> to <code>time</code>.</p>
+<ul>
+<li>
+<p>Show where you are <strong>Solution</strong></p>
+<blockquote>
+<p><code>bash-2.03$ pwd</code> <code>tmp</code> <code>bash-2.03$ export PS1='[\u@\h \w]$ '</code> <code>[jp@solaris8 /tmp]$</code></p>
+</blockquote>
+</li>
+<li>
+<p>Need to find and run a …</p></li></ul>
+                <a class="readmore" href="/tutorial-bash-examples.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/go-installation-script-for-linux.html" rel="bookmark"
+                           title="Permalink to "Go Installation Script for Linux"">"Go Installation Script for Linux"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-12T00:00:00+00:00">
+                Published: Tue 12 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Go Installation Script for Linux</h1>
+<p>For: Mid-range Linux Users</p>
+<p>Written <code>sh</code> script for Debian-Linux to install Go language.</p>
+<p>To install the script, copy the code, save as anything you wish, give executable permission and feed it with latest Go insllation archive.</p>
+<p>script link: https://github.com/vgnshlvnz/installation-scripts/blob/master …</p>
+                <a class="readmore" href="/go-installation-script-for-linux.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-get-list-of-installed-softwares-of-windows.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL] Get list of installed softwares of Windows"">"[TUTORIAL] Get list of installed softwares of Windows"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-12T00:00:00+00:00">
+                Published: Tue 12 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>Get Installed programs in Windows</h1>
+<p>This tutorial should work on any windows from 7 and beyond.</p>
+<p>To start:</p>
+<ul>
+<li>
+<p>Open command prompt from Start Menu, right-click and run as <code>Administrator</code></p>
+</li>
+<li>
+<p>Once you're in command-prompt, type <code>wmic /output:C:InstallList.txt product get name,version</code></p>
+</li>
+<li>
+<p>Then go the directory and you should …</p></li></ul>
+                <a class="readmore" href="/tutorial-get-list-of-installed-softwares-of-windows.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/quickstart-for-go-in-the-app-engine-flexible-environment.html" rel="bookmark"
+                           title="Permalink to "[Quickstart] For Go in the App Engine Flexible Environment"">"[Quickstart] For Go in the App Engine Flexible Environment"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This quickstart shows you how to create a small App Engine application that displays a short message.</p>
+<h2>Before you begin</h2>
+<p>Before running this sample, take the following steps:</p>
+<ul>
+<li>
+<p>1) Select or create a Cloud Platform Console project. <a href="https://console.cloud.google.com/project?_ga=1.243600902.2004985784.1467629203">Go To The Projects Page</a></p>
+</li>
+<li>
+<p>2) Enable billing for your project. <a href="https://support.google.com/cloud/answer/6293499#enable-billing">Enable Billing …</a></p></li></ul>
+                <a class="readmore" href="/quickstart-for-go-in-the-app-engine-flexible-environment.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/quickstart-learn-node-in-no-time.html" rel="bookmark"
+                           title="Permalink to "[QUICKSTART] Learn Node in no time"">"[QUICKSTART] Learn Node in no time"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p><strong>Question 1</strong>:</p>
+<p>Write a program that prints the text "HELLO WORLD" to the console (stdout).</p>
+<p><strong>Hint:</strong></p>
+<p>To make a Node.js program, create a new file with a .js extension and start writing JavaScript! Execute your program by running it with the node command. e.g.:</p>
+<p>$ node program.js</p>
+<p>You …</p>
+                <a class="readmore" href="/quickstart-learn-node-in-no-time.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-enable-autosave-feature-in-microsoft-word-2013.html" rel="bookmark"
+                           title="Permalink to "[Tutorial] Enable Autosave feature in Microsoft Word 2013"">"[Tutorial] Enable Autosave feature in Microsoft Word 2013"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>[Tutorial] Enable Autosave feature in Microsoft Word 2013</h1>
+<p>This tutorial was written to ease problems faced by graduates losing their work. By <code>enabling</code> autosave feature in Word 2013, you will save your work incase your computer crash.</p>
+<ul>
+<li>Start New Blank Document.</li>
+<li>Click <code>File</code> -&gt; <code>Save</code> -&gt; <code>Browse</code></li>
+<li>You will see <code>Tools</code> near …</li></ul>
+                <a class="readmore" href="/tutorial-enable-autosave-feature-in-microsoft-word-2013.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-go-installation-set-path-environment-variable-windows-10.html" rel="bookmark"
+                           title="Permalink to "[Tutorial] Go Installation Set PATH environment variable - Windows 10"">"[Tutorial] Go Installation Set PATH environment variable - Windows 10"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This tutorial is written for those who are struggling to add new tools such ask android/sdk, android/platform-tools and golang installation. This tutorial should work on windows 7,8,10. This tutorial was written while installing <a href="https://golang.org/dl/">Golang</a> on Windows 10 Machine.</p>
+<p>Proceed by starting command-line prompt with "Run As …</p>
+                <a class="readmore" href="/tutorial-go-installation-set-path-environment-variable-windows-10.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/google-compute-engine-quickstart.html" rel="bookmark"
+                           title="Permalink to "Google Compute Engine - Quickstart"">"Google Compute Engine - Quickstart"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Quickstart with MongoDB</p>
+<p>Once you have obtained your account with Google Cloud Console, proceed to do the following:</p>
+<p><a href="https://console.cloud.google.com/compute/instances?project=impactful-veld-136223&amp;graph=GCE_CPU&amp;duration=PT1H">[Create an Instance]</a></p>
+<ul>
+<li><em>Name</em> the instance. Name must start with a lowercase letter followed by up to 62 lowercase letters, numbers, or hyphens, and cannot end with a hyphen. In this case …</li></ul>
+                <a class="readmore" href="/google-compute-engine-quickstart.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/quickstart-gcloud-compute.html" rel="bookmark"
+                           title="Permalink to "Quickstart - gcloud compute"">"Quickstart - gcloud compute"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Install Google Cloud SDK from <em><a href="https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe">[here]</a>.</em></p>
+<p>Make sure following are selected:</p>
+<ul>
+<li><strong>Start Google Cloud SDK Shell</strong></li>
+<li><strong>Run 'gcloud init'</strong></li>
+</ul>
+<p>Initialize the SDK</p>
+<p>Use the <code>gcloud init</code> command to perform several common SDK setup tasks. These include authorizing the SDK tools to access Google Cloud Platform using your user account credentials …</p>
+                <a class="readmore" href="/quickstart-gcloud-compute.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/quickstart-google-cloud-sql-instance.html" rel="bookmark"
+                           title="Permalink to "Quickstart - Google Cloud SQL instance"">"Quickstart - Google Cloud SQL instance"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This page describes how to create a Google Cloud SQL instance (either First Generation or Second Generation). A Google Cloud SQL instance is a MySQL database hosted in Google's cloud.</p>
+<p>For information about installing and getting started with the Cloud SDK, see <a href="https://cloud.google.com/sdk">Google Cloud SDK</a>. For information about the Cloud …</p>
+                <a class="readmore" href="/quickstart-google-cloud-sql-instance.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/quickstart-python-app-engine-standard-environment.html" rel="bookmark"
+                           title="Permalink to "Quickstart - Python App Engine Standard Environment"">"Quickstart - Python App Engine Standard Environment"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This quickstart shows you how to create a small App Engine application that displays a short message.</p>
+<h2>Download the Hello World app</h2>
+<p>We've created a simple Hello World app for Python so you can quickly get a feel for deploying an app to Google Cloud Platform. Follow these steps to …</p>
+                <a class="readmore" href="/quickstart-python-app-engine-standard-environment.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-java-oop-basics.html" rel="bookmark"
+                           title="Permalink to "[tutorial] - Java OOP Basics"">"[tutorial] - Java OOP Basics"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-02T00:00:00+00:00">
+                Published: Sat 02 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>TL;DR:Following are characteristics of an <strong>object-oriented programming</strong>:</p>
+<ul>
+<li>Everything is an object</li>
+<li>A program is a bunch of objects telling each other what to do by sending messages</li>
+<li>Each object has its own memory made up of other objects</li>
+<li>Every object has a type.</li>
+<li>All objects of a particular …</li></ul>
+                <a class="readmore" href="/tutorial-java-oop-basics.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/python-convert-uppercase-to-lowercase.html" rel="bookmark"
+                           title="Permalink to "[PYTHON] Convert Uppercase to Lowercase"">"[PYTHON] Convert Uppercase to Lowercase"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-06-11T00:00:00+00:00">
+                Published: Sat 11 June 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This post written for casual python users who have knowledge in [man]-handling python interpreter. Depending on your workstation operating system, enter python interpreter.</p>
+<p>Once you're in the interpreter, assign a variable to the content you want to convert.</p>
+<p>e.g:</p>
+<p>python&gt;&gt;&gt;string = "<your text here without brackets ONLY>"</p>
+<p>Then print the variable with lower function …</p>
+                <a class="readmore" href="/python-convert-uppercase-to-lowercase.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/guidelinux-4-first-time-users-101-linux4ftu101.html" rel="bookmark"
+                           title="Permalink to "[GUIDE]LINUX 4 FIRST TIME USERS 101 // LINUX:4FTU101"">"[GUIDE]LINUX 4 FIRST TIME USERS 101 // LINUX:4FTU101"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-01-24T00:00:00+00:00">
+                Published: Sat 24 January 2015
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <blockquote>
+<p>"Any man who reads too much and uses his own brain too little falls into lazy habits of thinking - Albert Einstein"</p>
+</blockquote>
+<p>I am writing this guide to help those who are interested in trying Linux as a first time user. Assumption is made such that you're new to Linux and …</p>
+                <a class="readmore" href="/guidelinux-4-first-time-users-101-linux4ftu101.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/tutorial-how-to-set-up-lamp-server-on-fedora-20.html" rel="bookmark"
+                           title="Permalink to "[TUTORIAL] HOW TO SET UP LAMP SERVER ON FEDORA 20"">"[TUTORIAL] HOW TO SET UP LAMP SERVER ON FEDORA 20"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-07-18T00:00:00+00:00">
+                Published: Fri 18 July 2014
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p><strong>WHAT IS LAMP?</strong></p>
+<p><strong>LAMP</strong> is an acronym for <strong>Linux</strong>, <strong>Apache</strong>, <strong>MySQL</strong> (or <strong>MariaDB</strong>) and <strong>PHP</strong>/<strong>Perl</strong>/<strong>Python</strong>. It is a software bundle composed entirely of free and open source software used for building dynamic websites and acts as local web server on your PC. On <strong>Windows</strong> system, <strong>WAMP</strong> is used …</p>
+                <a class="readmore" href="/tutorial-how-to-set-up-lamp-server-on-fedora-20.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/squid-optimizing-web-delivery-sample-configuration.html" rel="bookmark"
+                           title="Permalink to "Squid [Optimizing Web Delivery] + [Sample Configuration]"">"Squid [Optimizing Web Delivery] + [Sample Configuration]"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-03-07T00:00:00+00:00">
+                Published: Fri 07 March 2014
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p><strong>SQUID</strong></p>
+<p>Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more. It reduces bandwidth and improves response times by caching and reusing frequently-requested web pages. Squid has extensive access controls and makes a great server accelerator. It runs on most available operating systems, including Windows and …</p>
+                <a class="readmore" href="/squid-optimizing-web-delivery-sample-configuration.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/install-jdk7-with-netbeans-linux-how-to.html" rel="bookmark"
+                           title="Permalink to "Install JDK7 with NetBeans [Linux]-[How-to]"">"Install JDK7 with NetBeans [Linux]-[How-to]"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-27T00:00:00+00:00">
+                Published: Mon 27 January 2014
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>This how-to going to teach you how to install Oracle Java JDK and NetBeans in single installer file in linux. This how-to is aimed for those who have average understanding on linux terminal such as setting file permission, downloading and etc.</p>
+<p><strong>Steps:</strong></p>
+<p>1)Download the file from <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk-7-netbeans-download-432126.html" title="JDK 7 With NetBeans">this</a> web site …</p>
+                <a class="readmore" href="/install-jdk7-with-netbeans-linux-how-to.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/example-markdown-example-use-anywhere.html" rel="bookmark"
+                           title="Permalink to "[EXAMPLE] MARKDOWN EXAMPLE - USE ANYWHERE"">"[EXAMPLE] MARKDOWN EXAMPLE - USE ANYWHERE"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-12-07T00:00:00+00:00">
+                Published: Sat 07 December 2013
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <h1>My First Post using StackEdit!</h1>
+<p>I discovered this application that uses <strong>Markdown Syntax</strong> which is pretty helpful while writing a <code>blog post</code> or <code>github post</code>. You name it.</p>
+<hr>
+<h2>StackEdit</h2>
+<p>What is <strong>StackEdit</strong>? Check out the following and get yourself familiarized with StackEdit. I am sure most of <strong>you</strong> will be …</p>
+                <a class="readmore" href="/example-markdown-example-use-anywhere.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/a-brief-introduction-on-unix.html" rel="bookmark"
+                           title="Permalink to "A brief Introduction on Unix"">"A brief Introduction on Unix"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-11-28T00:00:00+00:00">
+                Published: Thu 28 November 2013
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <ul>
+<li>"computer"</li>
+<li>"information-technology"</li>
+<li>"linux"</li>
+<li>"self-effort"</li>
+<li>"understanding"</li>
+<li>"unix"</li>
+</ul>
+<hr>
+<p><strong>What is Unix?</strong></p>
+<p>UNIX is an operating system which was first developed in the 1960s, and has been under constant development ever since. By operating system, we mean the suite of programs which make the computer work. It is a stable, multi-user, multi-tasking system …</p>
+                <a class="readmore" href="/a-brief-introduction-on-unix.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/raspberry-pi-edible-or-non-edible.html" rel="bookmark"
+                           title="Permalink to "Raspberry Pi - Edible or Non-edible?"">"Raspberry Pi - Edible or Non-edible?"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-08-05T00:00:00+00:00">
+                Published: Mon 05 August 2013
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>To be honest, Raspberry pie is edible.</p>
+<p><a href="http://vigneshwaranravichandran.files.wordpress.com/2013/08/fresh_raspberry_pie.jpg"><img alt="Raspberry Pie" src="http://vigneshwaranravichandran.files.wordpress.com/2013/08/fresh_raspberry_pie.jpg?w=300"></a></p>
+<p>So which is the non-edible pie then? It's not pie but pi. Behold, Raspberry Pi, a credit-card sized computer aimed at hobbyist and hackers (not forgetting students) around the world. It's an ARM GNU/Linux box only at $25 (price may vary after …</p>
+                <a class="readmore" href="/raspberry-pi-edible-or-non-edible.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/how-to-enable-auto-save-function-in-microsoft-word-2010important.html" rel="bookmark"
+                           title="Permalink to "How to enable auto-save function in Microsoft Word 2010[IMPORTANT]"">"How to enable auto-save function in Microsoft Word 2010[IMPORTANT]"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2013-07-31T00:00:00+00:00">
+                Published: Wed 31 July 2013
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>If you're University student/college student, take note. This is important and eventually it saves you from HEART ATTACK.</p>
+<p>Crashes happen. Anywhere, anytime. Even your laptop or desktop may face crashes. While you're indulged with your work, computer goes off and all your work goes off with it. So, make …</p>
+                <a class="readmore" href="/how-to-enable-auto-save-function-in-microsoft-word-2010important.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/hello-world.html" rel="bookmark"
+                           title="Permalink to "Hello world!"">"Hello world!"</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2012-06-05T00:00:00+00:00">
+                Published: Tue 05 June 2012
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Welcome to <a href="https://wordpress.com/">WordPress.com</a>! This is your very first post. Click the Edit link to modify or delete it, or <a href="/wp-admin/post-new.php" title="Direct link to Add New in the Admin Dashboard">start a new post</a>. If you like, use this post to tell readers why you started this blog and what you plan to do with it.</p>
+<p>Happy blogging!</p>
+                <a class="readmore" href="/hello-world.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

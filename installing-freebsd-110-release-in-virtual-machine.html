@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Installing FreeBSD 11.0-RELEASE in virtual machine"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This tutorial will guide you on how to install FreeBSD in virtual machine. You will be prompted with Keyboard Selection. Select your desired..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/installing-freebsd-110-release-in-virtual-machine.html" rel="bookmark"
+           title="Permalink to "Installing FreeBSD 11.0-RELEASE in virtual machine"">"Installing FreeBSD 11.0-RELEASE in virtual machine"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-17T00:00:00+00:00">
+                Published: Mon 17 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This tutorial will guide you on how to install FreeBSD in virtual machine.</p>
+<p>You will be prompted with Keyboard Selection. Select your desired keyboard layout.</p>
+<p><img alt="Keyboard_selection" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/keyboard_selection.png"></p>
+<p>Next you will be presented with Set Hostname. Set your hostname. You can follow mine for example.</p>
+<p><img alt="set_hostname" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/set_hostname.png"></p>
+<p>Then you will be prompted with Distribution Select. You can choose to select all.</p>
+<p><img alt="distribution_set" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/distribution_set.png"></p>
+<p>Next you will be prompted with Partitioning. Select <code>Auto (UFS)</code> for now.</p>
+<p><img alt="partitioning" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/partitioning.png"></p>
+<p>Select <code>Entire Disk</code>.</p>
+<p><img alt="partitioning_2" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/partitioning_2.png"></p>
+<p>Select <code>MBR</code> for now.</p>
+<p><img alt="partition_scheme" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/partition_scheme.png"></p>
+<p>You will be presented with final layout. Hit Finish.</p>
+<p><img alt="partition_editor" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/partition_editor.png"></p>
+<p>Hit Commit. Installation should start by now.</p>
+<p><img alt="commit" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/commit.png"></p>
+<p>Then you will be prompted to set root password. Set your password, then you will be prompted Network Configuration. Select OK.</p>
+<p><img alt="network_configuration" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/network_configuration.png"></p>
+<p>Next configure IPv4 for interface you have selected earlier, then configure DHCP. It should prompt you to configure IPv6. You can select No. You should see Resolver Configuration. Leave it untouched.</p>
+<p><img alt="resolver_configuration" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/resolver_configuration.png"></p>
+<p>Next you will need to set Time Zone configuration. Select accordingly. Then you should see System Configuration. Leave it untouched.</p>
+<p><img alt="system_configuration" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/system_configuration.png"></p>
+<p>Next you will be prompted with System Hardening. Select all.</p>
+<p><img alt="system_hardening" src="https://vigneshwaranravichandran.files.wordpress.com/2017/07/system_hardening.png"></p>
+<p>Add new <code>Username</code>. When you are prompted <code>Invite</code><username><code>into other groups?</code> type <code>wheel</code> and set password accordingly.</p>
+<p>You will be presented with Final Configuration page. Exit and Hit No for any manual configuration and reboot your virtual machine.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

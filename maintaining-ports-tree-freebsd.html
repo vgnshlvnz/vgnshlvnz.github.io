@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Maintaining Ports Tree - FreeBSD"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="FreeBSD has its own package management which is the ports tree. Ports tree has all the packages you need to build/run application such as..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/maintaining-ports-tree-freebsd.html" rel="bookmark"
+           title="Permalink to "Maintaining Ports Tree - FreeBSD"">"Maintaining Ports Tree - FreeBSD"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-14T00:00:00+00:00">
+                Published: Fri 14 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>FreeBSD has its own package management which is the ports tree. Ports tree has all the packages you need to build/run application such as subversion, git and others.</p>
+<p>To check when you last updated ports tree, execute following command:</p>
+<blockquote>
+<p>stat -x /usr/ports/UPDATING</p>
+</blockquote>
+<p>Output will show you the last time ports tree collection was accessed and changed.</p>
+<p>To update ports tree collection, you can run following command:</p>
+<blockquote>
+<p>portsnap fetch extract update</p>
+</blockquote>
+<p>To look for packages in ports tree, execute following command</p>
+<blockquote>
+<p>whereis subversion</p>
+</blockquote>
+<p>output will show you absolute path to that package. You can also change directory into <code>/usr/ports</code> and type following command:</p>
+<blockquote>
+<p>make search name=<package\95name></p>
+</blockquote>
+<p>or</p>
+<blockquote>
+<p>make quicksearch name=<package\95name></p>
+</blockquote>
+<h3>Using ```subversion``` to update ports tree</h3>
+<p>Make sure you have <code>subversion</code> installed in your system. Executing <code>svn --version</code> may tell you if you have it installed in your system.</p>
+<p>Then execute following command to pull updated ports tree</p>
+<blockquote>
+<p>svn checkout https://svn.FreeBSD.org/ports/head /usr/ports</p>
+</blockquote>
+<p>If you have any ports tree sub-directory in conflict, try running following commands in order:</p>
+<blockquote>
+<p>svn revert --depth infinity <directory\95name></p>
+<p>svn update <directory\95name></p>
+</blockquote>
+<p>Source:</p>
+<p>1)https://stackoverflow.com/questions/2406469/svn-remains-in-conflict</p>
+<p>2)https://www.digitalocean.com/community/tutorials/how-to-install-and-manage-ports-on-freebsd-10-1</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

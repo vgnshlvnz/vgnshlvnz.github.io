@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"MySQL Master-Slave Replication"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This article explores the opportunity of a Master-Slave replication on MySQL 8. The underlying OS is FreeBSD 13. On the Master server install and..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/mysql-master-slave-replication.html" rel="bookmark"
+           title="Permalink to "MySQL Master-Slave Replication"">"MySQL Master-Slave Replication"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-02-18T00:00:00+00:00">
+                Published: Fri 18 February 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This article explores the opportunity of a Master-Slave replication on MySQL 8. The underlying OS is FreeBSD 13.</p>
+<p>On the Master server install and start the MySQL service. Log into MySQL as root and perform following steps:</p>
+<p><code>create user 'replicate'@'%' identified with mysql_native_password by 'tryhackme';</code></p>
+<p><code>grant replication slave, replication client on *.* to 'replicate'@'%';</code></p>
+<p><code>flush privileges;</code></p>
+<p>Log out and edit <code>my.cnf</code> file under <code>/usr/local/etc/mysql/</code> and add following line under <code>[mysqld]</code>:</p>
+<p><code>server-id=1</code></p>
+<p>Make sure MySQL service is running in master server. Now move to Slave server, and do the following in MySQL console:</p>
+<p><code>create user 'replicate'@'%' identified with mysql_native_password by 'tryhackme';</code></p>
+<p><code>grant replication slave, replication client on *.* to 'replicate'@'%'</code></p>
+<p>Exit from the console, go to <code>my.cnf</code> and add the following line under <code>[mysqld]</code>:</p>
+<p><code>server-id=2</code></p>
+<p>Now login to Slave MySQL console again and enter the following lines:</p>
+<p><code>change master master_host="&lt;MASTER_HOSTIP&gt;", master_user="replicate", master_password="tryhackme";</code></p>
+<p>Once you are done with above, go back to Master and create a database. Once you have created, go back to Slave MySQL console and start the slave process:</p>
+<p><code>start slave;</code></p>
+<p>You will see that the database created in Master replicated in Slave.</p>
+<p>Reference:</p>
+<p>https://nixmicrosoft.wordpress.com/2011/11/13/configure-mysql-replication-in-freebsd/</p>
+<p><a href="https://dba.stackexchange.com/questions/202933/slave-mysql-configuration-is-not-stored">https://dba.stackexchange.com/questions/202933/slave-mysql-configuration-is-not-stored</a></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

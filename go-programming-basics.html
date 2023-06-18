@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Go Programming - basics"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Go Programming - basics golang Installation - Linux This guide/article was written for Debian 10 GNU/Linux running latest updates. Before you..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/go-programming-basics.html" rel="bookmark"
+           title="Permalink to "Go Programming - basics"">"Go Programming - basics"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-06-21T00:00:00+00:00">
+                Published: Mon 21 June 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Go Programming - basics</h1>
+<h2><code>golang</code> Installation - Linux</h2>
+<p>This guide/article was written for <code>Debian 10 GNU/Linux</code> running latest updates. Before you begin, run following command to update your system.</p>
+<ul>
+<li><code>#apt update &amp;&amp; apt upgrade -y</code></li>
+</ul>
+<p>Once you have completed above step, now it’s time to install <code>Go Programming Language</code> or <code>golang</code> in your Linux host.</p>
+<p>First, you need to install a program called <code>curl</code> to fetch the packages files for <code>golang</code>.</p>
+<ul>
+<li><code>apt install -y curl</code></li>
+</ul>
+<p>Once you have installed <code>curl</code>, head over to <a href="//golang.org/dl/">official Go downloads page</a>) and select appropriate <code>golang</code> binary release’s tarball or package.</p>
+<p>Now download the package using <code>curl</code> command.</p>
+<ul>
+<li><code>$curl https://dl.google.com/go/go1.14.3.linux-amd64.tar.gz --output go1.14.3.linux-amd64.tar.gz</code><br>
+    Note: You can check the downloaded package’s hashsum if you are unsure about the package you have downloaded.</li>
+</ul>
+<p>Now you need to extract the contents of the <code>golang</code> installation package you have downloaded.</p>
+<ul>
+<li><code>$tar xzvf go&lt;VERSION&gt;.linux-amd64.tar.gz</code><br>
+    You will have a directory called <code>/go</code> in your home directory.</li>
+</ul>
+<p>You will need to change the permission of the directory and it’s content to user and group <code>root</code></p>
+<ul>
+<li><code>$sudo chown root:root ./go</code></li>
+</ul>
+<p>Move the file to <code>/usr/local</code> directory. This is done to ensure the files in <code>go</code> directory is available throughout the environment session.</p>
+<ul>
+<li><code>$sudo mv go /usr/local</code><br>
+    If you get permission errors, try following command:</li>
+<li><code>#tar -C /usr/local -xvzf go1.14.3.linux-amd64.tar.gz</code><br>
+    This will extract the contents of the package into <code>/usr/local</code> directory</li>
+</ul>
+<p>Now, create appropriate <code>golang</code> work directory in your home directory.</p>
+<p>Edit <code>~/.profile</code> from non-root user and insert the following lines:</p>
+<ul>
+<li><code>export GOPATH=$HOME/&lt;GO_WORKDIR&gt;</code></li>
+<li><code>export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin</code><br>
+    Refresh your profile by running:</li>
+<li><code>$source ~/.profile</code></li>
+</ul>
+<h3>Testing your installation</h3>
+<p>Now, go into the directory you have created for your <code>golang</code> work, and create a directory hierarchy folder by running following command:</p>
+<ul>
+<li><code>$mkdir -p &lt;GOLANG_WORKDIR&gt;/src/my-1st-project/hello</code><br>
+    Once you have done that, you can create <code>hello.go</code> file inside above directory. Open the <code>hello.go</code> file using your favorite text editor and enter following code:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;fmt&quot;</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;Hello, World!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Once you have done that, you need to compile the code by invoking <code>go install</code> command.</p>
+<ul>
+<li><code>$go install my-1st-project/hello</code></li>
+</ul>
+<p>Now you can run the compiled program by calling <code>hello</code> in your current directory. It should print out <code>Hello World</code>.</p>
+<h2>Anatomy of a Go program</h2>
+<div class="highlight"><pre><span></span><code><span class="o">//</span> <span class="n">this</span> <span class="n">program</span> <span class="n">imports</span> <span class="n">fmt</span> <span class="n">package</span> <span class="ow">and</span> <span class="nb">print</span>
+<span class="o">//</span> <span class="s2">&quot;Hello, World&quot;</span> <span class="n">to</span> <span class="n">the</span> <span class="n">output</span>
+<span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;Hello, World</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="o">/*</span>
+<span class="n">This</span> <span class="n">program</span> <span class="n">imports</span> <span class="n">fmt</span> <span class="n">package</span> <span class="ow">and</span> <span class="nb">print</span>
+<span class="s2">&quot;Hello, World&quot;</span> <span class="n">to</span> <span class="n">output</span>
+<span class="o">*/</span>
+<span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;Hello, World&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, first few lines will be denoted for comments about the code. You can start writing comments by adding <code>//</code> (double forward-slash) or by <code>/*</code> (forward-slash and asterisk) and closing with <code>*/</code> (asterisk and forward-slash).</p>
+<p>The package <code>package main</code> has a special meaning in <code>Go</code> and it will make your code compile for an executable and not the package</p>
+<p>Next , <code>import ( "fmt" )</code> imports <code>fmt</code> package which does formatted printing.</p>
+<p>Finally, its our main program code. It is started with <code>func main()</code> then followed by <code>{}</code>. In the <code>{}</code>, we will write a function that is provided by <code>fmt</code> package, that is <code>Println</code> or <code>Printf</code> followed by the content inside <code>()</code>.</p>
+<h3>Go tools</h3>
+<p><code>Golang</code> comes with a binary called <code>go</code>. It is used for tasks such as building, testing, benchmarking, and starting third party packages and more.</p>
+<p>Copy below code into <code>welcome.go</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="o">//</span> <span class="n">Print</span> <span class="n">a</span> <span class="n">friendly</span> <span class="n">greeting</span>
+
+<span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+        <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;Welcome Gophers ☺&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Now, type following command to run the file.</p>
+<ul>
+<li><code>$go run welcome.go</code></li>
+</ul>
+<p>You should see a statement printed out with smiley face. What happens in the background is that <code>go</code> interpretes the code and print the ouput.</p>
+<p>Now, type the following command to compile the code.</p>
+<ul>
+<li><code>$go build welcome.go</code><br>
+    This will compile <code>welcome.go</code> file into an executable depending on your host architecture.</li>
+</ul>
+<h2>Go Basics</h2>
+<p>Let’s write a program that calculates the mean or average of two numbers. Following code does it.</p>
+<div class="highlight"><pre><span></span><code><span class="o">//</span> <span class="n">calculate</span> <span class="n">mean</span> <span class="n">of</span> <span class="n">two</span> <span class="n">numbers</span>
+<span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+<span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span>  <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="n">var</span>  <span class="n">x</span>  <span class="nb">int</span>
+<span class="n">var</span>  <span class="n">y</span>  <span class="nb">int</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;x=%v, type of %T</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;x=%v, type of %T</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">var</span>  <span class="n">mean</span>  <span class="nb">int</span>
+
+<span class="n">mean</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;result: %v, type of %T</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span>
+
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, you declare two variables called <code>x</code> and <code>y</code> with <code>int</code> as its variable type. By default <code>golang</code> will assign value 0 to the variable until a value is assigned to it which is done in the next line, <code>x=1</code> &amp; <code>y=1</code>. Following line prints the value and the type, <code>%v</code> denotes value and <code>%T</code> denotes the type. Then we declare a variable with type int called <code>mean</code> and perform calculation for mean in the following line. Finally we print the result and it’s type.</p>
+<p>To run the code, simply type <code>go run &lt;FILENAME&gt;.go</code>. You should see some output. Lets examine the output.</p>
+<p>In the output, you would have noticed that the result of <code>mean</code> operation is 1 when the mathematical result is 1.5. To solve this, we will introduce <code>float64</code> variable type. There is also <code>float32</code>. Following code snippet will show you.</p>
+<div class="highlight"><pre><span></span><code><span class="k">var</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">float64</span>
+<span class="k">var</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">float64</span>
+
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span>
+<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span>
+</code></pre></div>
+
+<p>You can shorten the code above by writing the following:</p>
+<div class="highlight"><pre><span></span><code><span class="k">var</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">float64</span>
+<span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span>
+</code></pre></div>
+
+<p>Which can be simplified by writing following:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="nv">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span>
+</code></pre></div>
+
+<p>This means that the variable <code>x</code> and <code>y</code> is created and assigned with floating point value. <code>Golang</code> will automatically detect it’s variable type in runtime or during compilation.</p>
+<h3>If and Switch</h3>
+<h4><code>if..else</code> Statement</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span>  <span class="s2">&quot;fmt&quot;</span>
+
+<span class="n">func</span>  <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="n">x</span> <span class="o">:=</span> <span class="mi">10</span>
+
+<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;X is large&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, we are checking if value <code>x</code> is bigger than 5. Unlike Java or C, you do not need parentheses to express the condition. Now the condition is met, it will print <code>X is large</code>.</p>
+<p>Lets write a <code>if..else</code> statement. Following code shows the usage of <code>if..else</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span>{<span class="w"> </span><span class="nv">fmt</span>.<span class="nv">Println</span><span class="ss">(</span><span class="s2">&quot;X is big&quot;</span><span class="ss">)</span><span class="w"> </span>}
+<span class="k">else</span><span class="w"> </span>{<span class="w"> </span><span class="nv">fmt</span>.<span class="nv">Println</span><span class="ss">(</span><span class="s2">&quot;X is small&quot;</span><span class="ss">)</span><span class="w"> </span>}
+</code></pre></div>
+
+<p>Now if you declare a variable <code>x</code> and assign a value that is lesser than <code>100</code>, the program will execute the <code>else</code> statement block because it did not satisfy the condition. Next, I will introduce <code>else if</code> statement.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">20</span>
+
+<span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;X is lesser than 10&quot;</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;X is lesser than 30&quot;</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;No match&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, we have introduced <code>else if</code>. Suppose you have multiple <code>if</code> conditions in which one of the condition is fulfilled, the statement block for that <code>else if</code> statement will execute. So in this case, variable <code>x</code> has a value of <code>20</code>. So when the code is interpreted, it will match the second <code>if</code> statement, <code>else if</code> because x is lesser than <code>30</code>.</p>
+<h4><code>switch</code> Statement</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">:=</span><span class="mi">2</span>
+
+    <span class="n">switch</span> <span class="n">x</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span>
+            <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;Default&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Above code is how you write a <code>switch</code> statement in <code>golang</code>. You declare <code>switch</code> by giving it a parameter <code>x</code> and declare <code>case 1..3</code> and case <code>default</code> when none of the cases match. When you run the code by typing:<br>
+-<code>$go run &lt;FILENAME&gt;.go</code><br>
+You will see that the program outputs <code>2</code> as the value stored in parameter <code>x</code> matches case <code>2</code>. Now if you do not want to match any case, match the <code>default</code> case, change the value of <code>x</code> to zero as example snippet below:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="nv">switch</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">default</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;Default&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>When you run above code, complete with package, imports and main function, you will observe that it outputs to <code>default</code> as value <code>x</code> does not match any of the case in the <code>switch</code> statement. Switch statement also allows string to be used in case statement. Following code shows an example:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;case&quot;</span>
+
+<span class="nv">switch</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="s">&quot;case&quot;</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;match&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="s">&quot;different&quot;</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;different match&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">default</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>As with other <code>switch case</code> statements, this code block checks if the variable <code>x</code> is match in the case statements. It should print out <code>match</code> as it matches case <code>case</code>.</p>
+<p>You can also do the following:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="nv">switch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;more than 10&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">case</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;more than 100&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">default</span><span class="o">:</span>
+<span class="w">        </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above case, you can directly assign condition to the case statement. In this code, it will execute the first case statement as it matches with the condition provided.</p>
+<h3>For loops</h3>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Above code is one example on how you can write <code>for</code> loop statement. The statement starts with variable <code>x</code> which you can change, then the condition, which is <code>x&lt;3</code>, and then the increment <code>x++</code>. So the code start from 0, check if 0 is lesser than 3, print the value of 0 and then increase the value of 0 by 1. Upon next execution, the same step happens, until the condition is fulfilled.</p>
+<p>Another example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="nv">x</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">break</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, the for loop runs until it satisfy the <code>if</code> condition inside the <code>for</code> loop. Once it satisfies the condition, it breaks from the loop. Therefore only value 0 and 1 will be printed.</p>
+<p>In the next example we will look how we can use <code>continue</code> to avoid printing 0 and print 1 and 2 instead.</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="nv">x</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">continue</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In this example, when the <code>for</code> loop runs, it checks the <code>if</code> condition, since it satisfies the condition it continues the execution without printing the value of <code>x</code>.</p>
+<p>You can also write for condition in following way:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">x</span><span class="o">++</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>This is like <code>while</code> loop in other languages.</p>
+<p>In final example, <code>for</code> loop can also be written in following way:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">break</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">x</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">x</span><span class="o">++</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above example, the for loop runs and checks the condition of <code>if</code> statement, since it does not pass the condition, it prints out the value of x and increment the value of x. When it satisfies the if condition, it simply breaks from executing.</p>
+<h3>Strings</h3>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">string</span> <span class="o">:=</span> <span class="s2">&quot;This is a string&quot;</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;string[0] = %v (Type %T)&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, we declare a variable string with the value. In the next line we simply print the content of the variable. In following line, we print the length of the string. Finally we check the first index of the string variable. print it’s value and it’s type which will be <code>uint8</code> is a byte.</p>
+<p>If you try to assign a new value to the first index, as shown below:</p>
+<div class="highlight"><pre><span></span><code>string[0] = 11
+</code></pre></div>
+
+<p>The go compiler will throw an error saying you cannot assign the value. This tells us that strings are immutable, that is once a string is assigned to a variable it cannot be changed.</p>
+<p>Following code will concatenate two strings together:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">fName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Vigneshwaran&quot;</span>
+<span class="nv">lName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Ravichandran&quot;</span>
+<span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">fName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">lName</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>Unicode</h4>
+<p>Strings in <code>golang</code> support unicode characters. Following example shows unicode support:</p>
+<div class="highlight"><pre><span></span><code>fmt.Println(&quot;This is ½&quot;)
+</code></pre></div>
+
+<h4>Multiline</h4>
+<p>Following code shows how you can write multiple lines in <code>golang</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">string</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nv">`</span>
+<span class="nv">        This is a string.</span>
+<span class="nv">        This is a second string.</span>
+<span class="nv">        `</span>
+<span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">string</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This will output in a multiple line output.</p>
+<h4>Slice</h4>
+<p>To access parts of the string you can use slice. Example below shows how slicing works.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">string</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;This is a string&quot;</span>
+<span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">string</span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">11</span><span class="p">])</span>
+<span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">string</span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="p">])</span>
+<span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">string</span><span class="p">[</span><span class="o">:</span><span class="mi">4</span><span class="p">])</span>
+</code></pre></div>
+
+<p>In above code snippet, we have assigned a string to a variable and in 2nd line we slice the string from index 4 to index 10 omitting index 11. In following line, we I have specified the start index but left end index empty. This will result in the printing to start from index 4 to the end of the index. In last line we have specified the end index. So the printing will start from the start of index until the 3rd index omitting 4th index.</p>
+<h3>Slice</h3>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+<span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span>  <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="n">members</span> <span class="o">:=</span> <span class="p">[]</span><span class="n">string</span><span class="p">{</span><span class="s2">&quot;Vigneshwaran&quot;</span><span class="p">,</span> <span class="s2">&quot;Uthayamurthy&quot;</span><span class="p">,</span> <span class="s2">&quot;Letchumi&quot;</span><span class="p">}</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;members = %v (Type %T)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">members</span><span class="p">,</span> <span class="n">members</span><span class="p">)</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">members</span><span class="p">))</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">members</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">members</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>A slice a sequence of items. All items in the slice must be same type. After <code>func main()</code> , we specify the type by square brackets then the type <code>string</code>. Then we will the slice with curly brackets. You can use the len function to measure the length of the slice. You can also start from specific position or specify specific position of the slice. The 2nd line after slice declaration will print out the values in the slice and it’s type.</p>
+<p>To access the elements in the slice, you can do the following:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">members</span><span class="p">);</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Member: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">members</span><span class="o">[</span><span class="n">x</span><span class="o">]</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="n">x</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">members</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="k">if</span><span class="w"> </span><span class="n">members</span><span class="o">[</span><span class="n">x</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;Uthayamurthy&quot;</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Member found. Member Name: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">members</span><span class="o">[</span><span class="n">x</span><span class="o">]</span><span class="p">)</span>
+<span class="err">}</span>
+<span class="n">x</span><span class="o">++</span>
+<span class="err">}</span>
+
+<span class="k">for</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="k">for</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Member Name: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">members</span><span class="o">[</span><span class="n">x</span><span class="o">]</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="k">for</span><span class="w">  </span><span class="k">index</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Index: %d = Name: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">index</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="k">for</span><span class="w">  </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Member Name: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+<span class="err">}</span>
+</code></pre></div>
+
+<p>In above code snippet, you can you traditional for loop to access the slice. <code>member[x]</code> will access the value in the index. You can also use <code>range</code>. Using range, you will need to specify the <code>index</code> and the value variable you want. Then you can access the member of the slice. To omit the index, in <code>golang</code> you can use underscore <code>_</code>.</p>
+<p>To append an element into the slice, we use <code>append</code>. Following example shows the usage of <code>append</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">pets</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nv">string</span><span class="p">{</span><span class="s">&quot;Dog&quot;</span><span class="p">,</span><span class="s">&quot;Cat&quot;</span><span class="p">}</span>
+
+<span class="nv">pets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="nv">pets</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bird&quot;</span><span class="p">)</span>
+
+<span class="k">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="w"> </span><span class="nv">pet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nv">range</span><span class="w"> </span><span class="nv">pets</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">fmt</span><span class="o">.</span><span class="nf">Println</span><span class="p">(</span><span class="nv">pet</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The output of above code will include element <code>Bird</code> in the slice.</p>
+<h3>Maps</h3>
+<div class="highlight"><pre><span></span><code><span class="n">credentials</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">map</span><span class="o">[</span><span class="n">string</span><span class="o">]</span><span class="n">string</span><span class="err">{</span>
+<span class="ss">&quot;username&quot;</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;vgnshlvnz&quot;</span><span class="p">,</span>
+<span class="ss">&quot;password&quot;</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;!@m@h@ck3r&quot;</span><span class="p">,</span>
+<span class="err">}</span>
+
+<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">credentials</span><span class="p">))</span>
+
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Username: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">credentials</span><span class="o">[</span><span class="n">&quot;username&quot;</span><span class="o">]</span><span class="p">)</span>
+
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Password: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">credentials</span><span class="o">[</span><span class="n">&quot;password&quot;</span><span class="o">]</span><span class="p">)</span>
+
+<span class="k">for</span><span class="w">  </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">credentials</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;Value: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="k">for</span><span class="w">  </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">credentials</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;%s = %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="n">credentials</span><span class="o">[</span><span class="n">&quot;url&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;https://facebook.com&quot;</span>
+
+<span class="k">for</span><span class="w">  </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">credentials</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;%s = %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="err">}</span>
+
+<span class="k">delete</span><span class="p">(</span><span class="n">credentials</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;url&quot;</span><span class="p">)</span>
+
+<span class="k">for</span><span class="w">  </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="err">:</span><span class="o">=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="n">credentials</span><span class="w"> </span><span class="err">{</span>
+<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="ss">&quot;%s = %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="err">}</span>
+</code></pre></div>
+
+<p>In above code snippet, you declare a <code>map</code> by typing out map followed by the type of the key and the type of the value. In it, you declare your key, value pairs with a comma <code>,</code> after every key,value pair including the last pair. The rest is self explanatory as you can iterate through the <code>maps</code> as you would do with <code>slices</code>. To add a key, value, you declare <code>credentials[url] = "https://facebook.com"</code> which will add new pair to the <code>map</code>. To delete, you simply call <code>delete(credentials, "url")</code>. You would enter the map variable and the key you would want to delete.</p>
+<h3>Functions</h3>
+<h4>Defining functions</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;fmt&quot;</span>
+
+<span class="n">func</span> <span class="n">add</span><span class="p">(</span><span class="n">a</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span> <span class="nb">int</span><span class="p">)</span> <span class="nb">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">a</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span> <span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="n">div</span><span class="p">,</span> <span class="n">mod</span> <span class="o">:=</span> <span class="nb">divmod</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;div=</span><span class="si">%d</span><span class="s2">, mod=</span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">div</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Above code shows you how to declare a function. When you declare a function, you must specify the variable type and it’s return type, as shown below:</p>
+<div class="highlight"><pre><span></span><code><span class="k">func</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="p">)</span><span class="w"> </span><span class="nb nb-Type">int</span>
+</code></pre></div>
+
+<p><code>golang</code> can also return more than one as shown above. You need to use parenthesis when specifying multiple return types.</p>
+<h4>Parameter passing</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;fmt&quot;</span>
+
+<span class="n">func</span> <span class="n">doubleAt</span><span class="p">(</span><span class="n">values</span> <span class="p">[]</span><span class="nb">int</span><span class="p">,</span> <span class="n">i</span> <span class="nb">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">double</span><span class="p">(</span><span class="n">x</span> <span class="nb">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">doublePtr</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span><span class="nb">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">*</span><span class="n">x</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">values</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
+    <span class="n">doubleAt</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="n">val</span> <span class="o">:=</span> <span class="mi">10</span>
+    <span class="n">double</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">doublePtr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above code, you pass parameters to the function to process the parameter. Take note that <code>golang</code> passes by value, that whatever you pass into a function, will be applicable within the function body. To change the value, you can use <code>go</code> pointers. You can declare a function like below, with pointer:</p>
+<div class="highlight"><pre><span></span><code><span class="k">func</span><span class="w"> </span><span class="n">doublePtr</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="nb nb-Type">int</span><span class="p">)</span>
+</code></pre></div>
+
+<p>To pass the value of your variable into the function, you need to use <code>&amp;</code> like below:</p>
+<div class="highlight"><pre><span></span><code>doublePtr(&amp;val)
+</code></pre></div>
+
+<p>For slices however, the value is changed even if the <code>slice</code> is outside of the function.</p>
+<h4>Errors</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+    <span class="s2">&quot;math&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="n">float64</span><span class="p">)</span> <span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s2">&quot;sqrt of negative value (</span><span class="si">%f</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">Sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">nil</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">s1</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;Error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">s2</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="n">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;Error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above example, we declare a function to calculate the positive square root value. In the function header, we specify <code>error</code> return type to catch any error. In this case, if a number is negative, then the error part of the return will be provided. In <code>main</code> function, we declare a simple <code>if..else</code> statement to check if the <code>err</code> variable is empty. In second attempt <code>s2</code>, an error will be generated since it is a negative number.</p>
+<h4>Defer</h4>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s2">&quot;fmt&quot;</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">cleanup</span><span class="p">(</span><span class="n">name</span> <span class="n">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;Cleaning up </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">worker</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">defer</span> <span class="n">cleanup</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+    <span class="n">defer</span> <span class="n">cleanup</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;worker&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">worker</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>Golang</code> has a garbage collector. Which means you don’t have to deal with memory management. When you allocate an object and then stop using it, <code>Golang</code>'s garbage collector will clear it up. However, memory is just one kind of resource. And you may have other resources you use in your program. For example, files, sockets, virtual machines and others. You’d like to make sure that these resources are closed when you’re done with them as well. To make sure a resource is closed, use defer.</p>
+<p>To think of defer, think of a process you would like to do after main process, say you want to authenticate a user then redirect the user to his/her homepage. You can you defer in this case, where the main function of authenticating of users will run first before running deferred function of show his/her homepage.</p>
+<p>Above example shows a simple usage of defer. When you execute the code, the interpreter will print the <code>worker</code> print statement before calling <code>cleanup("B")</code> and then <code>cleanup("A")</code>.</p>
+<h3>Structs</h3>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;fmt&quot;</span>
+
+<span class="nb">type</span> <span class="n">credentials</span> <span class="n">struct</span> <span class="p">{</span>
+    <span class="n">Username</span>   <span class="n">string</span>
+    <span class="n">Password</span>   <span class="n">string</span>
+    <span class="n">isLoggedIn</span> <span class="nb">bool</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">credentailOne</span> <span class="o">:=</span> <span class="n">credentials</span><span class="p">{</span>
+        <span class="s2">&quot;vgnshlvnz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;!@m@h@ck3r&quot;</span><span class="p">,</span>
+        <span class="n">false</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">&quot;%+v</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">credentailOne</span><span class="p">)</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">credentailOne</span><span class="o">.</span><span class="n">Username</span><span class="p">)</span>
+    <span class="n">credentailOne</span><span class="o">.</span><span class="n">isLoggedIn</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">credentailOne</span><span class="o">.</span><span class="n">isLoggedIn</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>There are times you’d like to define your own data structures. In <code>golang</code> you’ll use Struct to combine several fields into a datatype.</p>
+<p>In example above, we defined a Struct called <code>credentials</code> and set some variable and it’s datatype. Then in function main, we created an instance of the struct with our values. We printed the values of the struct, printed individual variable from the struct and then changed the value of one of the variable in the struct.</p>
+<p>If you’re coming from languages such as Java or C++, you might wonder if you can have private or protective fields which are not exposed outside of your package. In Go, this is very simple. Everything that starts with an uppercase letter, is accessible from other packages. Otherwise, it’s accessible only from within the current package.</p>
+<h3>Methods</h3>
+<div class="highlight"><pre><span></span><code><span class="n">package</span> <span class="n">main</span>
+
+<span class="kn">import</span> <span class="s2">&quot;fmt&quot;</span>
+
+<span class="nb">type</span> <span class="n">Trade</span> <span class="n">struct</span> <span class="p">{</span>
+    <span class="n">Symbol</span> <span class="n">string</span>
+    <span class="n">Volume</span> <span class="nb">int</span>
+    <span class="n">Price</span>  <span class="n">float64</span>
+    <span class="n">Buy</span>    <span class="nb">bool</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span><span class="n">Trade</span><span class="p">)</span> <span class="n">Value</span><span class="p">()</span> <span class="n">float64</span> <span class="p">{</span>
+    <span class="n">value</span> <span class="o">:=</span> <span class="n">float64</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Volume</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="o">.</span><span class="n">Price</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">Buy</span> <span class="p">{</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">value</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">value</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">t</span> <span class="o">:=</span> <span class="n">Trade</span><span class="p">{</span>
+        <span class="n">Symbol</span><span class="p">:</span> <span class="s2">&quot;MSFT&quot;</span><span class="p">,</span>
+        <span class="n">Volume</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">Price</span><span class="p">:</span>  <span class="mf">99.98</span><span class="p">,</span>
+        <span class="n">Buy</span><span class="p">:</span>    <span class="n">true</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Value</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>In above example, we have created a function called <code>Value</code> which accepts pointer struct <code>Trade</code> as <code>t</code> with a floating point return. A calculation is performed then if <code>t.Buy</code> value is true then the value is changed to negative.</p>
+<p><a href="//www.digitalocean.com/community/tutorials/how-to-install-go-on-debian-10"># How To Install Go on Debian 10</a>)<br>
+<a href="//golang.org/doc/install"># Getting Started</a>)</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[TUTORIAL] Install VNC Server - Fedora 23/24"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This tutorial was written to guide users in installing VNC Server in their Fedora workstation. Install VNC Server First, run dnf update Second,..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorial-install-vnc-server-fedora-2324.html" rel="bookmark"
+           title="Permalink to "[TUTORIAL] Install VNC Server - Fedora 23/24"">"[TUTORIAL] Install VNC Server - Fedora 23/24"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-19T00:00:00+00:00">
+                Published: Tue 19 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This tutorial was written to guide users in installing VNC Server in their Fedora workstation.</p>
+<h2>Install VNC Server</h2>
+<ul>
+<li>First, run <strong><code>dnf update</code></strong></li>
+<li>Second, run <strong><code>dnf install tigervnc-server</code></strong></li>
+</ul>
+<h2>Configuring VNC Server</h2>
+<ul>
+<li>Third, copy following files <strong><code>cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</code></strong> Edit the file replacing `````` with your username. -Fourth, run <strong><code>systemctl daemon-reload</code></strong></li>
+<li>Fifth, run <strong><code>su -</code></strong> Then run <strong><code>vncpasswd</code></strong> . Note: use minimum 6 chars.</li>
+</ul>
+<h2>Starting VNC Server</h2>
+<ul>
+<li>Finally, run <strong><code>systemctl start vncserver@display_number.service</code></strong> where <code>display_number</code> is n=1,2,3....nth number.</li>
+</ul>
+<p><code>reference</code>:<a href="https://docs.fedoraproject.org/en-US/Fedora/21/html/System_Administrators_Guide/ch-TigerVNC.html">Fedora Docs</a></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Linux/RHEL RHCSA Practice Tasks"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="## RHEL TASKS Task 01: Assuming the root user password is lost, and your system is running in multi-user target with no current root session open...." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/linuxrhel-rhcsa-practice-tasks.html" rel="bookmark"
+           title="Permalink to "Linux/RHEL RHCSA Practice Tasks"">"Linux/RHEL RHCSA Practice Tasks"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-03-10T00:00:00+00:00">
+                Published: Fri 10 March 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>## RHEL TASKS</p>
+<p>Task 01: Assuming the root user password is lost, and your system is running in multi-user target with no current root session open. Reboot the system into an appropriate target level, and reset the root user password to root1234. (Exercise 11-2). After completing this task, log in as the root user and perform the remaining tasks presented below.</p>
+<p>---</p>
+<p>Task 02: Using a manual method (create/modify files by hand), configure a network connection on the primary network device with IP address 192.168.0.241/24, gateway 192.168.0.1, and nameserver 192.168.0.1. Use different IP assignments based on your lab setup. (Exercise 16-3).</p>
+<p>### Answer</p>
+<p>Go to /etc/sysconfig/network-scripts/ifcfg-ensXXX</p>
+<p>Add the following:</p>
+<p>IPADDR= PREFIX= GATEWAY= DNS1=</p>
+<p>---</p>
+<p>Using the nmcli command, configure a network connection on the primary network device with IP address 192.168.0.242/24, gateway 192.168.0.1, and nameserver 192.168.0.1. Use different IP assignments based on your lab environment. (Exercise 16-4).</p>
+<p>### Answer</p>
+<p>nmcli con add type Ethernet ifname enpXX con-name enpXX ip4 `127.0.0.2 gw4 127.0.0.1</p>
+<p>nmcli con modify CONNECTION_NAME ipv4.dns "127.0.0.1"</p>
+<p>---</p>
+<p>On rhcsa3, configure a network connection on the primary network device with IP address 192.168.0.243/24, gateway 192.168.0.1, and nameserver 192.168.0.1 using the nmcli command (use different IP assignments based on your lab environment). (Exercise 16-4).</p>
+<p>### Answer</p>
+<p>nmcli con add type Ethernet ifname enpXX con-name enpXX ip4 `127.0.0.2 gw4 127.0.0.1</p>
+<p>nmcli con modify CONNECTION_NAME ipv4.dns "127.0.0.1"</p>
+<p>---</p>
+<p>On rhcsa4, configure a network connection on the primary network device with IP address 192.168.0.244/24, gateway 192.168.0.1, and nameserver 192.168.0.1 using a manual method (create/modify file by hand). Use different IP assignments based on your lab environment. (Exercise 16-3).</p>
+<p>### Answer</p>
+<p>Go to /etc/sysconfig/network-scripts/ifcfg-ensXXX</p>
+<p>Add the following:</p>
+<p>IPADDR= PREFIX= GATEWAY= DNS1=</p>
+<p>---</p>
+<p>On rhcsa5, configure a network connection on the primary network device with IP address 192.168.0.245/24, gateway 192.168.0.1, and nameserver 192.168.0.1 using the nmcli command. Use different IP assignments based on your lab environment. (Exercise 16-4).</p>
+<p>### Answer</p>
+<p>nmcli con add type Ethernet ifname enpXX con-name enpXX ip4 `127.0.0.2 gw4 127.0.0.1</p>
+<p>nmcli con modify CONNECTION_NAME ipv4.dns "127.0.0.1"</p>
+<p>---</p>
+<p>On rhcsa6, configure a network connection on the primary network device with IP address 192.168.0.246/24, gateway 192.168.0.1, and nameserver 192.168.0.1 using a manual method (create/modify files by hand). Use different IP assignments based on your lab environment. (Exercise 16-3).</p>
+<p>### Answer</p>
+<p>Go to /etc/sysconfig/network-scripts/ifcfg-ensXXX</p>
+<p>Add the following:</p>
+<p>IPADDR= PREFIX= GATEWAY= DNS1=</p>
+<p>---</p>
+<p>Task 03: Using a manual method (modify file by hand), set the system hostname to [rhcsal.example.com](http://rhcsal.example.com/) and alias rhcsal. Make sure that the new hostname is reflected in the command prompt. (Exercises 16-1 and 16-5).</p>
+<p>### Answer</p>
+<p>Edit /etc/hosts</p>
+<p>---</p>
+<p>Using the hostnamectl command, set the system hostname to [rhcsa2.example.com](http://rhcsa2.example.com/) and alias rhcsa2. Make sure that the new hostname is reflected in the command prompt. (Exercises 16-1 and 16-5).</p>
+<p>### Answer</p>
+<p>hostnamectl set-hostname FQDN</p>
+<p>---</p>
+<p>On VM1, set the system hostname to [rhcsa3.example.com](http://rhcsa3.example.com/) and alias rhcsa3 using the hostnamectl command. Make sure that the new hostname is reflected in the command prompt. (Exercises 16-1 and 16-5).</p>
+<p>### Answer</p>
+<p>Edit /etc/hosts</p>
+<p>---</p>
+<p>On VM2, set the system hostname to [rhcsa4.example.com](http://rhcsa4.example.com/) and alias rhcsa4 using a manual method (modify file by hand). Make sure that the new hostname is reflected in the command prompt. (Exercises 16-1 and 16-5).</p>
+<p>### Answer</p>
+<p>Edit /etc/hosts</p>
+<p>---</p>
+<p>On VM1, set the system hostname to [rhcsa5.example.com](http://rhcsa5.example.com/) and alias rhcsa5 using the hostnamectl command. Make sure that the new hostname is reflected in the command prompt.</p>
+<p>### Answer</p>
+<p>Edit /etc/hosts</p>
+<p>---</p>
+<p>On VM2, set the system hostname to [rhcsa6.example.com](http://rhcsa6.example.com/) and alias rhcsa6 using a manual method (modify file by hand). Make sure that the new hostname is reflected in the command prompt. (Exercises 16-1 and 16-5).</p>
+<p>### Answer</p>
+<p>Edit /etc/hosts</p>
+<p>---</p>
+<p>Task 04: Set the default boot target to multi-user. (Chapter 12, topic: Managing Target Units).</p>
+<p>### Answer</p>
+<p>systemctl set-default multi-user</p>
+<p>---</p>
+<p>Task 05: Set SELinux to permissive mode. (Chapter 21, topic: Viewing and Controlling SELinux Operational State).</p>
+<p>### Answer</p>
+<p>edit /etc/selinux/config</p>
+<p>---</p>
+<p>**On rhcsa3, add HTTP port 8300/tcp to the SELinux policy database persistently. (Exercise 21-3).**</p>
+<p>### Answer semanage port -a -t http_port_t -p tcp 8300 semanage port -m -t http_port_t -p tcp 8300</p>
+<p>Task 06: Perform a case-insensitive search for all lines in the /usr/share/dict/linux.words file that begin with the pattern "essential”. Redirect the output to /var/tmp/pattern.txt file. Make sure that empty lines are omitted. (Chapter 07, topic: Regular Expressions).</p>
+<p>### Answer</p>
+<p>cat /usr/share/dict/linux.words | grep -i '^essential' &gt;&gt; /var/tmp/pattern.txt</p>
+<p>---</p>
+<p>**Task 07: Change the primary command prompt for the root user to display the hostname, username, and current working directory information in that order. Update the per-user initialization file for permanence. (Exercise 7-1).**</p>
+<p>### Answer</p>
+<p>edit .bash_profile and add following line at the end of the file.</p>
+<p>export PS1="&lt; $LOGNAME on $(hostname) in \$PWD &gt;"</p>
+<p>---</p>
+<p>Task 08: Create user accounts called user10, user20, and user30. Set their passwords to Temp1234. Make user10 and user30 accounts to expire on December 31, 2021. (Exercises 5-1, and 6-1 or 6-2).</p>
+<p>### Answer</p>
+<p>useradd passwd chage --expiredate YYYY-mm-dd</p>
+<p>Create a user account called user70 with UID 7000 and comments "I am user70". Set the maximum allowable inactivity for this user to 30 days. (Exercises 5-2, and 6-1 or 6-2).</p>
+<p>### Answer</p>
+<p>useradd -u 7000 -c "I am user70" -f 30 user70</p>
+<p>---</p>
+<p>Create a user account called user50 with a non-interactive shell. (Exercise 5-4).</p>
+<p>### Answer</p>
+<p>useradd -s /sbin/nologin user50</p>
+<p>---</p>
+<p>Lock user account user70. Use regular expressions to capture the line that shows the lock and store the output in file /var/tmp/user70.lock. (Chapter 03, topic: Regular Expressions, and Exercise 6-3).</p>
+<p>### Answer</p>
+<p>usermod -L user70 grep -i "user70" /etc/passwd &gt; /var/tmp/user70.lock</p>
+<p>---</p>
+<p>Task 09: Create a group called group10 and add user20 and user30 as secondary members. (Exercise 6-4).</p>
+<p>### Answer</p>
+<p>groupadd group10 usermod -aG group10 user20 usermod -aG group10 user30</p>
+<p>---</p>
+<p>Task 10: Create a user account called user40 with UID 2929. Set the password to user1234. (Exercise 5-2).</p>
+<p>### Answer</p>
+<p>useradd -u 2929 user40 passwd user40</p>
+<p>---</p>
+<p>Task 11: Create a directory called dir1 under /var/tmp with ownership and owning group set to root. Configure default ACLs on the directory and give user10 read, write, and execute permissions. (Exercise 4-8).</p>
+<p>### Answer mkdir /var/tmp/dir1 chown root:root /var/tmp/dir1</p>
+<p>setfacl -dm u:user10:rwx /var/tmp/dir1/</p>
+<p>getfacl</p>
+<p>---</p>
+<p>Create a file called testfilel under /var/tmp with ownership and owning group set to root. Configure access ACLS on the file and give user10 read and write access. Test access by logging in as user10 and editing the file. (Chapter 03, topic: Creating Files and Directories, and Exercise 4-7).</p>
+<p>### Answer touch /var/tmp/testfile1 chown root:root /var/tmp/testfile1 setfacl -m u:user10:rw /var/tmp/testfile1</p>
+<p>--- On rhcsa3, create a group called group30 with GID 3000, and add user60 and user80 to this group. Create a directory called /sdata, enable setgid bit on it, and add write permission bit for group members. Set ownership and owning group to root and group30. Create a file called filel under /sdata as user60 and modify the file as user80 successfully. (Exercises 4-5, 6-4, and 6-6).</p>
+<p>### Answer groupadd -g 3000 group30 usermod -aG group30 user60 usermod -aG group30 user80 mkdir /sdata chmod g+s /sdata chmod g+w /sdata</p>
+<p>---</p>
+<p>On rhcsa3, create directory /var/dir1 with full permissions for everyone. Disallow non- owners to remove files. Test by creating file /var/dir1/stkfilel as user60 and removing it as user80. (Exercise 4-6).</p>
+<p>### Answer mkdir /var/dir1 chmod ugo+rwx /var/dir1 chmod o+t /var/dir1/</p>
+<p>---</p>
+<p>On rhcsa3, create file Infilel under /var/tmp and create one hard link /var/tmp/lnfile2 and one soft link/boot/file1. Edit Infilel using one link at a time and confirm. (Exercises 3-2 and 3-3).</p>
+<p>### Answer touch /var/tmp/Infile1 ln /var/tmp/Infile1 /var/tmp/Infile2 ln -s /var/tmp/Infile1 /boot/file1</p>
+<p>---</p>
+<p>On rhcsa5, create file Infilel under /var/tmp and create three hard links called hard1, hard2, and hard3 for it. Identify the inode number associated with all four files. Edit any of the files and observe the metadata for all the files for confirmation. (Exercise 3-2).</p>
+<p>### Answer touch /var/tmp/Infile1 ln /var/tmp/Infile1 /var/tmp/hard1 ln /var/tmp/Infile1 /var/tmp/hard2 ln /var/tmp/Infile1 /var/tmp/hard3</p>
+<p>---</p>
+<p>**On rhcsa5, members (user100 and user200) of group 100 should be able to collaborate on files under /shared but cannot delete each other's files. (Exercises 4-5 and 4-6).**</p>
+<p>### Answer mkdir /shared chmod o+t /shared chmod g+s /shared chmod ugo+rwx /shared chown root:group100 /shared</p>
+<p>---</p>
+<p>Task 12: Attach the RHEL 8 ISO image to the VM and mount it persistently to /mnt/cdrom. Define access to both repositories and confirm. (Exercise 10-1).</p>
+<p>### Answer mount -o ro /dev/sr0 /mnt/cdrom</p>
+<p>vi /etc/fstab /dev/sr0 /mnt/cdrom iso9660 ro 0 0</p>
+<p>vi /etc/yum.repos.d/local.repo [BaseOS] name=BaseOS baseurl=file:///mnt/cdrom/BaseOS enabled=1 gpgcheck=0</p>
+<p>[AppStream] name=AppStream baseurl=file:///mnt/cdrom/AppStream enabled=1 gpgcheck=0</p>
+<p>---</p>
+<p>Attach the RHEL 8 ISO image to the VM and mount it persistently to /mnt/dvdrom. Define access to both repositories and confirm. (Exercise 10-1).</p>
+<p>### Answer mount -o ro /dev/sr0 /mnt/cdrom</p>
+<p>vi /etc/fstab /dev/sr0 /mnt/cdrom iso9660 ro 0 0</p>
+<p>vi /etc/yum.repos.d/local.repo [BaseOS] name=BaseOS baseurl=file:///mnt/cdrom/BaseOS enabled=1 gpgcheck=0</p>
+<p>[AppStream] name=AppStream baseurl=file:///mnt/cdrom/AppStream enabled=1 gpgcheck=0</p>
+<p>---</p>
+<p>On rhcsa3 and rhcsa4, attach the RHEL 8 ISO image to the VM and mount it persistently to /mnt/sr0. Define access to both repositories and confirm. (Exercise 10-1).</p>
+<p>### Answer mount -o ro /dev/sr0 /mnt/cdrom</p>
+<p>vi /etc/fstab /dev/sr0 /mnt/cdrom iso9660 ro 0 0</p>
+<p>vi /etc/yum.repos.d/local.repo [BaseOS] name=BaseOS baseurl=file:///mnt/cdrom/BaseOS enabled=1 gpgcheck=0</p>
+<p>[AppStream] name=AppStream baseurl=file:///mnt/cdrom/AppStream enabled=1 gpgcheck=0</p>
+<p>---</p>
+<p>On rhcsa3, install module postgresql version 9.6 (select a different non-default version if 9.6 is not available). (Exercise 10-5).</p>
+<p>Install package group called "Development Tools" and capture its information in /var/tmp/systemtools.out file. (Chapter 03, topic: Regular Expressions, and Exercise 10-3).</p>
+<p>On rhcsa5 and rhcsa6, attach the RHEL 8 ISO image to the VM and mount it persistently to /mnt/sr0. Define access to both repositories and confirm. (Exercise 10-1).</p>
+<p>### Answer mount -o ro /dev/sr0 /mnt/cdrom</p>
+<p>vi /etc/fstab /dev/sr0 /mnt/cdrom iso9660 ro 0 0</p>
+<p>vi /etc/yum.repos.d/local.repo [BaseOS] name=BaseOS baseurl=file:///mnt/cdrom/BaseOS enabled=1 gpgcheck=0</p>
+<p>[AppStream] name=AppStream baseurl=file:///mnt/cdrom/AppStream enabled=1 gpgcheck=0</p>
+<p>---</p>
+<p>On rhcsa6, install module "container-tools" stream rhel8. (Exercise 10-5).</p>
+<p>On rhcsa6, list all files that are part of the “setup" package, and use regular expressions and I/O redirection to send the output lines containing "hosts" to /var/tmp/setup.pkg. (Exercise 9-2, and Chapter 07, topics: Regular Expressions, and Input, Output, and Error Redirections).</p>
+<p>### Answer rpm -ql setup | grep hosts &gt;&gt; /var/tmp/setup.pkg</p>
+<p>---</p>
+<p>Task 13: Create a logical volume called Ivoll of size 280MB in vgtest volume group. Mount the ext4 file system persistently to /mnt/mntl. (Exercises 14-1, 14-2, and 15-3).</p>
+<p>### Answer</p>
+<p>pvcreate /dev/sdX /dev/sdY vgcreate vgtest /dev/sdX /dev/sdY lvcreate -L 280 vgtest --name lvol1 mkfs.ext4 /dev/vgtest/lvol1 mount -o rw /dev/vgtest/lvol1 /mnt/mnt1</p>
+<p>vi /etc/fstab /dev/vgtest/lvol1 /mnt/mnt1 ext4 defaults 0 0</p>
+<p>---</p>
+<p>Extend the file system in the logical volume lvol1 by 64MB without unmounting it and without losing any data. Confirm the new size for the logical volume and the file system. (Exercise 15-4).</p>
+<p>### Answer lvextend -L +64 /dev/vgtest/lvol1 resize2fs /dev/vgtest/lvol1</p>
+<p>---</p>
+<p>Create a disk partition of size 100MB on the 400MB disk and format it with Ext4 file system structures. Assign label stdlabel to the file system. Mount the file system on /mnt/stdfs1 persistently using the label. Create file stdfilel in the mount point. (Exercise 13-2 or 13-4, Chapter 15, topic: Labeling a File System, and Exercise 15-1).</p>
+<p>### Answer fdisk /dev/sdX mkfs.ext4 /dev/sdX e2label /dev/sdX stdlabel mount -o rw /dev/sdX /mnt/stdfs1</p>
+<p>vi /etc/fstab</p>
+<p>LABEL=stdlabel /dev/sdX ext4 defaults 0 0</p>
+<p>----</p>
+<p>**On rhcsa3, create VDO volume called vdol on the 4GB disk with logical size 16GB and mounted with Ext4 structures on /mnt/vdol. (Exercises 13-6 and 13-7).**</p>
+<p>### Answer `dnf install kmod-kvdo` `systemctl enable --now vdo` `vdo create --name vdo1 --device /dev/sdX --vdoLogicalSize 16G --vdoSlabSize 128` mkfs.ext4 /dev/mapper/vdo1 mount -o rw /dev/mapper/vdo1 /mnt/vdo1</p>
+<p>vi /etc/fstab /dev/mapper/vdo1 /mnt/vdo1 ext4 defaults 0 0</p>
+<p>---</p>
+<p>Task 14: Change group membership on /mnt/mntl to group10. Set read/write/execute permissions on /mnt/mntl for group members, and revoke all permissions for public. (Exercises 6-4, 6-6, and either 4-1 or 4-2).</p>
+<p>### Answer chown :group10 /mnt/mnt1 chmod g+rwx /mnt/mnt1 chown o-rwx /mnt/mnt1</p>
+<p>---</p>
+<p>Task 15: Create a logical volume called lvswap of size 280MB in vgtest volume group. Initialize the logical volume for swap use. Use the UUID and place an entry for persistence. (Exercise 15-6).</p>
+<p>### Answer lvcreate -L 280M vgtest --name lvswap mkswap /dev/vgtest/lvswap</p>
+<p>vi /etc/fstab UUID=&lt;&gt; none swap defaults 0 0</p>
+<p>---</p>
+<p>Create a swap partition of size 85MB on the 400MB disk. Use its UUID and ensure it is activated after every system reboot. (Exercise 15-6).</p>
+<p>### Answer fdisk mkswap /dev/sdX vi /etc/fstab UUID=&lt;&gt; none swap default 0 0</p>
+<p>---</p>
+<p>Create a logical volume called lv1 of size equal to 10 LEs in vgl volume group (create vgl with PE size 8MB in a partition on the 400MB disk). Initialize the logical volume with XFS type and mount it on /mnt/lvfs1. Create a file called lv1filel in the mount point. Set the file system to automatically mount at each system reboot. (Exercises 14-1, 14-2, and 15-3). Add a group called group20 and change group membership on /mnt/lvfs1 to group20. Set read/write/execute permissions on /mnt/lvfs1 for the owner, group members, and others. (Exercises 6-4, 6-6, and either 4-1 or 4-2).</p>
+<p>### Answer fdisk /dev/sdX pvcreate /dev/sdX vgcreate -s 8 vg1 /dev/sdX lvcreate -l 10 vg1 --name lv1 mkfs.xfs /dev/vg1/lv1 mount -o rw /dev/vg1/lv1 /mnt/lvfs1 blkid /dev/vg1/lv1</p>
+<p>vi /etc/fstab UUID=&lt;&gt; /mnt/lvfs1 xfs defaults 0 0</p>
+<p>groupadd group20 chown :group20 /mnt/lvfs1 chmod ugo+rwx /mnt/lvfs1</p>
+<p>On rhcsa4, create Stratis pool pooll and volume strl on a 1GB disk and mount it to /mnt/str1. (Exercise 15-5). ### Answer `dnf install -y stratisd stratis-cli` `systemctl enable --now stratisd` `stratis pool create pool1 /dev/sdX` `stratis filesystem create pool1 str1` `mkdir /mnt/str1; mount /dev/stratis/pool1/str1 /mnt/str1`</p>
+<p>vi /etc/fstab UUID=&lt;&gt; /mnt/str1 xfs x-systemd.requires=stratisd.service 0 0</p>
+<p>**note**: stratis always contain xfs structures ---</p>
+<p>On rhcsa4, expand Stratis pool pooll using the other 1GB disk. Confirm that /mnt/str1 sees the storage expansion. (Exercise 15-5). ### Answer `stratis pool add-data pool1 /dev/sdX` `stratis pool add-data pool1 /dev/sdX` `stratis pool list`</p>
+<p>---</p>
+<p>On rhcsa6, create VDO volume vdo2 on the 4GB disk with logical size 16GB and mounted persistently with XFS structures on /mnt/vdo2. (Exercises 13-6 and 13-7).</p>
+<p>### Answer vdo create --name vdo2 --device /dev/sdX --vdoLogicalSize 16G --vdoSlabSize 128</p>
+<p>lsblk /dev/sdX -o UUID vi /etc/fstab UUID=&lt;&gt; /mnt/vdo2 xfs defaults 0 0</p>
+<p>---</p>
+<p>Task 16: Use the combination of tar and bzip2 commands to create a compressed archive of the /usr/lib directory. Store the archive under /var/tmp as usr.tar.bz2. (Exercise 3-1).</p>
+<p>### Answer tar cjf usr.tar.bz2 /usr/lib mv usr.tar.bz2 /var/tmp</p>
+<p>---</p>
+<p>Use the tar and gzip command combination to create a compressed archive of the /etc directory. Store the archive under /var/tmp using a filename of your choice. (Exercise 3-1).</p>
+<p>### Answer tar czf etc.tar.gz /etc mv etc.tar.gz /var/tmp</p>
+<p>---</p>
+<p>Task 17: Create a directory hierarchy /dir1/dir2/dir3/dir4 and apply SELinux contexts of /etc on it recursively. (Chapter 03, topic: Creating Files and Directories, and Exercise 21-2).</p>
+<p>### Answer mkdir -p /dir1/dir2/dir3/dir4 ls -lZ /etc chcon -vu &lt;&gt; -t &lt;&gt; /dir1 -R</p>
+<p>---</p>
+<p>Create a directory /direct01 and apply SELinux contexts for /root to it. (Exercise 21-2).</p>
+<p>### Answer ls -lZ /root chcon -vu &lt;&gt; -t &lt;&gt; /direct01</p>
+<p>---</p>
+<p>On rhcsa3, set SELinux type shadow_t on a new file testfile1 in /usr and ensure that the context is not affected by a SELinux relabeling. (Exercises 21-1 and 21-2).</p>
+<p>### Answer chcon -vu &lt;&gt; -t shadow_t /usr/testfile1 semanage fcontext -a -s &lt;&gt; -t shadow_t '/usr/testfile1'</p>
+<p>---</p>
+<p>On rhcsa6, flip the value of the Boolean nfs_export_all_rw persistently. (Exercise 21-5).</p>
+<p>### Answer getsebool -a | grep nfs_export_all_rw setsebool nfs_export_all_rw off</p>
+<p>---</p>
+<p>Task 20: Allow user20 to use sudo without being prompted for their password. (Chapter 06, topic: Doing as Superuser (or Doing as Substitute User)).</p>
+<p>### Answer visudo user20 ALL=(ALL) NOPASSWD: ALL</p>
+<p>---</p>
+<p>Task 21: Write a bash shell script to create three user accounts—user555, user666, and user777— with no login shell and passwords matching their usernames. The script should also extract the three usernames from the /etc/passwd file and redirect them into /var/tmp/newusers. (Chapter 22: Script12 and Chapter 07, topics: Regular Expressions, and Input, Output, and Error Redirections).</p>
+<p>### Answer</p>
+<h1>!/bin/bash for USER in user{555.666.777} do /usr/sbin/useradd -s /sbin/nologin if [ $? = 0 ] then echo $USER | /usr/bin/passwd --stdin $USER grep $USER /etc/passwd &gt;&gt; /var/tmp/newusers fi done</h1>
+<p>---</p>
+<p>Write a bash shell script so that it prints RHCSA when RHCE is passed as an argument, and vice versa. If no argument is provided, the script should print a usage message and quit with exit value 5. (Chapter 22: Script10).</p>
+<p>### Answer #!/bin/bash</p>
+<p>if [ "$1" = RHCSA ] then echo "RHCE" elif [ "$1" = RHCE ] then echo "RHCSA" else echo "Usage: pass RHCSA or RHCE as an argument" exit 5 fi</p>
+<p>----</p>
+<p>On rhcsa3, search for all manual pages for the description containing the keyword "password" and redirect the output to file /var/tmp/man.out. (Chapter 02, topic Searching by Keyword, and Chapter 07, topic: Input, Output, and Error Redirections).</p>
+<p>### Answer man -k password &gt;&gt; /var/tmp/man.out</p>
+<p>Write a bash shell script that checks for the existence of files (not directories) under the /usr/bin directory that begin with the letters "ac" and display their statistics (the stat command). (Chapter 22: Table 22-1 and Script07).</p>
+<p>### Answer #!/bin/bash</p>
+<p>find /usr/bin/ -name "ac*" -exec stat {} \\;</p>
+<p>Task 21: Write a bash shell script that defines an environment variable called ENV1=book1 and creates a user account that matches the value of the variable. (Chapter 22: Script02 and Script03).</p>
+<p>### Answer #!/bin/bash</p>
+<p>ENV1=book1</p>
+<p>if [ "$1" = "$ENV1" ] then /usr/sbin/useradd $1 cat /etc/passwd | grep $1 else echo "Usage: createuser.sh fi</p>
+<p>Task 22: Launch a simple container as user20 using the latest version of ubi7 image. Configure the container to auto-start at system reboots without the need for user20 to log in. (Exercise 23-10).</p>
+<p>### Answer podman run -dt --name (container_name) ubi7</p>
+<p>mkdir ~/.config/systemd/user/ -p podman generate systemd --new --name rootless-container &gt;&gt; ~/.config/systemd/user/rootless-container.service</p>
+<p>podman stop rootless-container podman rm rootless-container systemctl --user daemon-reload systemctl enable --now rootless-container --user systemctl start --user rootless-container loginctl enable-linger</p>
+<p>Launch a root container and configure it to auto-start via systemd. (Exercise 23-9).</p>
+<p>### Answer podman run -dt --name root-container ubi7 podman generate systemd --new --name root-container | tee /etc/systemd/system/root-container.service</p>
+<p>podman stop root-container podman rm root-container</p>
+<p>systemctl enable --now root-container systemctl start root-container</p>
+<p>---</p>
+<p>Launch another container as user20 using the latest version of ubi8 image with two environment variables SHELL and HOSTNAME. Configure the container to auto-start via systemd without the need for user20 to log in. Connect to the container and verify variable settings. (Exercise 23-7 and 23-10).</p>
+<p>### Answer</p>
+<p>podman run -dt -e HOSTNAME="vgnshlvnz" -e SHELL="bin/bash" --name envar-container ubi8 podman generate systemd --new --name envar-container | tee ~/.config/systemd/user/envar-container.service</p>
+<p>podman stop envar-container podman rm envar-container</p>
+<p>systemctl --user enable --now envar-container systemctl --user start envar-container</p>
+<p>podman exec envar-container /bin/bash -c 'echo $HOSTNAME' podman exec envar-container /bin/bash -c 'echo $SHELL'</p>
+<p>---</p>
+<p>Launch a container as user80 with /data01 mapped to /data01 using the latest version of the ubi8 image. Configure a systemd service to auto-start the container on system reboots without the need for user80 to log in. Create files under the shared mount point and validate data persistence. (Exercise 23-7 and 23-10).</p>
+<p>### Answer podman run -dt -v /data01:/data01:Z --name ubi8 ubi8</p>
+<p>mkdir -p ~/.config/systemd/user/</p>
+<p>podman generate systemd --new --name ubi8 | tee ~/.config/systemd/user/ubi8.service</p>
+<p>systemctl --user enable --now ubi8</p>
+<p>podman stop ubi8 podman rm ubi8</p>
+<p>systemctl --user daemon-reload systemctl --user start ubi8</p>
+<p>loginctl enable-linger</p>
+<p>podman attach ubi8</p>
+<p>cd /mnt/ touch file.txt</p>
+<p>exit</p>
+<p>---</p>
+<p>On rhcsa3, launch a named container as user60 with host port 10000 mapped to container port 80. Employ the latest version of the ubi7 image. Configure a systemd service to auto-start the container without the need for user60 to log in. Validate port mapping using an appropriate podman subcommand. (Exercises 23-5 and 23-10).</p>
+<p>### Answer podman run -dt -p 10000:80 --name user60 ubi7</p>
+<p>mkdir -p ~/.config/systemd/user/</p>
+<p>podman generate systemd --new --name user60 | tee ~/.config/systemd/user/user60.service</p>
+<p>systemctl --user enable --now ubi8</p>
+<p>podman stop user60 podman rm user60</p>
+<p>systemctl --user daemon-reload systemctl --user start user60</p>
+<p>loginctl enable-linger</p>
+<p>On rhcsa3, launch another named container as user60 with /host_data01 mapped to /container_data01, one variable ENVIRON=Exam, and host port 1050 mapped to container port 1050. Use the latest version of the ubi8 image. Configure a separate systemd service to auto-start the container without the need for user60 to log in. Create a file under the shared directory and validate data persistence. Verify port mapping and variable settings using appropriate podman subcommands. (Exercises 23-5, 23-7, 23-8, and 23-10).</p>
+<p>### Answer podman run -dt -v /host_data01:/container_data01:Z -e ENVIRON=Exam -p 1050:1050 --name ubi8 ubi8</p>
+<p>podman generate systemd --new --name ubi8 | tee /etc/systemd/system/ubi8.service</p>
+<p>systemctl enable --now ubi8</p>
+<p>podman stop ubi8 podman rm ubi8</p>
+<p>systemctl start ubi8</p>
+<p>---</p>
+<p>On rhcsa5, launch a named root container with host port 443 mapped to container port 443. Employ the latest version of the ubi7 image. Configure a systemd service to auto-start the container at system reboots. Validate port mapping using an appropriate podman subcommand. (Exercises 23-5 and 23-9).</p>
+<p>### Answer podman run -dt -p 443:443 --name ubi7 ubi7</p>
+<p>podman generate systemd --new --name ubi7 | tee /etc/systemd/system/ubi7.service</p>
+<p>systemctl daemon-reload systemctl enable --now ubi7</p>
+<p>systemctl start ubi7</p>
+<p>---</p>
+<p>Task 23: Set up a cron job for user70 to search for files by the name "core" in the /var directory and copy them to the directory /var/tmp/coredir1. This job should run every Monday at 1:20 a.m. (Chapter 04, topics: Using the find Command, and Using find with -exec and -ok Flags, and Exercise 8-4).</p>
+<p>### Answer find /var/ -name core -type f -exec cp "{}" /var/tmp/ \;</p>
+<p>Search for all files in the entire directory structure that have been modified in the past 30 days and save the file listing in the /var/tmp/modfiles.txt file. (Chapter 04, topics: Using the find Command and Using find with -exec and -ok Flags).</p>
+<p>On rhcsa5, launch a named container as user100 with /data01 mapped to /data01 and two variables KERN=$(uname -r) and SHELL defined. Use the latest version of the ubi8 image. Configure a systemd service to auto-start the container at system reboots without the need for user100 to log in. Create a file under the shared mount point and validate data persistence. Verify port mapping using an appropriate podman subcommand. (Exercises 23-7, 23-8, and 23-10).</p>
+<p>Task 24: Modify the bootloader program and set the default autoboot timer value to 2 seconds. (Exercise 11-1).</p>
+<p>### Answer edit /etc/default/grub</p>
+<p>grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>---</p>
+<p>Task 25: Determine the recommended tuning profile for the system and apply it. (Exercise 12-2).</p>
+<p>### Answer yum install -y tuned systemctl enable --now tuned systemctl start tuned</p>
+<p>tuned-adm active - will show currently active profile tuned-adm profile powersave - this will switch the tuning profile to power-save tuned-adm recommend - this will suggest the best profile tuned-adm profile virtual-guest</p>
+<p>---</p>
+<p>On rhcsa5 and rhcsa6, set the tuning profile to powersave. (Exercise 12-2).</p>
+<p>### Answer tuned-adm profile powersave</p>
+<p>Task 26: Configure Chrony to synchronize system time with the hardware clock. Remove all other NTP sources. (Exercise 18-1).</p>
+<p>Task 27: On rhcsa3, add the http service to the "external" firewalld zone persistently. (Exercise 20- 1).</p>
+<p>On rhcsa5, add HTTP port 8400/udp to the public zone persistently. (Exercise 21-3).</p>
+<p>Task 28: Write a bash shell script so that it prints RHCSA when RHCE is passed as an argument, and vice versa. If no argument is provided, the script should print a usage message and quit with exit value 5. (Chapter 22: Script10).</p>
+<p>Task 29: Configure NFS service on rhcsa3 and share /rh_share3 with rhcsa4. Configure AutoFS direct map on rhcsa4 to mount /rh_share3 on /mnt/rh_share4. User user80 (create on both systems) should be able to create files under the share on the NFS server as well as under the mount point on the NFS client. (Exercises 5-1, 17-1, and 17-3).</p>
+<p>Configure NFS service on rhcsa4 and share the home directory for user60 (create user60 on both systems) with rhcsa3. Configure AutoFS indirect map on rhcsa3 to automatically mount the home directory under /nfsdir when user60 logs on to rhcsa3. (Exercises 5-1, 17-1, 17-4, and 17-5).</p>
+<p>Export /share5 on rhcsa5 and mount it to /share6 persistently on rhcsa6. (Exercises 17-1 and 17-2).</p>
+<p>Use NFS to export home directories for all users (ul, u2, and u3) on rhcsa6 so that their home directories become available under /homel when they log on to rhcsa5. Create u1, u2, and u3. (Exercises 17-1 and 17-5).</p>
+<p>Task 30: Configure password-less ssh access for user60 from rhcsa3 to rhcsa4. (Exercise 19-2).</p>
+<p>Configure password-less ssh access for ul from rhcsa5 to rhcsa6. Copy the directory /etc/sysconfig from rhcsa5 to rhcsa6 under /var/tmp/remote securely. (Exercise 19-2, and Chapter 9, topic: Copying Files Remotely Using scp).</p>
+<p>Synchronize the entire /etc directory on rhcsa5 to /var/tmp/etc on rhcsa6. Use in-transit compression. Capture the output and any errors in the /var/tmp/etc.transfer file on rhcsa5 during the synchronization process. (Chapter 19, topic: Synchronizing Files Remotely Using rsync, and Chapter 07, topic: Regular Expressions).</p>
+<p>Task 31: On rhcsa5, check the current version of the Linux kernel. Register rhcsa5 with RHSM and install the latest version of the kernel available. Ensure that the existing kernel and its configuration remain intact. Reboot the system and confirm the new version is loaded. (Exercise 11-3, and Chapter 02, topic: Viewing System Information).</p>
+<p>Task 32: On rhcsa5, configure journald to store messages permanently under /var/log/journal and fall back to memory-only option if /var/log/journal directory does not exist or has permission/access issues. (Exercise 12-1).</p>
+<p>&gt; Written with [StackEdit](https://stackedit.io/).</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

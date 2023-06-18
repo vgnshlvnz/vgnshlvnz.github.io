@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Quickstart - Python App Engine Standard Environment"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This quickstart shows you how to create a small App Engine application that displays a short message. Download the Hello World app We've created a..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/quickstart-python-app-engine-standard-environment.html" rel="bookmark"
+           title="Permalink to "Quickstart - Python App Engine Standard Environment"">"Quickstart - Python App Engine Standard Environment"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-04T00:00:00+00:00">
+                Published: Mon 04 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This quickstart shows you how to create a small App Engine application that displays a short message.</p>
+<h2>Download the Hello World app</h2>
+<p>We've created a simple Hello World app for Python so you can quickly get a feel for deploying an app to Google Cloud Platform. Follow these steps to download Hello World to your local machine.</p>
+<ol>
+<li>
+<p>Clone the Hello World sample app repository to your local machine:</p>
+<p><code>git clone https://github.com/GoogleCloudPlatform/python-docs-samples</code></p>
+</li>
+<li>
+<p>Then go to the directory that contains the sample code:</p>
+<p><code>cd python-docs-samples/appengine/standard/hello_world</code></p>
+</li>
+</ol>
+<p>Alternatively, you can <a href="https://github.com/GoogleCloudPlatform/python-docs-samples/archive/master.zip">download the sample</a> as a zip file and extract it.</p>
+<h2>Test the application</h2>
+<p>Test the application using the development web server, which is included with the App Engine SDK.</p>
+<ol>
+<li>
+<p>From within the sample directory, start the development server with the following command using Google Cloud SDK Shell:</p>
+<p><code>dev_appserver.py .</code></p>
+<p>The development server is now running, listening for requests on port 8080.</p>
+<p>Caution: If you did not create symlinks for <code>dev_appserver.py</code> when installing the App Engine SDK, you may need to specify the full path to<code>dev_appserver.py</code>.</p>
+</li>
+<li>
+<p>Visit <a href="http://localhost:8080/">http://localhost:8080/</a> in your web browser to see the app in action.</p>
+</li>
+</ol>
+<p>For more information about running the development web server, see <a href="https://cloud.google.com/appengine/docs/python/tools/devserver">the Python Development Server reference</a>.</p>
+<h2>Make a change</h2>
+<p>You can leave the web server running while you develop your application. The web server watches for changes in your source files and reloads them if necessary.</p>
+<ol>
+<li>Try it now: Leave the web server running, then edit <code>main.py</code> at python-doc-samples\appengine\standard\hello_world  to change <code>Hello, World!</code> to something else.</li>
+<li>Reload <a href="http://localhost:8080/">http://localhost:8080/</a> to see the results.</li>
+</ol>
+<h2>Deploy your app</h2>
+<p>To deploy your app to App Engine, you will need to register a project to create your project ID, which will determine the URL for the app.</p>
+<ol>
+<li>In the Cloud Platform Console, go to the Projects page and select or create a new project.<a href="https://console.cloud.google.com/project?_ga=1.240568832.2004985784.1467629203">GO TO THE PROJECTS PAGE</a></li>
+<li>Note the project ID that you created above.</li>
+<li>
+<p>Upload your application to Google App Engine by invoking the following command. This opens a browser window for you to sign in using your Google account. You'll be providing the project ID as the argument for <code>-A</code>. Use the <code>-V</code> argument to specify a version name.</p>
+<p>appcfg.py -A &lt;YOUR_PROJECT_ID&gt; -V v1 update .</p>
+</li>
+<li>
+<p>Your app is now deployed and ready to serve traffic at<code>http://&lt;YOUR_PROJECT_ID_&gt;.appspot.com</code></p>
+</li>
+</ol>
+<p>.</p>
+<h2>Congratulations!</h2>
+<p>You have completed this quickstart.</p>
+<p>The full URL for your application is <code>http://&lt;YOUR_PROJECT_ID&gt;.appspot.com/</code>. Optionally, you can purchase and use a top-level domain name for your app, or use one that you have already registered.</p>
+<h2>Clean up</h2>
+<p>To avoid incurring charges to your Google Cloud Platform account for the resources used in this quickstart:</p>
+<ol>
+<li>Go to the <a href="https://console.cloud.google.com/project">Cloud Platform Console</a>.</li>
+<li>In the list of projects, select the project that you want to shut down.</li>
+<li>In the prompt, type your project ID to confirm the deletion.</li>
+<li>Click <strong>Shut down</strong> to schedule your project for deletion.</li>
+</ol>
+<h2>What's next</h2>
+<h2>Use a custom domain</h2>
+<p>You can serve your App Engine app using your own custom domain instead of <code>appspot.com</code>. For more information, see <a href="https://cloud.google.com/appengine/docs/go/console/using-custom-domains-and-ssl">Using Custom Domains and SSL</a>.</p>
+<h2>Hello World code review</h2>
+<p>Hello World is the simplest possible App Engine app: it contains only one Python module, has only one version, and all of the code is located within the app's root directory. This section describes each of the app files in detail.</p>
+<h3><code>main.py</code></h3>
+<p>This Python script responds to a request with an HTTP header and the message <code>Hello, World!</code></p>
+<p><a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/hello_world/main.py">appengine/standard/hello_world/main.py</a></p>
+<p><a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/hello_world/main.py">VIEW ON GITHUB</a></p>
+<p>import webapp2 class MainPage(webapp2.RequestHandler): def get(self): self.response.headers['Content-Type'] \= 'text/plain' self.response.write('Hello, World!') app \= webapp2.WSGIApplication([ ('/', MainPage), ], debug\=True) </p>
+<h3><code>app.yaml</code></h3>
+<p>The <code>app.yaml</code> configuration file defines several options for the app, and describes which handler scripts should be used for which URLs.</p>
+<p><a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/hello_world/app.yaml">appengine/standard/hello_world/app.yaml</a></p>
+<p><a href="https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/hello_world/app.yaml">VIEW ON GITHUB</a></p>
+<p>runtime: python27 api_version: 1 threadsafe: true handlers: - url: /.* script: main.app</p>
+<p>From top to bottom, this configuration file says the following about this application:</p>
+<ul>
+<li>This code runs in the <code>python27</code> runtime environment, API version <code>1</code>. Additional runtime environments and languages may be supported in the future.</li>
+<li>This application is <code>threadsafe</code> so the same instance can handle several simultaneous requests. Threadsafe is an advanced feature and can result in erratic behavior if your application is not specifically designed to be threadsafe.</li>
+<li>Every request to a URL whose path matches the regular expression <code>/.*</code> (all URLs) should be handled by the <code>app</code> object in the <code>main</code> Python module.</li>
+</ul>
+<p>The syntax of this file is <a href="http://www.yaml.org/">YAML</a>. For a complete list of configuration options, see <a href="https://cloud.google.com/appengine/docs/python/config/appconfig">the app.yaml reference</a>.</p>
+<h3>Learn the whole platform</h3>
+<p>Now that you know what it's like to develop and deploy App Engine apps, you can stretch out and see the rest of Google Cloud Platform. For a guided walkthrough that teaches you how to create an application that uses the entire platform, not just App Engine, check out our <a href="https://cloud.google.com/appengine/docs/python/gettingstarted/introduction">Creating a Guestbook</a>quickstart in which you expand this simple application to become a fully-fledged Guestbook application that lets authenticated Google accounts post messages to a public page.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

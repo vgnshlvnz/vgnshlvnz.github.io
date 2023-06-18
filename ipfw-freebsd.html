@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"ipfw - freebsd"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="following configurations should work with nat environment [code lang=text] #!/usr/local/bin/env sh #flush out the list before we begin ipfw -q -f..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/ipfw-freebsd.html" rel="bookmark"
+           title="Permalink to "ipfw - freebsd"">"ipfw - freebsd"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-18T00:00:00+00:00">
+                Published: Mon 18 March 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>following configurations should work with nat environment</p>
+<p>[code lang=text] <br />#!/usr/local/bin/env sh #flush out the list before we begin ipfw -q -f flush</p>
+<h1>set rules command prefix cmd="ipfw -q add" pif="vtnet0" # Interface name of NIC attached to Internet</h1>
+<h1>No restrictions on Loopback Interface $cmd 00010 allow all from any to any via lo0</h1>
+<p>$cmd 00011 divert natd log all from any to any via $pif $cmd 00012 pass all from any to any</p>
+<h1>ipfw nat 10 config ip 45.77.191.174 log #ipfw add 00011 nat 10 log ip from 10.0.0.0/16 to any out via $pif #ipfw add 00012 nat 10 log ip from any to 10.0.0.0/16 in via $pif</h1>
+<p>$cmd 00101 check-state</p>
+<p># allow and log all other outbound connections $cmd 00299 allow log all from any to any out via $pif</p>
+<p># Deny all inbound traffic from non-routable reserved address spaces $cmd 00300 deny all from 192.168.0.0/16 to any in via $pif #RFC 1918 private IP $cmd 00301 deny all from 172.16.0.0/12 to any in via $pif #RFC 1918 private IP $cmd 00302 deny all from 10.0.0.0/8 to any in via $pif #RFC 1918 private IP $cmd 00303 deny all from 127.0.0.0/8 to any in via $pif #loopback $cmd 00304 deny all from 0.0.0.0/8 to any in via $pif #loopback $cmd 00305 deny all from 169.254.0.0/16 to any in via $pif #DHCP auto-config $cmd 00306 deny all from 192.0.2.0/24 to any in via $pif #reserved for docs $cmd 00307 deny all from 204.152.64.0/23 to any in via $pif #Sun cluster interconnect $cmd 00308 deny all from 224.0.0.0/3 to any in via $pif #Class D &amp; E multicast</p>
+<p># Deny public pings $cmd 00310 deny icmp from any to any in via $pif</p>
+<p># Deny ident $cmd 00315 deny tcp from any to any 113 in via $pif</p>
+<p># Deny all Netbios services. $cmd 00320 deny tcp from any to any 137 in via $pif $cmd 00321 deny tcp from any to any 138 in via $pif $cmd 00322 deny tcp from any to any 139 in via $pif $cmd 00323 deny tcp from any to any 81 in via $pif</p>
+<p># Deny fragments $cmd 00330 deny all from any to any frag in via $pif</p>
+<p># Deny ACK packets that did not match the dynamic rule table $cmd 00332 deny tcp from any to any established in via $pif</p>
+<p># Allow traffic from ISP's DHCP server. # Replace x.x.x.x with the same IP address used in rule 00120. $cmd 00360 allow udp from any to 45.32.56.1 67 in via $pif keep-state</p>
+<p># Allow HTTP connections to internal web server $cmd 00400 allow tcp from any to me 80 in via $pif setup keep-state $cmd 00401 allow log tcp from any to me 53 in via $pif setup keep-state $cmd 00402 allow log udp from any to me 53 in via $pif setup keep-state</p>
+<p># Allow inbound SSH connections $cmd 00410 allow tcp from any to me 22 in via $pif setup keep-state</p>
+<h1>allow possible rndc - bind to work in port 953 $cmd 00420 allow tcp from any to me 953 in via $pif setup keep-state</h1>
+<p># Reject and log all other incoming connections $cmd 00499 deny log all from any to any in via $pif</p>
+<p># Everything else is denied and logged $cmd 00999 deny log all from any to any</p>
+<p>[/code]</p>
+<p>this is for natd.conf</p>
+<p>[code lang=text] <br />redirect_port tcp 10.0.0.1:80 80 redirect_port tcp 10.0.0.1:443 443 redirect_port tcp 10.0.0.1:53 53 redirect_port udp 10.0.0.1:53 53</p>
+<p>[/code]</p>
+<p>reference:</p>
+<p>https://www.freebsd.org/doc/handbook/firewalls-ipfw.html</p>
+<p>https://www.freebsd.org/cgi/man.cgi?query=natd&amp;sektion=8&amp;manpath=freebsd-release-ports</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

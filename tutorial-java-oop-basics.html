@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[tutorial] - Java OOP Basics"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="TL;DR:Following are characteristics of an object-oriented programming: Everything is an object A program is a bunch of objects telling each other..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorial-java-oop-basics.html" rel="bookmark"
+           title="Permalink to "[tutorial] - Java OOP Basics"">"[tutorial] - Java OOP Basics"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-02T00:00:00+00:00">
+                Published: Sat 02 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>TL;DR:Following are characteristics of an <strong>object-oriented programming</strong>:</p>
+<ul>
+<li>Everything is an object</li>
+<li>A program is a bunch of objects telling each other what to do by sending messages</li>
+<li>Each object has its own memory made up of other objects</li>
+<li>Every object has a type.</li>
+<li>All objects of a particular type can receive same messages</li>
+</ul>
+<p>Basically an object has state, behavior and identity.</p>
+<p><strong>Why OOP</strong></p>
+<p>Suppose that you want to assemble your own PC, you go to a hardware store and pick up a motherboard, a processor, some RAMs, a hard disk, a casing, a power supply, and put them together. You turn on the power, and the PC runs. You need not worry whether the CPU is 1-core or 6-core; the motherboard is a 4-layer or 6-layer; the hard disk has 4 plates or 6 plates, 3 inches or 5 inches in diameter; the RAM is made in Japan or Korea, and so on. You simply put the hardware components together and expect the machine to run. Of course, you have to make sure that you have the correct interfaces, i.e., you pick an IDE hard disk rather than a SCSI hard disk, if your motherboard supports only IDE; you have to select RAMs with the correct speed rating, and so on. Nevertheless, it is not difficult to set up a machine from hardware components. Similarly, a car is assembled from parts and components, such as chassis, doors, engine, wheels, brake and transmission. The components are reusable, e.g., a wheel can be used in many cars (of the same specifications). Hardware, such as computers and cars, are assembled from parts, which are reusable hardware components. How about software? Can you "assemble" a software application by picking a routine here, a routine there, and expect the program to run? The answer is obviously NO! Unlike hardware, it is very difficult to "assemble" an application from software components. Since the advent of computer 70 years ago, we have written tons and tons of programs and routines. However, for each new application, we have to re-invent the wheels and write the program from scratch! Why re-invent the wheels? Why re-writing codes? Can you write better codes than those codes written by the experts?</p>
+<h5><strong>Traditional Procedural-Oriented languages</strong></h5>
+<p><img alt="OOP_CFunction" src="https://vigneshwaranravichandran.files.wordpress.com/2016/07/oop_cfunction.png"></p>
+<p>Traditional procedural-oriented programming languages (such as C, Fortran, Cobol and Pascal) suffer some notable drawbacks in creating <em>reusable software components</em>:</p>
+<ol>
+<li>The procedural-oriented programs are made up of functions. Functions are <em>less reusable</em>. It is very difficult to copy a function from one program and reuse in another program because the function is likely to reference the global variables and other functions. In other words, functions are not well-encapsulated as a self-contained <em>reusable unit</em>.</li>
+<li>The procedural languages are not suitable of <em>high-level abstraction</em> for solving real life problems. For example, C programs uses constructs such as if-else, for-loop, array, method, pointer, which are low-level and hard to abstract real problems such as a Customer Relationship Management (CRM) system or a computer soccer game.</li>
+</ol>
+<p>The traditional procedural-languages <em>separate</em> the data structures (variables) and algorithms (functions).</p>
+<blockquote>
+<p>In the early 1970s, the US Department of Defense (DoD) commissioned a task force to investigate why its IT budget always went out of control; but without much to show for. The findings are:</p>
+<ol>
+<li>80% of the budget went to the software (with the remaining 20% to the hardware).</li>
+<li>More than 80% of the software budget went to maintenance (only the remaining 20% for new software development).</li>
+<li>Hardware components could be applied to various products, and their integrity normally did not affect other products. (Hardware can share and reuse! Hardware faults are isolated!)</li>
+<li>Software procedures were often non-sharable and not reusable. Software faults could affect other programs running in computers.</li>
+</ol>
+<p>The task force proposed to make software behave like hardware OBJECT. Subsequently, DoD replaces over 450 computer languages, which were then used to build DoD systems, with an object-oriented language called Ada.</p>
+</blockquote>
+<h5>Object-Oriented Programming Languages</h5>
+<p>Object-oriented programming (OOP) languages are designed to overcome these problems.</p>
+<ol>
+<li>The basic unit of OOP is a <em>class</em>, which encapsulates both the <em>static properties</em> and_dynamic operations_ within a "box", and specifies the public interface for using these boxes. Since classes are well-encapsulated, it is easier to reuse these classes. In other words, OOP combines the data structures and algorithms of a software entity inside the same box.</li>
+<li>OOP languages permit <em>higher level of abstraction</em> for solving real-life problems. The traditional procedural language (such as C and Pascal) forces you to think in terms of the structure of the computer (e.g. memory bits and bytes, array, decision, loop) rather than thinking in terms of the problem you are trying to solve. The OOP languages (such as Java, C++ and C#) let you think in the problem space, and use software objects to represent and abstract entities of the problem space to solve the problem.</li>
+</ol>
+<p><img alt="OOP_SoccerGame" src="https://vigneshwaranravichandran.files.wordpress.com/2016/07/oop_soccergame.png"></p>
+<p>As an example, suppose you wish to write a computer soccer games (which I consider as a complex application). It is quite difficult to model the game in procedural-oriented languages. But using OOP languages, you can easily model the program accordingly to the "real things" appear in the soccer games.</p>
+<ul>
+<li>Player: attributes include name, number, location in the field, and etc; operations include run, jump, kick-the-ball, and etc.</li>
+<li>Ball:</li>
+<li>Reference:</li>
+<li>Field:</li>
+<li>Audience:</li>
+<li>Weather:</li>
+</ul>
+<p>Most importantly, some of these classes (such as <code>Ball</code> and <code>Audience</code>) can be reused in another application, e.g., computer basketball game, with little or no modification.</p>
+<h5>Benefits of OOP</h5>
+<p>The procedural-oriented languages focus on procedures, with function as the basic unit. You need to first figure out all the functions and then think about how to represent data.</p>
+<p>The object-oriented languages focus on components that the user perceives, with objects as the basic unit. You figure out all the objects by putting all the data and operations that describe the user's interaction with the data.</p>
+<p>Object-Oriented technology has many benefits:</p>
+<ul>
+<li><em>Ease in software design</em> as you could think in the problem space rather than the machine's bits and bytes. You are dealing with high-level concepts and abstractions. Ease in design leads to more productive software development.</li>
+<li><em>Ease in software maintenance</em>: object-oriented software are easier to understand, therefore easier to test, debug, and maintain.</li>
+<li><em>Reusable software</em>: you don't need to keep re-inventing the wheels and re-write the same functions for different situations. The fastest and safest way of developing a new application is to reuse existing codes - fully tested and proven codes.</li>
+</ul>
+<p><strong>OOP in Java</strong></p>
+<p>Class &amp; Instance</p>
+<p>In Java, <em>a class is a definition of objects of the same kind</em>. In other words, a <em>class</em> is a blueprint, template, or prototype that defines and describes the <em>static attributes</em> and <em>dynamic behaviors</em> common to all objects of the same kind.</p>
+<p>An <em>instance</em> is <em>a realization of a particular item of a class</em>. In other words, an instance is an <em>instantiation</em> of a class. All the instances of a class have similar properties, as described in the class definition. For example, you can define a class called "<code>Student</code>" and create three instances of the class "<code>Student</code>" for "<code>Peter</code>", "<code>Paul</code>" and "<code>Pauline</code>".</p>
+<p>The term "<em>object</em>" usually refers to <em>instance</em>. But it is often used loosely, and may refer to a class or an instance.</p>
+<h4>A Class is a 3-Compartment Box Encapsulating Data and Operations</h4>
+<p><img alt="OOP_ThreeCompartment" src="https://vigneshwaranravichandran.files.wordpress.com/2016/07/oop_threecompartment.png"></p>
+<p>A class can be visualized as a three-compartment box, as illustrated:</p>
+<ol>
+<li><em>Name</em> (or identity): identifies the class.</li>
+<li><em>Variables</em> (or attribute, state, field): contains the_static attributes_ of the class.</li>
+<li><em>Methods</em> (or behaviors, function, operation): contains the <em>dynamic behaviors</em> of the class.</li>
+</ol>
+<p>In other words, a class encapsulates the static attributes (data) and dynamic behaviors (operations that operate on the data) in a box.</p>
+<p>The followings figure shows a few examples of classes:</p>
+<p><img alt="OOP_ClassExamples" src="https://vigneshwaranravichandran.files.wordpress.com/2016/07/oop_classexamples.png"></p>
+<p>The following figure shows two instances of the class <code>Student</code>, identified as "<code>paul</code>" and "<code>peter</code>".</p>
+<p><img alt="OOP_InstanceExamples" src="https://vigneshwaranravichandran.files.wordpress.com/2016/07/oop_instanceexamples.png"></p>
+<p><strong>Unified Modeling Language</strong> (UML) Class and Instance Diagrams: The above class diagrams are drawn according to the UML notations. A class is represented as a 3-compartment box, containing name, variables, and methods, respectively. Class name is shown in bold and centralized. An instance is also represented as a 3-compartment box, with instance name shown as <code>_instanceName_:_Classname_</code> and underlined.</p>
+<h5>Brief Summary</h5>
+<ol>
+<li>A <em>class</em> is a programmer-defined, abstract, self-contained, reusable software entity that mimics a real-world thing.</li>
+<li>A class is a 3-compartment box containing the name, variables and the methods.</li>
+<li>A class encapsulates the data structures (in variables) and algorithms (in methods). The values of the variables constitute its <em>state</em>. The methods constitute its <em>behaviors</em>.</li>
+<li>An <em>instance</em> is an instantiation (or realization) of a particular item of a class.</li>
+</ol>
+<p>reference:</p>
+<p>1)Thinking In Java 4th Edition</p>
+<p>2)https://www.ntu.edu.sg/home/ehchua/programming/java/J3a_OOPBasics.html</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Run Linux® binaries in BSD"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This guide was written to setup Linux® compatibility for FreeBSD. This guide was done in GhostBSD, should work for FreeBSD and other BSD..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/run-linuxr-binaries-in-bsd.html" rel="bookmark"
+           title="Permalink to "Run Linux® binaries in BSD"">"Run Linux® binaries in BSD"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-19T00:00:00+00:00">
+                Published: Mon 19 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This guide was written to setup Linux® compatibility for FreeBSD. This guide was done in GhostBSD, should work for FreeBSD and other BSD derivatives.</p>
+<p>In order to load Linux kernel module, run the following command:</p>
+<p><code>#kldload linux</code> # you can load <code>linux64</code> kernel module as well</p>
+<p>To check if aforementioned module is loaded, run <code>#kldstat</code> . You should see in the output.</p>
+<p>Next you will need to install Linux® libraries and binaries from ports tree ( or pkg if you wish )</p>
+<p><code>#cd /usr/ports/emulators/linux_base-c6 &amp;amp;&amp;amp; make config-recursive &amp;amp;&amp;amp; make install clean</code></p>
+<p>Once you are done with above steps, go ahead and download and <code>.rpm</code> package to test your setup. To install <code>.rpm</code>package, you will need to install <code>archivers/rpm4</code> . The installation command is similar to <code>linux_base-c6</code>. Now run following commands in order:</p>
+<ul>
+<li><code>#cd /compat/linux</code></li>
+</ul>
+<p>-<code>#rpm2cpio &amp;lt;  **&amp;lt;path_to_rpm_package&amp;gt;** | cpio -id</code></p>
+<p>For this guide, I have installed <a href="https://centos.pkgs.org/7/epel-x86_64/htop-2.2.0-1.el7.x86_64.rpm.html"><code>htop</code></a> application, so to run, change directory to <code>compat/linux</code> and run <code>htop</code> binary. It should work, it worked for me.</p>
+<p>Update: below steps get Linux emulator running:</p>
+<p>Enable Linux Emulation - BSD</p>
+<p>kldload linux</p>
+<p>kldload linux64</p>
+<p>pkg install emulators/linux_base-c7</p>
+<p>pkg install archivers/rpm4</p>
+<h1>put in /etc/fstab</h1>
+<p>[code lang=text] <br />linprocfs /compat/linux/proc linprocfs rw 0 0</p>
+<p>linsysfs /compat/linux/sys linsysfs rw 0 0</p>
+<p>tmpfs /compat/linux/dev/shm tmpfs rw,mode=1777 0 0</p>
+<p>[/code]</p>
+<p>mount /compat/linux/proc</p>
+<p>mount /compat/linux/sys</p>
+<p>mount /compat/linux/dev/shm</p>
+<p>mkdir -p /var/lib/rpm</p>
+<p>/usr/local/bin/rpm --initdb</p>
+<p>echo 'linux_enable="YES"'&gt;&gt;/etc/rc.conf</p>
+<p>Resource: <a href="https://www.freebsd.org/doc/handbook/linuxemu-lbc-install.html">Chapter 10. Linux® Binary Compatibility</a>.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

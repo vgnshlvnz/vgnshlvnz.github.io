@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"VirtualBox post-setup TrueOS/FreeBSD"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Load VirtualBox: \============== You need to load the vboxdrv kernel module via /boot/loader.conf: vboxdrv_load="YES" You also have to add all..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/virtualbox-post-setup-trueosfreebsd.html" rel="bookmark"
+           title="Permalink to "VirtualBox post-setup TrueOS/FreeBSD"">"VirtualBox post-setup TrueOS/FreeBSD"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-22T00:00:00+00:00">
+                Published: Sat 22 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Load VirtualBox:</p>
+<p>\==============</p>
+<p>You need to load the vboxdrv kernel module via /boot/loader.conf:</p>
+<p>vboxdrv_load="YES"</p>
+<p>You also have to add all users to your vboxusers group in order to use vbox.</p>
+<p>% pw groupmod vboxusers -m</p>
+<p>Reboot the machine to load the needed kernel modules.</p>
+<p>Bridging Support:</p>
+<p>\=================</p>
+<p>For bridged networking please add the following line to your /etc/rc.conf:</p>
+<p>vboxnet_enable="YES"</p>
+<p>USB Support:</p>
+<p>\============</p>
+<p>For USB support your user needs to be in the operator group and needs read</p>
+<p>and write permissions to the USB device.</p>
+<p>% pw groupmod operator -m</p>
+<p>Add the following to /etc/devfs.rules (create if it doesn't exist):</p>
+<p>[system=10]</p>
+<p>add path 'usb/*' mode 0660 group operator</p>
+<p>To load these new rule add the following to /etc/rc.conf:</p>
+<p>devfs_system_ruleset="system"</p>
+<p>Then restart devfs to load the new rules:</p>
+<p>% /etc/rc.d/devfs restart</p>
+<p>Troubleshooting:</p>
+<p>\================</p>
+<p>Running VirtualBox as non-root user may fail with a fatal error</p>
+<p>NS_ERROR_FACTORY_NOT_REGISTERED. In this case delete /tmp/.vbox-*-ipc file.</p>
+<p>If you experience "Network: write Failed: Cannot allocate memory" errors</p>
+<p>try to increase net.graph.maxdata in /boot/loader.conf</p>
+<p>Resource: http://wiki.freebsd.org/VirtualBox</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

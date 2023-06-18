@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"FEDORA/RHEL/CENTOS - some LVM command examples"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="NOTE: This guide serves as tutorial to claim free space in my machine. I will attempt to explain what I am doing. Assumption is made such that..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/fedorarhelcentos-some-lvm-command-examples.html" rel="bookmark"
+           title="Permalink to "FEDORA/RHEL/CENTOS - some LVM command examples"">"FEDORA/RHEL/CENTOS - some LVM command examples"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-17T00:00:00+00:00">
+                Published: Mon 17 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>NOTE: This guide serves as tutorial to claim free space in my machine. I will attempt to explain what I am doing. Assumption is made such that there are 5 partitions in <code>/dev/sda</code> at the time of writing. I was trying to claim <code>/dev/sda2</code> to extend <code>/dev/sda5</code> which contained fedora root partition. This guide should help you in attempting RHEL RHCSA exam.</p>
+<h2>Introduction</h2>
+<p>LVM, known as Logical Volume Manager is a device mapper target that gives logical volume management for the Linux Kernel.</p>
+<h2>Command examples</h2>
+<p>In following series of commands, I am going to re-claim space for my root partition.</p>
+<ul>
+<li><code>#fdisk -l /dev/sda</code>- list available partitions in hdd</li>
+</ul>
+<p>The output should be something like below:</p>
+<p>[code lang=text] <br />Disk /dev/sda: 232.9 GiB, 250000000000 bytes, 488281250 sectors Units: sectors of 1 * 512 = 512 bytes Sector size (logical/physical): 512 bytes / 512 bytes I/O size (minimum/optimal): 512 bytes / 512 bytes Disklabel type: dos Disk identifier: 0xcd8f72e0</p>
+<p>Device Boot Start End Sectors Size Id Type /dev/sda1 * 2048 1126399 1124352 549M 7 HPFS/NTFS/exFAT /dev/sda2 1126400 283475967 282349568 134.7G 7 HPFS/NTFS/exFAT /dev/sda3 283475968 285573119 2097152 1G 83 Linux /dev/sda4 285573120 488280063 202706944 96.7G 5 Extended /dev/sda5 285575168 488280063 202704896 96.7G 8e Linux LVM</p>
+<p>[/code]</p>
+<ul>
+<li>
+<p><code>#pvs</code> or <code>#pvdisplay</code> - Display available physical volume</p>
+</li>
+<li>
+<p><code>#pvcreate /dev/sda2</code> - Create new physical volume</p>
+</li>
+<li>
+<p><code>#vgs</code> or <code>#vgdisplay</code> - Display volume groups available. Take note of<code>VG</code> or <code>VG Name</code>. You will need it for next step.</p>
+</li>
+<li>
+<p><code>#vgextend fedora /dev/sda2</code> - Extend volume group <code>fedora</code> with <code>/dev/sda2</code> .</p>
+</li>
+<li>
+<p><code>#vgdisplay</code> - Take note of Free PE/Size</p>
+</li>
+<li>
+<p><code>#lvextend -l +&amp;lt;FREE PE&amp;gt; /dev/fedora/root</code> - Extend fedora root partition by <code>Free PE/Size</code> number</p>
+</li>
+<li>
+<p><code>#resize2fs /dev/fedora/root</code> - Resize root volume</p>
+</li>
+<li>
+<p><code>#lvdisplay</code> - display claimed free space, under <code>LV Size</code></p>
+</li>
+</ul>
+<p>Take note that not all of RHEL RHCSA commands covered.</p>
+<p>Resource:</p>
+<p>1.https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/lv_extend</p>
+<p>2.http://landoflinux.com/linux_lvm_command_examples.html</p>
+<p>3.https://www.tecmint.com/extend-and-reduce-lvms-in-linux/</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

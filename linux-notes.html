@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Linux-Notes"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Linux notes This note will be updated from time to time as I am currently in the process of self studying for RHEL RHCSA certification. The notes..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/linux-notes.html" rel="bookmark"
+           title="Permalink to "Linux-Notes"">"Linux-Notes"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-03-03T00:00:00+00:00">
+                Published: Tue 03 March 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Linux notes</h1>
+<p>This note will be updated from time to time as I am currently in the process of self studying for RHEL RHCSA certification. The notes should be clear to understand. If you do not understand, contact me.</p>
+<h2>Users &amp; Groups</h2>
+<h3><code>/etc/passwd</code></h3>
+<p>The password aka <code>passwd</code> file holds information of users in the system. Following is output of <code>/etc/passwd</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="o">:</span><span class="n">root</span><span class="o">:/</span><span class="n">root</span><span class="o">:/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span>
+<span class="n">daemon</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="n">daemon</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">bin</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="n">bin</span><span class="o">:/</span><span class="n">bin</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">sys</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">3</span><span class="o">:</span><span class="mi">3</span><span class="o">:</span><span class="n">sys</span><span class="o">:/</span><span class="n">dev</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">sync</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">4</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="n">sync</span><span class="o">:/</span><span class="n">bin</span><span class="o">:/</span><span class="n">bin</span><span class="o">/</span><span class="n">sync</span>
+<span class="n">games</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span><span class="mi">60</span><span class="o">:</span><span class="n">games</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/games:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">man</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">6</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="n">man</span><span class="o">:/</span><span class="n">var</span><span class="sr">/cache/man:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">lp</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">7</span><span class="o">:</span><span class="mi">7</span><span class="o">:</span><span class="n">lp</span><span class="o">:/</span><span class="n">var</span><span class="sr">/spool/lpd:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">mail</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">8</span><span class="o">:</span><span class="mi">8</span><span class="o">:</span><span class="n">mail</span><span class="o">:/</span><span class="n">var</span><span class="sr">/mail:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">news</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">9</span><span class="o">:</span><span class="mi">9</span><span class="o">:</span><span class="n">news</span><span class="o">:/</span><span class="n">var</span><span class="sr">/spool/news:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">uucp</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">10</span><span class="o">:</span><span class="mi">10</span><span class="o">:</span><span class="n">uucp</span><span class="o">:/</span><span class="n">var</span><span class="sr">/spool/uucp:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">proxy</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="n">proxy</span><span class="o">:/</span><span class="n">bin</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">33</span><span class="o">:</span><span class="mi">33</span><span class="o">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="o">:/</span><span class="n">var</span><span class="sr">/www:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">backup</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">34</span><span class="o">:</span><span class="mi">34</span><span class="o">:</span><span class="n">backup</span><span class="o">:/</span><span class="n">var</span><span class="sr">/backups:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">list</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span><span class="n">Mailing</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">Manager</span><span class="o">:/</span><span class="n">var</span><span class="sr">/list:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">irc</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">39</span><span class="o">:</span><span class="mi">39</span><span class="o">:</span><span class="n">ircd</span><span class="o">:/</span><span class="n">var</span><span class="sr">/run/ircd:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">gnats</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span><span class="n">Gnats</span><span class="w"> </span><span class="n">Bug</span><span class="o">-</span><span class="n">Reporting</span><span class="w"> </span><span class="n">System</span><span class="w"> </span><span class="o">(</span><span class="n">admin</span><span class="o">):/</span><span class="n">var</span><span class="sr">/lib/gnats:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">nobody</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="n">nobody</span><span class="o">:/</span><span class="n">nonexistent</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">systemd</span><span class="o">-</span><span class="n">network</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">100</span><span class="o">:</span><span class="mi">102</span><span class="o">:</span><span class="n">systemd</span><span class="w"> </span><span class="n">Network</span><span class="w"> </span><span class="n">Management</span><span class="o">,,,:/</span><span class="n">run</span><span class="sr">/systemd/netif:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">systemd</span><span class="o">-</span><span class="n">resolve</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">101</span><span class="o">:</span><span class="mi">103</span><span class="o">:</span><span class="n">systemd</span><span class="w"> </span><span class="n">Resolver</span><span class="o">,,,:/</span><span class="n">run</span><span class="sr">/systemd/resolve:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">syslog</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">102</span><span class="o">:</span><span class="mi">106</span><span class="o">::/</span><span class="n">home</span><span class="sr">/syslog:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">messagebus</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">103</span><span class="o">:</span><span class="mi">107</span><span class="o">::/</span><span class="n">nonexistent</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">_apt</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">104</span><span class="o">:</span><span class="mi">65534</span><span class="o">::/</span><span class="n">nonexistent</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">uuidd</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">105</span><span class="o">:</span><span class="mi">111</span><span class="o">::/</span><span class="n">run</span><span class="sr">/uuidd:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">avahi</span><span class="o">-</span><span class="n">autoipd</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">106</span><span class="o">:</span><span class="mi">112</span><span class="o">:</span><span class="n">Avahi</span><span class="w"> </span><span class="n">autoip</span><span class="w"> </span><span class="n">daemon</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/lib/avahi-autoipd:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">usbmux</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">107</span><span class="o">:</span><span class="mi">46</span><span class="o">:</span><span class="n">usbmux</span><span class="w"> </span><span class="n">daemon</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/lib/usbmux:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">dnsmasq</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">108</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="n">dnsmasq</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/lib/misc:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">rtkit</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">109</span><span class="o">:</span><span class="mi">114</span><span class="o">:</span><span class="n">RealtimeKit</span><span class="o">,,,:/</span><span class="n">proc</span><span class="o">:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">cups</span><span class="o">-</span><span class="n">pk</span><span class="o">-</span><span class="n">helper</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">110</span><span class="o">:</span><span class="mi">116</span><span class="o">:</span><span class="n">user</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">cups</span><span class="o">-</span><span class="n">pk</span><span class="o">-</span><span class="n">helper</span><span class="w"> </span><span class="n">service</span><span class="o">,,,:/</span><span class="n">home</span><span class="sr">/cups-pk-helper:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">speech</span><span class="o">-</span><span class="n">dispatcher</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">111</span><span class="o">:</span><span class="mi">29</span><span class="o">:</span><span class="n">Speech</span><span class="w"> </span><span class="n">Dispatcher</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/run/speech-dispatcher:/bin/</span><span class="kc">false</span>
+<span class="n">whoopsie</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">112</span><span class="o">:</span><span class="mi">117</span><span class="o">::/</span><span class="n">nonexistent</span><span class="o">:/</span><span class="n">bin</span><span class="o">/</span><span class="kc">false</span>
+<span class="n">kernoops</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">113</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="n">Kernel</span><span class="w"> </span><span class="n">Oops</span><span class="w"> </span><span class="n">Tracking</span><span class="w"> </span><span class="n">Daemon</span><span class="o">,,,:/:/</span><span class="n">usr</span><span class="sr">/sbin/</span><span class="n">nologin</span>
+<span class="n">saned</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">114</span><span class="o">:</span><span class="mi">119</span><span class="o">::/</span><span class="n">var</span><span class="sr">/lib/saned:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">pulse</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">115</span><span class="o">:</span><span class="mi">120</span><span class="o">:</span><span class="n">PulseAudio</span><span class="w"> </span><span class="n">daemon</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/run/pulse:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">avahi</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">116</span><span class="o">:</span><span class="mi">122</span><span class="o">:</span><span class="n">Avahi</span><span class="w"> </span><span class="n">mDNS</span><span class="w"> </span><span class="n">daemon</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/run/avahi-daemon:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">colord</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">117</span><span class="o">:</span><span class="mi">123</span><span class="o">:</span><span class="n">colord</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="n">management</span><span class="w"> </span><span class="n">daemon</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/lib/colord:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">hplip</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">118</span><span class="o">:</span><span class="mi">7</span><span class="o">:</span><span class="n">HPLIP</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="n">user</span><span class="o">,,,:/</span><span class="n">var</span><span class="sr">/run/hplip:/bin/</span><span class="kc">false</span>
+<span class="n">geoclue</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">119</span><span class="o">:</span><span class="mi">124</span><span class="o">::/</span><span class="n">var</span><span class="sr">/lib/geoclue:/usr/sbin/</span><span class="n">nologin</span>
+<span class="n">gnome</span><span class="o">-</span><span class="n">initial</span><span class="o">-</span><span class="n">setup</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">120</span><span class="o">:</span><span class="mi">65534</span><span class="o">::/</span><span class="n">run</span><span class="sr">/gnome-initial-setup/:/bin/</span><span class="kc">false</span>
+<span class="n">gdm</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">121</span><span class="o">:</span><span class="mi">125</span><span class="o">:</span><span class="n">Gnome</span><span class="w"> </span><span class="n">Display</span><span class="w"> </span><span class="n">Manager</span><span class="o">:/</span><span class="n">var</span><span class="sr">/lib/gdm3:/bin/</span><span class="kc">false</span>
+<span class="n">vgnshlvnz</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1000</span><span class="o">:</span><span class="mi">1000</span><span class="o">:</span><span class="n">vigneshwaran</span><span class="w"> </span><span class="n">ravichandran</span><span class="o">,,,:/</span><span class="n">home</span><span class="sr">/vgnshlvnz:/bin/</span><span class="n">bash</span>
+<span class="n">nvidia</span><span class="o">-</span><span class="n">persistenced</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">122</span><span class="o">:</span><span class="mi">128</span><span class="o">:</span><span class="n">NVIDIA</span><span class="w"> </span><span class="n">Persistence</span><span class="w"> </span><span class="n">Daemon</span><span class="o">,,,:/</span><span class="n">nonexistent</span><span class="o">:/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nologin</span>
+</code></pre></div>
+
+<p>The entries are delimited with colon. First will be the username, <code>root</code> for example. Following is <code>x</code> indicate that the password is stored in <code>/etc/shadow</code>. Next is the user id, which is <code>0</code> as root is the primary user of any Linux or Unix operating system. Following will be <code>0</code> as well, which indicates the group id followed by real name of the user <code>root</code>. Next column refers to the home directory, <code>/root</code> and finally the shell that will be available for user.</p>
+<h3><code>/etc/shadow</code></h3>
+<p>The shadow file will contain password of users listed in <code>/etc/password</code> and other relevant information about the user. Following is an output of <code>/etc/shadow</code>.</p>
+<div class="highlight"><pre><span></span><code>root:!:18206:0:99999:7:::
+daemon:*:18113:0:99999:7:::
+bin:*:18113:0:99999:7:::
+sys:*:18113:0:99999:7:::
+sync:*:18113:0:99999:7:::
+games:*:18113:0:99999:7:::
+man:*:18113:0:99999:7:::
+lp:*:18113:0:99999:7:::
+mail:*:18113:0:99999:7:::
+news:*:18113:0:99999:7:::
+uucp:*:18113:0:99999:7:::
+proxy:*:18113:0:99999:7:::
+www-data:*:18113:0:99999:7:::
+backup:*:18113:0:99999:7:::
+list:*:18113:0:99999:7:::
+irc:*:18113:0:99999:7:::
+gnats:*:18113:0:99999:7:::
+nobody:*:18113:0:99999:7:::
+systemd-network:*:18113:0:99999:7:::
+systemd-resolve:*:18113:0:99999:7:::
+syslog:*:18113:0:99999:7:::
+messagebus:*:18113:0:99999:7:::
+_apt:*:18113:0:99999:7:::
+uuidd:*:18113:0:99999:7:::
+avahi-autoipd:*:18113:0:99999:7:::
+usbmux:*:18113:0:99999:7:::
+dnsmasq:*:18113:0:99999:7:::
+rtkit:*:18113:0:99999:7:::
+cups-pk-helper:*:18113:0:99999:7:::
+speech-dispatcher:!:18113:0:99999:7:::
+whoopsie:*:18113:0:99999:7:::
+kernoops:*:18113:0:99999:7:::
+saned:*:18113:0:99999:7:::
+pulse:*:18113:0:99999:7:::
+avahi:*:18113:0:99999:7:::
+colord:*:18113:0:99999:7:::
+hplip:*:18113:0:99999:7:::
+geoclue:*:18113:0:99999:7:::
+gnome-initial-setup:*:18113:0:99999:7:::
+gdm:*:18113:0:99999:7:::
+vgnshlvnz:$6$Ix4rSZSn$AowKU3/ItWXnRuJBgmRmugTrOZVzB5rjXiF1wJuENRWDpvmJw7SROtXED0:18206:0:99999:7:::
+nvidia-persistenced:*:18246:0:99999:7:::
+</code></pre></div>
+
+<p>For example, user <code>vgnshlvnz</code> has cryptographic hash of the password, followed by other information of the user.</p>
+<h3><code>/etc/group</code></h3>
+<p>The group file contains information about groups present in the system. Following is an output of <code>/etc/group</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">0</span><span class="o">:</span>
+<span class="n">daemon</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span>
+<span class="n">bin</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span>
+<span class="n">sys</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">3</span><span class="o">:</span>
+<span class="n">adm</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">4</span><span class="o">:</span><span class="n">syslog</span><span class="o">,</span><span class="n">vgnshlvnz</span>
+<span class="n">tty</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span>
+<span class="n">voice</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">22</span><span class="o">:</span>
+<span class="n">cdrom</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">24</span><span class="o">:</span><span class="n">vgnshlvnz</span>
+<span class="n">floppy</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">25</span><span class="o">:</span>
+<span class="n">tape</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">26</span><span class="o">:</span>
+<span class="n">sudo</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">27</span><span class="o">:</span><span class="n">vgnshlvnz</span>
+<span class="n">audio</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">29</span><span class="o">:</span><span class="n">pulse</span>
+<span class="n">dip</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">30</span><span class="o">:</span><span class="n">vgnshlvnz</span>
+<span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">33</span><span class="o">:</span>
+<span class="n">backup</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">34</span><span class="o">:</span>
+<span class="n">operator</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">37</span><span class="o">:</span>
+<span class="n">list</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span>
+<span class="n">irc</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">39</span><span class="o">:</span>
+<span class="n">src</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">40</span><span class="o">:</span>
+<span class="n">gnats</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span>
+<span class="n">shadow</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span>
+<span class="n">utmp</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span>
+<span class="n">video</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span>
+<span class="n">sasl</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span>
+<span class="n">plugdev</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">46</span><span class="o">:</span><span class="n">vgnshlvnz</span>
+<span class="n">staff</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">50</span><span class="o">:</span>
+<span class="n">games</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">60</span><span class="o">:</span>
+<span class="n">vgnshlvnz</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1000</span><span class="o">:</span>
+<span class="n">sambashare</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">126</span><span class="o">:</span><span class="n">vgnshlvnz</span>
+<span class="n">vboxusers</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">127</span><span class="o">:</span>
+<span class="n">nvidia</span><span class="o">-</span><span class="n">persistenced</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">128</span><span class="o">:</span>
+</code></pre></div>
+
+<p>Take <code>root</code> and <code>sambashare</code> group. The <code>x</code> indicates there is no password in <code>/etc/shadow</code> for this user. Next indicates the group id, for <code>sambashare</code> it’s 126. The last column represents users or members of the group.</p>
+<h2>Creating &amp; Modifying Users</h2>
+<h3>Create User</h3>
+<p>In GNU/Linux operating system, one can add users by typing the <code>useradd</code> command. Following command is an example of user account creation with explanation.</p>
+<ul>
+<li><code>useradd -s /bin/bash -d /home/&lt;username&gt; -m &lt;username&gt;</code></li>
+</ul>
+<p>The 1st parameter, <code>-s</code> or <code>--shell</code> will assign a shell for the user you want to create. Next parameter, <code>-d</code> or <code>--home-dir</code> will specify the location of the user’s home directory, in this case in <code>/home</code> directory. The last parameter, <code>-m</code> or <code>--create-home</code> will create home directory for the user specified. For more information, just type <code>useradd</code> or <code>man useradd</code>. You will get a lot other parameters you can pass to the binary/program/tool.</p>
+<h3>Modify User</h3>
+<p>Assuming a user account has been created, we need to assign password to the user account. By typing <code>passwd &lt;username&gt;</code> will prompt user to enter new password and confirm the password. Now that we have created an account without name, you can use the command <code>usermod</code> to modify user account values. For example, <code>usermod -c "&lt;comment&gt;" &lt;username&gt;</code> will assign new GECOS value for the username you would specify. Let’s say for example, you have created an account and you need to add the user to another group, <code>usermod -a -G &lt;group_username&gt; &lt;username&gt;</code> command will help you to achieve that. The <code>-a</code> parameter tells <code>usermod</code> to append the group together with <code>-G</code> parameter.</p>
+<h3>Deleting Users</h3>
+<p>To delete a user from the Linux system, you can use the command <code>userdel</code> command. The syntax for the command will be <code>userdel &lt;username&gt;</code> . Take note that this will only remove the user and relevant entries in <code>/etc/shadow</code> and <code>/etc/group</code>. To remove the home directory, you can pass <code>-r</code> parameter. So the command will be <code>userdel -r &lt;username&gt;</code>.</p>
+<h2>Password Policy</h2>
+<p>There are two files that defines the password policy of a Linux system. <code>/etc/login.defs</code> and <code>/etc/pam.d/system-auth</code> are the files.</p>
+<h3><code>/etc/login.defs</code></h3>
+<p>In this file, you can define password policies such as number of days the password is valid before needing a change, minimum number of characters used. Following is an excerpt of <code>/etc/login.defs</code>.</p>
+<div class="highlight"><pre><span></span><code># Password aging controls:
+#
+#  PASS_MAX_DAYS   Maximum number of days a password may be used.
+#  PASS_MIN_DAYS   Minimum number of days allowed between password changes.
+#  PASS_MIN_LEN    Minimum acceptable password length.
+#  PASS_WARN_AGE   Number of days warning given before a password expires.
+#
+PASS_MAX_DAYS   99999
+PASS_MIN_DAYS   0
+PASS_MIN_LEN    5
+PASS_WARN_AGE   7
+</code></pre></div>
+
+<p>In above, you can see that <code>PASS_MAX_DAYS</code>,<code>PASS_MIN_DAYS</code>,<code>PASS_MAX_LEN</code>, and <code>PASS_WARN_AGE</code> are set with a value. You can change the values accordingly. For instance, you would like to have a password policy of maximum 180 days and keep the password for a minimum of 14 days. You could change the first two values mentioned.</p>
+<h3><code>/etc/pam.d/system-auth</code></h3>
+<p>In this file, you can things like types of characters needed to use in order to create a password like special characters, lowercase &amp; uppercase and etc. Following is an excerpt of <code>/etc/pam.d/system-auth</code> file.</p>
+<div class="highlight"><pre><span></span><code>ccount     required                                     pam_unix.so
+account     sufficient                                   pam_localuser.so
+account     sufficient                                   pam_succeed_if.so uid &lt; 1000 quiet
+account     [default=bad success=ok user_unknown=ignore] pam_sss.so
+account     required                                     pam_permit.so
+
+password    requisite                                    pam_pwquality.so try_first_pass local_users_only
+password    sufficient                                   pam_unix.so sha512 shadow nullok try_first_pass use_authtok
+password    sufficient                                   pam_sss.so use_authtok
+password    required                                     pam_deny.so
+
+session     optional                                     pam_keyinit.so revoke
+session     required                                     pam_limits.so
+-session    optional                                     pam_systemd.so
+session     [success=1 default=ignore]                   pam_succeed_if.so service in crond quiet use_uid
+session     required                                     pam_unix.so
+session     optional                                     pam_sss.so
+</code></pre></div>
+
+<p>You need to change this line,</p>
+<blockquote>
+<p><code>password requisite pam_pwquality.so try_first_pass local_users_only</code></p>
+</blockquote>
+<p>to enforce things like how many retries, minimum length of the password, uppercase &amp; lowercase, numeric values and other characters as defined below.</p>
+<blockquote>
+<p><code>password requisite pam_pwquality.so try_first_pass retry=3 minlength=12 lcredit=-1 ucredit=-1 dcredit=-1 ocredit=-1 difok=4</code></p>
+</blockquote>
+<p>The retries is set at 3 tries, minimum length is 12 character, and the -1 in lowercase, uppercase, digit, other characters and the password is set such as the password must be different than 4 previous passwords<a href="#fn1">1</a>.</p>
+<p>To be updated.</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+<hr>
+<ol>
+<li><a href="//www.networkworld.com/article/2726217/how-to-enforce-password-complexity-on-linux.html">How to enforce password complexity on Linux</a> <a href="#fnref1">↩︎</a></li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

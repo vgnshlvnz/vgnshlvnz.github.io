@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"RUN TOR BROWSER AS NON-ROOT USER IN KALI LINUX"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content=""blog-posts" tags: "howto" "kalilinux" "kalilinuxhowto" "tor" "tor-browser" "tor-kalilinux" "torbrowser" This article is a simple trick to have..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/run-tor-browser-as-non-root-user-in-kali-linux.html" rel="bookmark"
+           title="Permalink to "RUN TOR BROWSER AS NON-ROOT USER IN KALI LINUX"">"RUN TOR BROWSER AS NON-ROOT USER IN KALI LINUX"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"howto"</li>
+<li>"kalilinux"</li>
+<li>"kalilinuxhowto"</li>
+<li>"tor"</li>
+<li>"tor-browser"</li>
+<li>"tor-kalilinux"</li>
+<li>"torbrowser"</li>
+</ul>
+<hr>
+<p>This article is a simple trick to have Tor Browser running as non-root user in Kali Linux. A lot of programs in Kali Linux requires you to run as root user, and Tor Browser does not like it run with root privileges. This is bad for security purposes.</p>
+<p>To start off, create a user in Kali Linux with password and home directory.</p>
+<table><tbody><tr><td>12</td><td><code>root@localhost:~#adduser &lt;username&gt;</code><br><code>root@localhost:~#passwd &lt;username&gt;</code></td></tr></tbody></table>
+
+<p>Verify if the home directory is created, by issuing following command:</p>
+<table><tbody><tr><td>1</td><td><code>root@localhost:~#ls -alFh /home/&lt;username&gt;</code></td></tr></tbody></table>
+
+<p>Once you're done with performing above task, go ahead and update your Kali Linux distribution. Following commands will help you achieve that.</p>
+<table><tbody><tr><td>12</td><td><code>root@localhost:~#apt-get update</code><code>root@localhost:~#apt-get upgrade</code></td></tr></tbody></table>
+
+<p>Once you're done with above task, go ahead and install following package, <code>torbrowser-launcher</code> from apt repository.</p>
+<table><tbody><tr><td>1</td><td><code>root@localhost:~#apt-get install torbrowser-launcher</code></td></tr></tbody></table>
+
+<p>Once you have finished installing the package, you will need to run following command to add user you have created earlier.</p>
+<table><tbody><tr><td>1</td><td><code>root@localhost:~#xhost SI:localuser:&lt;username&gt;</code></td></tr></tbody></table>
+
+<p><code>xhost</code> is a server access control program for X display server. It add/delete hostname/username to a acl list allowed to make connections to the X server. Once you're done with the command above, it's time to execute the command that will launch <code>torbrowser-launcher</code>. Type in following command:</p>
+<table><tbody><tr><td>1</td><td><code>root@localhost:~# sudo -u &lt;username&gt; -H torbrowser-launcher</code></td></tr></tbody></table>
+
+<p>Voila! You have successfully launched Tor Browser using standard user account/privileges.</p>
+<p>PS: Use Tor Browser for legitimate purposes only.</p>
+<p>Reference:<br>
+1) Running the Tor Browser on Kali Linux the proper way – <a href="https://medium.com/@jamesmacwhite/running-the-tor-browser-on-kali-linux-the-proper-way-d33a38b54e96">https://medium.com/@jamesmacwhite/running-the-tor-browser-on-kali-linux-the-proper-way-d33a38b54e96</a><br>
+2) Linux xhost command – <a href="https://www.computerhope.com/unix/xhost.htm">https://www.computerhope.com/unix/xhost.htm</a><br>
+3) XSERVER – <a href="https://www.x.org/releases/X11R7.7/doc/man/man1/Xserver.1.xhtml">https://www.x.org/releases/X11R7.7/doc/man/man1/Xserver.1.xhtml</a></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

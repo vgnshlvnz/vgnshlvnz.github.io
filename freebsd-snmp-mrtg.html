@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[FreeBSD] SNMP & MRTG"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="[FreeBSD] SNMP & MRTG This article was written using FreeBSD 11.3-RELEASE. Assumption is made such that reader knows what is SNMP (Simple Network..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/freebsd-snmp-mrtg.html" rel="bookmark"
+           title="Permalink to "[FreeBSD] SNMP & MRTG"">"[FreeBSD] SNMP & MRTG"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-01-07T00:00:00+00:00">
+                Published: Fri 07 January 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>[FreeBSD] SNMP &amp; MRTG</h1>
+<p>This article was written using FreeBSD 11.3-RELEASE. Assumption is made such that reader knows what is SNMP (Simple Network Management Protocol). At the end of the article, you should have working setup of SNMP &amp; MRTG (Multi Router Traffic Graph) .</p>
+<p>There are two packages available for SNMP in FreeBSD, which is <code>bsnmpd</code> and <code>net-snmp</code>. We are going to install the latter. In future article, I will write about <code>bsnmpd</code>. For now let’s focus on <code>net-snmp</code>.</p>
+<p>In FreeBSD, there are two ways to install a package, via <code>pkg</code> tool or <code>ports</code> tree. For this article, we are going to use <code>pkg</code> with latest release. To configure that, create a directory under <code>/usr/local/etc/pkg/</code> called <code>repos</code>. In that folder <code>touch</code> a empty file called <code>FreeBSD.conf</code> and add the following line into the file using your favorite method<a href="#fn1">1</a>.</p>
+<div class="highlight"><pre><span></span><code>FreeBSD:<span class="w"> </span>{
+<span class="w"> </span>url:<span class="w"> </span>&quot;pkg+http://pkg.FreeBSD.org/<span class="cp">${</span><span class="n">ABI</span><span class="cp">}</span>/latest&quot;
+}
+</code></pre></div>
+
+<p>Note:</p>
+<p>To change to <code>https</code>, install <code>ca-root-nss</code> package. To install, type <code>pkg install ca-root-nss</code>.</p>
+<p>Once you have created <code>FreeBSD.conf</code> file with the content, type the following command in order:</p>
+<blockquote>
+<p><code>pkg update -f</code></p>
+<p><code>pkg upgrade -f</code></p>
+<p>This will rebuild the packagesite, update and upgrade installed packages in the system.</p>
+</blockquote>
+<p>Once you have done all above, now it’s time to cheer up for the interesting part, to install and configure <code>net-snmp</code> package.</p>
+<p>To install, type <code>pkg install net-snmp</code>. Once it finishes installing, there will be on-screen message to make additional configuration. One of them is adding snmp related configuration. For now, put below content in <code>/etc/rc.conf</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">snmpd_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+<span class="n">snmpd_flags</span><span class="o">=</span><span class="s2">&quot;-a&quot;</span>
+<span class="n">snmpd_conffile</span><span class="o">=</span><span class="s2">&quot;/usr/local/share/snmp/snmpd.conf /etc/snmpd.conf&quot;</span>
+<span class="n">snmptrapd_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+<span class="n">snmptrapd_flags</span><span class="o">=</span><span class="s2">&quot;-a -p /var/run/snmptrapd.pid&quot;</span>
+</code></pre></div>
+
+<p>Once you have done initial configuration, you need to configure <code>net-snmp</code> configuration. By issuing following command, you will answer a few questions related to <code>snmp</code> and it will create <code>snmpd.conf</code> file in current directory. Issue <code>snmpconf -g basic_setup</code>. Once you’re done answering the questions, copy the file from current directory to <code>/usr/local/share/snmp/snmpd.conf</code> and <code>/etc/snmpd.conf</code>. This is to confirm an entry we made earlier in <code>/etc/rc.conf</code>, under <code>snmpd_conffile</code>.</p>
+<p>Now we are going to install two packages, <code>apache24</code> and <code>mrtg</code>. Issue the command <code>pkg install apache24 mrtg</code>. Once you’re done, issue following commands in any order you prefer. Issue <code>sysrc apache24_enable=yes</code> and <code>sysrc mrtg_daemon_enable="YES"</code>. What <code>sysrc</code> command will do is, it will add <code>rc.conf</code> options like the ones you have typed. If you’re unsure, you can always view the content of <code>rc.conf</code>.</p>
+<p>This will be the 2nd part of awesomeness, as we will be creating <code>mrtg.cfg</code> configuration as well as modifying a bit of <code>mrtg.cfg</code> to include various graph options. Bear in mind at the the time of writing, graph related to Memory is not working. I will update as time passes by. Mean time, you could try following command, <code>snmptranslate .1.3.6.1.2.1.1.3.0</code> to get the MIB. The MIB will be <code>DISMAN-EVENT-MIB::sysUpTimeInstance</code>. Now to see the value recorded by above MIB, you can run following command <code>snmpget -v 2c -c root localhost DISMAN-EVENT-MIB::sysUpTimeInstance</code> which will produce following output:</p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="nv">@freebsd</span><span class="o">-</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="n">vcpu</span><span class="o">-</span><span class="mi">2</span><span class="n">gb</span><span class="o">-</span><span class="n">nyc3</span><span class="o">-</span><span class="mi">01</span><span class="err">:</span><span class="o">~</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">snmpget</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="mi">2</span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">localhost</span><span class="w"> </span><span class="n">DISMAN</span><span class="o">-</span><span class="n">EVENT</span><span class="o">-</span><span class="nl">MIB</span><span class="p">:</span><span class="err">:</span><span class="n">sysUpTimeInstance</span>
+<span class="n">DISMAN</span><span class="o">-</span><span class="n">EVENT</span><span class="o">-</span><span class="nl">MIB</span><span class="p">:</span><span class="err">:</span><span class="n">sysUpTimeInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nl">Timeticks</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="mi">41560597</span><span class="p">)</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="n">days</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="err">:</span><span class="mi">26</span><span class="err">:</span><span class="mf">45.97</span>
+</code></pre></div>
+
+<p>Before we generate <code>mrtg</code> configuration, create a directory under <code>/usr/local/www/apache24/data</code> called <code>mrtg</code>.</p>
+<p>Now we are ready to create our first iteration of <code>mrtg.cfg</code> configuration file. Why I am saying this is because as you modify your <code>mrtg.cfg</code> to add new excerpts, new <code>index.html</code> using <code>indexmaker</code>.</p>
+<p>Following command will generate <code>mrtg.cfg</code> in <code>/usr/local/etc/mrtg</code>. Make sure that directory is owned, write-able by user <code>mrtg</code> and group <code>mrtg</code>.</p>
+<blockquote>
+<p><code>cfgmaker --global 'WorkDir: /usr/local/www/apache24/data/mrtg' --global 'Options[_]: growright,unknaszero' --output /usr/local/etc/mrtg/mrtg.cfg root@127.0.0.1</code></p>
+</blockquote>
+<p>If you’re unsure what is <code>root@localhost</code> in the context of <code>snmp</code>, it is access control setup for <code>snmp</code> which will define who is allowed to talk/send queries to your running <code>snmpd</code> agent. You can see the comments in <code>snmpd.conf</code>.</p>
+<p>Now, make a backup of the file, and edit <code>/usr/local/etc/mrtg/mrtg.cfg</code> to include the following lines to the end of the file.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Target</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mf">1.3</span><span class="o">.</span><span class="mf">6.1</span><span class="o">.</span><span class="mf">4.1</span><span class="o">.</span><span class="mf">2021.10</span><span class="o">.</span><span class="mf">1.5</span><span class="o">.</span><span class="mi">1</span><span class="o">&amp;</span><span class="mf">1.3</span><span class="o">.</span><span class="mf">6.1</span><span class="o">.</span><span class="mf">4.1</span><span class="o">.</span><span class="mf">2021.10</span><span class="o">.</span><span class="mf">1.5</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span>
+<span class="n">MaxBytes</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mi">100</span>
+<span class="n">AbsMax</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mi">1000</span>
+<span class="n">Options</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">gauge</span><span class="p">,</span><span class="n">nopercent</span><span class="p">,</span><span class="n">growright</span>
+<span class="n">Unscaled</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">dwmy</span>
+<span class="n">Title</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w">  </span><span class="n">Cpu</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">XSize</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mi">400</span>
+<span class="c1">#ShortLegend[cpu]: %</span>
+<span class="c1">#XSize[cpu]: 380</span>
+<span class="c1">#YSize[cpu]: 100</span>
+<span class="n">YLegend</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">Percent</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">Legend1</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">Legend2</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="nb">min</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">Legend3</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">Maximal</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">Minute</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">Legend4</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span>
+<span class="n">LegendI</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">LegendO</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="mi">5</span><span class="nb">min</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">PageTop</span><span class="p">[</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span><span class="w"> </span><span class="mi">5</span><span class="nb">min</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="w"> </span><span class="o">&lt;</span><span class="n">TABLE</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">System</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">freebsd</span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Maintainer</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">sysadmin</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Interface</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">cpu</span><span class="w"> </span><span class="n">usage</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">CPU</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="p">(</span><span class="n">percent</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span>
+<span class="w">       </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="o">&lt;/</span><span class="n">TABLE</span><span class="o">&gt;</span>
+
+<span class="c1">#####</span>
+<span class="n">PageTop</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="w"> </span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="w"> </span><span class="o">&lt;</span><span class="n">TABLE</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">System</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span><span class="w">     </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">freebsd</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Maintainer</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">sysadmin</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="p">(</span><span class="n">percent</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span>
+<span class="w">       </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="o">&lt;/</span><span class="n">TABLE</span><span class="o">&gt;</span>
+
+<span class="n">Target</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="mf">1.3</span><span class="o">.</span><span class="mf">6.1</span><span class="o">.</span><span class="mf">4.1</span><span class="o">.</span><span class="mf">2021.9</span><span class="o">.</span><span class="mf">1.9</span><span class="o">.</span><span class="mi">1</span><span class="o">&amp;</span><span class="mf">1.3</span><span class="o">.</span><span class="mf">6.1</span><span class="o">.</span><span class="mf">4.1</span><span class="o">.</span><span class="mf">2021.9</span><span class="o">.</span><span class="mf">1.9</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span>
+<span class="n">MaxBytes</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="mi">100</span>
+<span class="n">Options</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="n">gauge</span><span class="p">,</span><span class="n">nopercent</span><span class="p">,</span><span class="n">growright</span>
+<span class="n">Unscaled</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="n">dwmy</span>
+<span class="n">XSize</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="mi">400</span>
+<span class="n">Title</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="o">/</span><span class="k">var</span>
+<span class="n">ShortLegend</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="o">%</span>
+<span class="c1">#XSize[disk]: 380</span>
+<span class="c1">#YSize[disk]: 100</span>
+<span class="n">YLegend</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span>
+<span class="n">Legend1</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span>
+<span class="n">Legend2</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span>
+<span class="n">Legend3</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span>
+<span class="n">Legend4</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span>
+<span class="n">LegendI</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nbsp</span><span class="p">;</span><span class="n">DiskUsage</span>
+<span class="n">LegendO</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span>
+
+<span class="n">PageTop</span><span class="p">[</span><span class="n">disk</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="w"> </span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="w"> </span><span class="o">&lt;</span><span class="n">TABLE</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">System</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span><span class="w">     </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">freebsd</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Maintainer</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">sysadmin</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="o">&lt;</span><span class="n">TR</span><span class="o">&gt;&lt;</span><span class="n">TD</span><span class="o">&gt;</span><span class="n">Disk</span><span class="w"> </span><span class="n">Usage</span><span class="w"> </span><span class="p">(</span><span class="n">percent</span><span class="p">):</span><span class="o">&lt;/</span><span class="n">TD</span><span class="o">&gt;</span>
+<span class="w">       </span><span class="o">&lt;</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TD</span><span class="o">&gt;&lt;/</span><span class="n">TR</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="o">&lt;/</span><span class="n">TABLE</span><span class="o">&gt;</span><span class="w">  </span>
+
+<span class="n">Target</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="n">ssCpuRawUser</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">ssCpuRawUser</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ssCpuRawSystem</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">ssCpuRawSystem</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ssCpuRawNice</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">ssCpuRawNice</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span>
+<span class="n">Title</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">Server</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span>
+<span class="n">PageTop</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">CPU</span><span class="w"> </span><span class="n">Load</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">System</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Nice</span><span class="w"> </span><span class="n">Processes</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="n">MaxBytes</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="mi">100</span>
+<span class="n">ShortLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="o">%</span>
+<span class="n">YLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">Utilization</span>
+<span class="n">Legend1</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">Current</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">percentage</span><span class="w"> </span><span class="nb">load</span>
+<span class="n">LegendI</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">Used</span>
+<span class="n">LegendO</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span>
+<span class="n">Options</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">growright</span><span class="p">,</span><span class="n">nopercent</span>
+<span class="n">Unscaled</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">cpu</span><span class="p">]:</span><span class="w"> </span><span class="n">ymwd</span>
+
+<span class="n">Target</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">tcpPassiveOpens</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">tcpActiveOpens</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span>
+<span class="n">Title</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">Newly</span><span class="w"> </span><span class="n">Created</span><span class="w"> </span><span class="n">TCP</span><span class="w"> </span><span class="n">Connections</span>
+<span class="n">PageTop</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">New</span><span class="w"> </span><span class="n">TCP</span><span class="w"> </span><span class="n">Connections</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="n">MaxBytes</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="mi">10000000000</span>
+<span class="n">ShortLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">c</span><span class="o">/</span><span class="n">s</span>
+<span class="n">YLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">Conns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Min</span>
+<span class="n">LegendI</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">In</span>
+<span class="n">LegendO</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">Out</span>
+<span class="n">Legend1</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">New</span><span class="w"> </span><span class="n">inbound</span><span class="w"> </span><span class="n">connections</span>
+<span class="n">Legend2</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">New</span><span class="w"> </span><span class="n">outbound</span><span class="w"> </span><span class="n">connections</span>
+<span class="n">Options</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">newconns</span><span class="p">]:</span><span class="w"> </span><span class="n">growright</span><span class="p">,</span><span class="n">nopercent</span><span class="p">,</span><span class="n">perminute</span>
+
+<span class="n">Target</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">tcpCurrEstab</span><span class="o">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">tcpCurrEstab</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span>
+<span class="n">Title</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">Currently</span><span class="w"> </span><span class="n">Established</span><span class="w"> </span><span class="n">TCP</span><span class="w"> </span><span class="n">Connections</span>
+<span class="n">PageTop</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Established</span><span class="w"> </span><span class="n">TCP</span><span class="w"> </span><span class="n">Connections</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="n">MaxBytes</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="mi">10000000000</span>
+<span class="n">ShortLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">c</span><span class="o">/</span><span class="n">s</span>
+<span class="n">YLegend</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">Connections</span>
+<span class="n">LegendI</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">In</span>
+<span class="n">LegendO</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span>
+<span class="n">Legend1</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">Established</span><span class="w"> </span><span class="n">connections</span>
+<span class="n">Legend2</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span>
+<span class="n">Options</span><span class="p">[</span><span class="n">server</span><span class="o">.</span><span class="n">estabcons</span><span class="p">]:</span><span class="w"> </span><span class="n">growright</span><span class="p">,</span><span class="n">nopercent</span><span class="p">,</span><span class="n">gauge</span>
+</code></pre></div>
+
+<p>Replace <code>root@localhost</code> with appropriate values you set for <code>cfgmaker</code> command earlier in the article.</p>
+<p>Now, you need to generate the <code>index.html</code> for <code>mrtg</code>. Issue the command, <code>indexmaker --output=/usr/local/www/apache24/data/mrtg/index.html /usr/local/etc/mrtg/mrtg.cfg</code>. It will generate necessary files in <code>/usr/local/www/apache24/data/mrtg</code>. After this, you need to run the <code>mrtg</code> daemon to populate the graphs. In order to do that, we are going to add following in <code>crontab</code>. Issue <code>crontab -e</code> , enter following string:</p>
+<blockquote>
+<p><code>*/1 * * * * /usr/bin/env LANG=C /usr/local/bin/mrtg /usr/local/etc/mrtg/mrtg.cfg --logging /var/log/mrtg.log</code></p>
+</blockquote>
+<p>What it does is that it invokes <code>/usr/local/bin/mrtg</code> with path to <code>mrtg.cfg</code> and log in <code>mrtg.log</code> every 1 minute. You can choose desired interval to run the command.</p>
+<p>That’s it. Now start <code>apache24</code> service by issuing <code>service apache24 start</code> and then run the command from <code>crontab</code> manually once to populate your graphs. If you visit the your <code>&lt;SITE_IPADDR/FQDN&gt;/mrtg/index.html</code>, you should see some pretty graphs generated.</p>
+<h4>Additional Note:</h4>
+<ul>
+<li>As you add new <code>snmp</code> configs to <code>mrtg.cfg</code>, you need to re-generate <code>index.html</code> by issuing <code>indexmaker</code>.</li>
+<li>create a file under <code>/usr/local/bin/memstat.sh</code> and paste following content. Make sure you have <code>freecolor</code> package installed<a href="#fn2">2</a>.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env sh</span>
+
+/usr/local/bin/freecolor<span class="w"> </span>-m<span class="w"> </span>-o<span class="w"> </span><span class="p">|</span><span class="w"> </span>/usr/bin/awk<span class="w"> </span><span class="s1">&#39;NR==2 {memUsed = $3 } NR==3{swapUsed = $3 } END {print swapUsed &quot;\n&quot; memUsed&quot;\n0\n0&quot;}&#39;</span>
+</code></pre></div>
+
+<ul>
+<li>Now, edit <code>mrtg.cfg</code> and add following lines to the end of the file.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">Target</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="err">`</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">memstat</span><span class="p">.</span><span class="n">sh</span><span class="err">`</span>
+<span class="n">Title</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Mem</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Swap</span><span class="w"> </span><span class="k">Usage</span>
+<span class="n">PageTop</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Memory</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Swap</span><span class="w"> </span><span class="k">Usage</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="n">MaxBytes</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="mi">100000000000</span>
+<span class="n">ShortLegend</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">B</span>
+<span class="n">YLegend</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Memory</span>
+<span class="n">LegendI</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Swap</span>
+<span class="n">LegendO</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Mem</span>
+<span class="n">Legend1</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Swap</span>
+<span class="n">Legend2</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Mem</span>
+<span class="n">Options</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">gauge</span><span class="p">,</span><span class="n">growright</span><span class="p">,</span><span class="n">nopercent</span>
+<span class="n">kMG</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<span class="n">Colours</span><span class="o">[</span><span class="n">localmem</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">RED#bb0000</span><span class="p">,</span><span class="n">BLUE#1000ff</span><span class="p">,</span><span class="n">GREEN#006600</span><span class="p">,</span><span class="n">VIOLET#ff00ff</span>
+</code></pre></div>
+
+<h2>Reference</h2>
+<ol>
+<li><a href="//www.sbarjatiya.com/notes_wiki/index.php/Using_MRTG_for_monitoring_host_CPU,_memory,_disk_etc."># Using MRTG for monitoring host CPU, memory, disk etc</a>)</li>
+<li># Quick HOWTO : Ch23 : Advanced MRTG for Linux</li>
+<li><a href="//www.server-world.info/en/note?os=CentOS_7&amp;p=mrtg&amp;f=3"># MRTG : Get Memory Usage</a>)</li>
+<li><a href="//blog.up-link.ro/freebsd-system-monitoring-with-mrtg/"># FreeBSD: System Monitoring with MRTG</a>)</li>
+<li><a href="//blog.up-link.ro/files/mrtg.cfg"># Sample mrtg.cfg from log.up-link.ro</a>)</li>
+<li><a href="//forums.freebsd.org/threads/setting-up-mrtg-on-freebsd.248/"># Setting up MRTG on FreeBSD</a>)</li>
+<li><a href="//www.net-snmp.org/wiki/index.php/Tutorials">Tutorials - Net-SNMP Wiki</a>)</li>
+<li><a href="//www.iceflatline.com/2015/09/how-to-install-and-configure-mrtg-on-freebsd/"># How to Install and Configure MRTG on FreeBSD</a>)</li>
+<li><a href="//ggeek.blogspot.com/2008/10/freebsd-jails-and-net-snmp.html"># FreeBSD jails and net-snmp</a>)</li>
+<li><a href="//www.iceflatline.com/2015/09/how-to-install-and-configure-mrtg-on-freebsd/"># How to Install and Configure MRTG on FreeBSD</a>)</li>
+<li><a href="https://dan.langille.org/2014/10/22/getting-snmpwalk-to-talk-to-snmpd-on-freebsd/"># Getting snmpwalk to talk to snmpd on FreeBSD</a>](<a href="https://dan.langille.org/2014/10/22/getting-snmpwalk-to-talk-to-snmpd-on-freebsd/">https://dan.langille.org/2014/10/22/getting-snmpwalk-to-talk-to-snmpd-on-freebsd/</a>)</li>
+<li><a href="//www.debianhelp.co.uk/mrtg.htm"># MRTG Configuration in Debian</a>)</li>
+<li><a href="//kb.fortinet.com/kb/viewAttachment.do?attachID=configuring_a_FortiGate_for_mrtg.pdf&amp;documentID=10826">How to obtain a basic MRTG report page</a>)</li>
+</ol>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+<hr>
+<ol>
+<li><a href="https://forums.freebsd.org/threads/newer-packages-not-able-to-be-installed.68156/"># Newer packages not able to be installed</a> <a href="#fnref1">↩︎</a></li>
+<li><a href="//www.techrepublic.com/article/monitor-your-memory-usage-with-mrtg/"># # Monitor your memory usage with MRTG</a>) <a href="#fnref2">↩︎</a></li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"PF Firewall Configuration - FreeBSD"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="pf.conf below allows NAT connection to jail if you have any. Below configuration worked for me. To monitor using pflog0, refer to the example..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/pf-firewall-configuration-freebsd.html" rel="bookmark"
+           title="Permalink to "PF Firewall Configuration - FreeBSD"">"PF Firewall Configuration - FreeBSD"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-02-26T00:00:00+00:00">
+                Published: Tue 26 February 2019
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>pf.conf below allows NAT connection to jail if you have any. Below configuration worked for me. To monitor using pflog0, refer to the example below.</p>
+<h1>Update</h1>
+<p>PF is a good firewall solution for FreeBSD. It was first appeared in OpenBSD, then ported to FreeBSD and other platforms such as Blackberry. In order to run PF in FreeBSD there are few things you need to do, that is to make sure following two kernel modules are loaded into the kernel. - <code>pf.ko</code> - <code>pflog.ko</code></p>
+<p>To load a kernel module, in FreeBSD: <code>kldload pf.ko</code> <code>kldload pflog.ko</code></p>
+<p>To view loaded kernel modules in FreeBSD, the output will be something like below: - <code>kldstat</code></p>
+<p><code>Id Refs Address Size Name 1 21 0xffffffff80200000 206c860 kernel 2 1 0xffffffff8226e000 5c70 virtio_console.ko 4 1 0xffffffff82288000 ad30 aesni.ko 5 1 0xffffffff82293000 1140 cd9660_iconv.ko 6 2 0xffffffff82295000 87e8 libiconv.ko 7 1 0xffffffff82419000 1860 fdescfs.ko 8 1 0xffffffff8241b000 9e8 pflog.ko 9 1 0xffffffff8241c000 2e498 pf.ko</code> Following commands will enable PF and it's logging functionalities to FreeBSD via rc script <code>rc.conf</code>. We will also enable the host as a gateway through the last command. Make sure to have <code>pf.conf</code> file created in <code>/etc/</code> directory.</p>
+<ul>
+<li><code>sysrc pf_enable=yes</code></li>
+<li><code>sysrc pf_flags=""</code></li>
+<li><code>sysrc pf_rules="/etc/pf.conf"</code></li>
+<li><code>sysrc pflog_enable=yes</code></li>
+<li><code>sysrc pflog_logfile="/var/log/pflog0"</code></li>
+<li><code>sysrc pflog_flags=""</code></li>
+<li><code>sysrc gateway_enable=yes</code></li>
+</ul>
+<p>Once you have done all above, you can copy my firewall configuration and modify according to your needs. Be sure to change <code>extif</code></p>
+<p>[code lang=text] extif="vtnet0"</p>
+<p>public_ip="104.248.156.107" www_jail_ip="10.0.0.1" jail_net="10.0.0.0/24"</p>
+<p>www_port="{80,443}" tcp_port="{21,80,22222,443,53,67,68,22}"</p>
+<p>table const { 127/8, 172.16/12, 169.254/16, 192.0.2/24 0/8, 240/4 }</p>
+<p>set skip on lo set debug urgent set block-policy drop set loginterface $extif set state-policy if-bound set fingerprints "/etc/pf.os" set ruleset-optimization none</p>
+<p>set optimization aggressive</p>
+<p>scrub log on $extif all random-id min-ttl 15 set-tos 0x1c fragment reassemble</p>
+<p>nat-anchor "ftp-proxy/*" rdr-anchor "ftp-proxy/*"</p>
+<h1>scrub log on $extif all random-id min-ttl 15 set-tos 0x1c fragment reassemble</h1>
+<p>nat pass log (all, to pflog0) on $extif from $jail_net to any -&gt; $public_ip</p>
+<p>rdr pass log (all, to pflog0) on $extif proto tcp from any to $public_ip port $www_port -&gt; $www_jail_ip rdr pass log (all, to pflog0) on $extif proto {tcp,udp} from any to $public_ip port 53 -&gt; $www_jail_ip rdr pass log (all, to pflog0) on $extif proto {tcp,udp} from any to $public_ip port 21 -&gt; $www_jail_ip rdr pass proto tcp from any to any port ftp -&gt; 127.0.0.1 port 8021</p>
+<p>anchor "ftp-proxy/*"</p>
+<p>block log (all, to pflog0) block log (all, to pflog0) on $extif from to any pass out log (all, to pflog0) quick on $extif proto {tcp,udp} to any port $tcp_port keep state pass in log (all, to pflog0) quick on $extif proto {tcp,udp} to any port $tcp_port keep state [/code]</p>
+<p>Once you have saved the file in <code>/etc/pf.conf</code>, reload the firewall configuration by typing: - <code>service pf reload</code></p>
+<p>For more information on PF, visit <a href="//www.cyberciti.biz/faq/how-to-set-up-a-firewall-with-pf-on-freebsd-to-protect-a-web-server/">this</a>) link.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

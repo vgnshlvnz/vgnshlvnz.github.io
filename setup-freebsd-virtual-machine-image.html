@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Setup FreeBSD Virtual Machine Image"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Setting up FreeBSD is fun, especially when you are performing clean installation. We are going to cover setting up FreeBSD virtual machine file..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/setup-freebsd-virtual-machine-image.html" rel="bookmark"
+           title="Permalink to "Setup FreeBSD Virtual Machine Image"">"Setup FreeBSD Virtual Machine Image"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-09T00:00:00+00:00">
+                Published: Sun 09 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Setting up FreeBSD is fun, especially when you are performing clean installation. We are going to cover setting up FreeBSD virtual machine file download from <a href="https://download.freebsd.org/ftp/releases/VM-IMAGES/11.0-RELEASE/i386/Latest/FreeBSD-11.0-RELEASE-i386.vhd.xz">this link.</a></p>
+<p>Take Note: If you are using Virtualbox to boot up FreeBSD, select <code>NAT</code> . I have not tried other network configuration options as of now.</p>
+<p>Once you have finished download, extract the files and configure your virtual machine (Virtualbox / VMware) to boot the virtual machine file. You will be greeted with login screen. If you notice, you will see the term Amnesiac. Amnesiac simply means there is partial lost of information regarding the file we have booted just now.</p>
+<p>Log into FreeBSD using ```root``` username. Bear in mind that you will not be prompted for password. Issue ```passwd``` command to set new root password. Then open ```rc.conf``` using ``vi`` editor and add following options:</p>
+<p>hostname="freebsd.lan" ifconfig_em0="DHCP"</p>
+<p>Exit <code>rc.conf</code> and reboot your machine. Now your virtual machine should have working network connection. To test this, issue <code>ping -c 3 google.com</code>. You should get 3 replies from google servers. Next you need to update FreeBSD by issuing following command <code>freebsd-update fetch install</code>. If you receive following line <code>src component not installed, skipped</code>, we can manually install src files. In order to do that, you need to find out your FreeBSD version by issuing <code>uname -a</code>.  You should see somewhere along the line "i386" or "amd64" . Look for appropriate src tarball and download in your virtual machine. The command will be <code>fetch &amp;lt;path_to_src_tarball&amp;gt;</code> . Once you have finished downloading  src tarball, you need to extract it to /usr/src by issuing following command <code>tar -C / xvzf &amp;lt;path_to_src_tarball&amp;gt; /usr/src</code>. Once you are done, you need to extract and path ports tree by issuing following command <code>portsnap fetch extract update</code> . This command will keep ports tree up to date with latest snapshot from FreeBSD.</p>
+<p>TO BE CONTINUED TODO: Recompile kernel Rebuild world if possible</p>
+<p>For more information, visit <a href="https://www.freebsd.org/doc/handbook/">FreeBSD Handbook</a></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

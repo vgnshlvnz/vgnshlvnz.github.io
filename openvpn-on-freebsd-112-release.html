@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"OpenVPN on FreeBSD 11.2-RELEASE"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This guide was written based on result from a vps server. After following this guide, you should have working OpenVPN server and client. ###..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/openvpn-on-freebsd-112-release.html" rel="bookmark"
+           title="Permalink to "OpenVPN on FreeBSD 11.2-RELEASE"">"OpenVPN on FreeBSD 11.2-RELEASE"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-05T00:00:00+00:00">
+                Published: Wed 05 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This guide was written based on result from a vps server. After following this guide, you should have working OpenVPN server and client.</p>
+<h2>### Update, Install &amp; Copy OpenVPN configuration files</h2>
+<p>First we need to update <code>pkg</code> manager and then install <code>openvpn</code> package.</p>
+<p><code>#sh</code></p>
+<p><code>#pkg update &amp;amp;&amp;amp; pkg install openvpn</code></p>
+<p>Next we need to create <code>openvpn</code> directory and copy necessary configuration files.</p>
+<p><code>#mkdir /usr/local/share/examples/openvpn/sample-configuration-files/server.conf /usr/local/etc/openvpn/openvpn.conf</code></p>
+<p><code>#cp -r /usr/local/share/easy-rsa /usr/local/etc/openvpn/easy-rsa</code></p>
+<p><code>#cd /usr/local/etc/openvpn/easy-rsa</code></p>
+<p>Now we need to set following variables in <code>vars</code> file.</p>
+<p><code>#vi vars</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_COUNTRY</span><span class="w">     </span><span class="s2">&quot;&lt;COUNTRY&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_PROVINCE</span><span class="w">    </span><span class="s2">&quot;&lt;PROVINCE&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_CITY</span><span class="w">        </span><span class="s2">&quot;&lt;CITY&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_ORG</span><span class="w">         </span><span class="s2">&quot;&lt;ORGANIZATION&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_EMAIL</span><span class="w">       </span><span class="s2">&quot;&lt;EMAIL&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_REQ_OU</span><span class="w">          </span><span class="s2">&quot;&lt;ORGANIZATIONAL UNIT&gt;&quot;</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_KEY_SIZE</span><span class="w">        </span><span class="mi">2048</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_CA_EXPIRE</span><span class="w">       </span><span class="mi">3650</span>
+<span class="n">set_var</span><span class="w"> </span><span class="n">EASYRSA_CERT_EXPIRE</span><span class="w">     </span><span class="mi">3650</span>
+</code></pre></div>
+
+<h3>### Generate server keys</h3>
+<p>Now we are going to generate necessary server keys needed for connection between <code>openvpn</code> server &amp; client.</p>
+<div class="highlight"><pre><span></span><code>./easyrsa.real init-pki
+./easyrsa.real build-ca
+./easyrsa.real build-server-full openvpn-server nopass
+./easyrsa.real gen-dh
+openvpn --genkey --secret ta.key
+</code></pre></div>
+
+<h3>Generate client keys</h3>
+<p>Now, set CLIENT_NAME to any name you would like:</p>
+<p><code>#CLIENT_NAME="&amp;lt;client-name&amp;gt;"</code></p>
+<p><code>#./easyrsa.real build-client-full $CLIENT_NAME nopass</code></p>
+<h3>Copy server keys to ``openvpn`` directory</h3>
+<div class="highlight"><pre><span></span><code>mkdir /usr/local/etc/openvpn/keys
+cp pki/dh.pem \
+   pki/ca.crt \
+   pki/issued/openvpn-server.crt \
+   pki/private/openvpn-server.key \
+   ta.key \
+   /usr/local/etc/openvpn/keys
+</code></pre></div>
+
+<h3>Configure client .opvn file</h3>
+<div class="highlight"><pre><span></span><code>cd /usr/local/etc/openvpn
+touch $CLIENT_NAME.ovpn
+cat &gt; $CLIENT_NAME.ovpn
+client
+nobind
+dev tun
+remote-cert-tls server
+
+remote &lt;server-ip&gt; 1194 udp
+
+key-direction 1
+
+redirect-gateway def1
+</code></pre></div>
+
+<p>Type <code>Ctrl-D</code> and type the rest:</p>
+<div class="highlight"><pre><span></span><code>printf<span class="w"> </span>&quot;<span class="nt">&lt;key&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+cat<span class="w"> </span>easy-rsa/pki/private/$CLIENT_NAME.key<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;/key&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;cert&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+sed<span class="w"> </span>-n<span class="w"> </span>&#39;/^-----BEGIN/,/^-----END/p&#39;<span class="w"> </span>easy-rsa/pki/issued/$CLIENT_NAME.crt<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;/cert&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;ca&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+cat<span class="w"> </span>easy-rsa/pki/ca.crt<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;/ca&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;tls-auth&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+cat<span class="w"> </span>easy-rsa/ta.key<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+printf<span class="w"> </span>&quot;<span class="nt">&lt;/tls-auth&gt;</span>\n&quot;<span class="w"> </span>&gt;&gt;<span class="w"> </span>$CLIENT_NAME.ovpn
+</code></pre></div>
+
+<h3>Configure server</h3>
+<div class="highlight"><pre><span></span><code><span class="nv">touch</span><span class="w"> </span><span class="nv">openvpn</span>.<span class="nv">conf</span>
+<span class="nv">cat</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">openvpn</span>.<span class="nv">conf</span>
+<span class="nv">server</span><span class="w"> </span><span class="mi">192</span>.<span class="mi">168</span>.<span class="mi">255</span>.<span class="mi">0</span><span class="w"> </span><span class="mi">255</span>.<span class="mi">255</span>.<span class="mi">255</span>.<span class="mi">0</span>
+
+<span class="nv">verb</span><span class="w"> </span><span class="mi">3</span>
+
+<span class="nv">key</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">local</span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">/</span><span class="nv">keys</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">-</span><span class="nv">server</span>.<span class="nv">key</span><span class="w">  </span>#<span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">should</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">kept</span><span class="w"> </span><span class="nv">secret</span>
+<span class="nv">ca</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">local</span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">/</span><span class="nv">keys</span><span class="o">/</span><span class="nv">ca</span>.<span class="nv">crt</span>
+<span class="nv">cert</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">local</span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">/</span><span class="nv">keys</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">-</span><span class="nv">server</span>.<span class="nv">crt</span>
+<span class="nv">dh</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">local</span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">/</span><span class="nv">keys</span><span class="o">/</span><span class="nv">dh</span>.<span class="nv">pem</span>
+<span class="nv">tls</span><span class="o">-</span><span class="nv">auth</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">local</span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">openvpn</span><span class="o">/</span><span class="nv">keys</span><span class="o">/</span><span class="nv">ta</span>.<span class="nv">key</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span>#<span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">secret</span>
+
+<span class="nv">key</span><span class="o">-</span><span class="nv">direction</span><span class="w"> </span><span class="mi">0</span>
+<span class="nv">keepalive</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">60</span>
+
+<span class="nv">persist</span><span class="o">-</span><span class="nv">key</span>
+<span class="nv">persist</span><span class="o">-</span><span class="nv">tun</span>
+
+<span class="nv">proto</span><span class="w"> </span><span class="nv">udp</span>
+<span class="nv">port</span><span class="w"> </span><span class="mi">1194</span>
+<span class="nv">dev</span><span class="w"> </span><span class="nv">tun</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="nv">openvpn</span><span class="o">-</span><span class="nv">status</span>.<span class="nv">log</span>
+
+<span class="nv">user</span><span class="w"> </span><span class="nv">nobody</span>
+<span class="nv">group</span><span class="w"> </span><span class="nv">nobody</span>
+
+<span class="nv">explicit</span><span class="o">-</span><span class="k">exit</span><span class="o">-</span><span class="nv">notify</span><span class="w"> </span><span class="mi">1</span>
+<span class="nv">remote</span><span class="o">-</span><span class="nv">cert</span><span class="o">-</span><span class="nv">tls</span><span class="w"> </span><span class="nv">client</span>
+
+<span class="nv">route</span><span class="w"> </span><span class="mi">192</span>.<span class="mi">168</span>.<span class="mi">254</span>.<span class="mi">0</span><span class="w"> </span><span class="mi">255</span>.<span class="mi">255</span>.<span class="mi">255</span>.<span class="mi">0</span>
+
+<span class="nv">push</span><span class="w"> </span><span class="s2">&quot;dhcp-option DNS 8.8.8.8&quot;</span>
+<span class="nv">push</span><span class="w"> </span><span class="s2">&quot;dhcp-option DNS 8.8.4.4&quot;</span>
+</code></pre></div>
+
+<p>Type <code>Ctrl-D</code> and type the rest:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">sysrc</span><span class="w"> </span><span class="nx">openvpn_enable</span><span class="p">=</span><span class="s">&quot;YES&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">openvpn_if</span><span class="p">=</span><span class="s">&quot;tun&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">gateway_enable</span><span class="p">=</span><span class="s">&quot;YES&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">firewall_enable</span><span class="p">=</span><span class="s">&quot;YES&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">firewall_type</span><span class="p">=</span><span class="s">&quot;OPEN&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">natd_enable</span><span class="p">=</span><span class="s">&quot;YES&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">natd_interface</span><span class="p">=</span><span class="s">&quot;vtnet0&quot;</span>
+<span class="nx">sysrc</span><span class="w"> </span><span class="nx">natd_flags</span><span class="p">=</span><span class="s">&quot;&quot;</span>
+<span class="nx">service</span><span class="w"> </span><span class="nx">openvpn</span><span class="w"> </span><span class="nx">start</span>
+<span class="nx">reboot</span>
+</code></pre></div>
+
+<p>After your server reboot, you can start using <code>$CLIENT_NAME.ovpn</code> with your machine.</p>
+<p>resource:https://nopecode.com/2018/05/21/freebsd-openvpn.html</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

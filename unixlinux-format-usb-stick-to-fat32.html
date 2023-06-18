@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"UNIX/LINUX FORMAT USB STICK TO FAT32"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Following guide will teach you how to format your USB STICK. hit fdisk -l / fdisk -s to determine usb drive path. hit fdisk /dev/sdaX to enter..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/unixlinux-format-usb-stick-to-fat32.html" rel="bookmark"
+           title="Permalink to "UNIX/LINUX FORMAT USB STICK TO FAT32"">"UNIX/LINUX FORMAT USB STICK TO FAT32"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-08T00:00:00+00:00">
+                Published: Sat 08 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Following guide will teach you how to format your USB STICK.</p>
+<p>hit <code>fdisk -l</code> / <code>fdisk -s</code> to determine usb drive path.</p>
+<p>hit <code>fdisk /dev/sdaX</code> to enter fdisk program with device attached</p>
+<p>press <code>d</code> to delete existing partitions.</p>
+<p>press <code>n</code> to create new partition</p>
+<p>press <code>p</code> for primary partition</p>
+<p>Hit enter until you get to "Last Sector ...", you will be prompted to enter size of usb drive partition. Here you can leave it blank or give it a size, total size of your usb drive.</p>
+<p>press <code>t</code> and select appropriate partition type</p>
+<p>finally hit w and the changes you made earlier will be written to the disk and fdisk program will quit.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

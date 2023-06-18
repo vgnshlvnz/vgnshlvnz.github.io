@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[TUTORIAL]INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS This tutorial was written to guide users in installing dartlang in their linux workstation. Update..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorialinstall-dart_sdk-on-linux-debian_like_systems.html" rel="bookmark"
+           title="Permalink to "[TUTORIAL]INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS"">"[TUTORIAL]INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-17T00:00:00+00:00">
+                Published: Sun 17 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>INSTALL DART_SDK ON LINUX-DEBIAN_LIKE_SYSTEMS</h1>
+<p>This tutorial was written to guide users in installing dartlang in their linux workstation.</p>
+<ul>
+<li>
+<p>Update <code>sudo apt-get update</code></p>
+</li>
+<li>
+<p>Install <strong>apt-transport-https</strong> <code>sudo apt-get install apt-transport-https</code></p>
+</li>
+<li>
+<p>Get Google Linux package signing key <code>sudo sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'</code></p>
+</li>
+<li>
+<p>Set up the location of the stable repository <code>sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list &amp;gt; /etc/apt/sources.list.d/dart_stable.list'</code></p>
+</li>
+</ul>
+<p>And update your system by running this command: <code>apt-get update</code></p>
+<h2>Installing the SDK</h2>
+<p>Run this command: <code>sudo apt-get install dart/stable</code></p>
+<p>This is to install dartlang stable version. Once you're done installing, add following line in <code>$HOME/.profile</code></p>
+<ul>
+<li><code>export PATH=$PATH:/usr/lib/dart/bin</code></li>
+</ul>
+<p>and run this command to refresh your PATH environment variables: <code>source $HOME/.profile</code></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

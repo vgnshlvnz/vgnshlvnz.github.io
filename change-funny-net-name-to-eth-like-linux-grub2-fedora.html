@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"change funny net name to eth-like -- linux| grub2 | fedora"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="update: 5:03AM - adding note for fedora ORIGINAL: WRITTEN FOR UBUNTU/LINUX MINT suppose you encounter funny network interface names, such as:..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/change-funny-net-name-to-eth-like-linux-grub2-fedora.html" rel="bookmark"
+           title="Permalink to "change funny net name to eth-like -- linux| grub2 | fedora"">"change funny net name to eth-like -- linux| grub2 | fedora"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-17T00:00:00+00:00">
+                Published: Thu 17 August 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>update:</p>
+<p>5:03AM - adding note for fedora</p>
+<p>ORIGINAL: WRITTEN FOR UBUNTU/LINUX MINT</p>
+<p>suppose you encounter funny network interface names, such as:</p>
+<p>enp2s0 etc etc</p>
+<p>filename: grub2.cfg/grub.cfg</p>
+<p>you can change them by adding following</p>
+<div class="highlight"><pre><span></span><code>GRUB_CMDLINE_LINUX=&quot;net.ifnames=0 biosdevname=0&quot;
+</code></pre></div>
+
+<p>Update:</p>
+<p>5:03AM - 28th August 2018 -</p>
+<ul>
+<li>-  all sorts of condemnation = I am less concerned about Ubuntu Linux these days .</li>
+</ul>
+<p>fedora's default grub configuration file is in "/etc/default/grub" . <strong>It is then used to generate grub configuration.</strong></p>
+<p>you should look for above "GRUB_..", never mind whatever is in that line, add "net.ifnames=..." in-front of the line, use \ if you need.</p>
+<p>apply the change by running following command:</p>
+<p>grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>reference: https://fedoraproject.org/wiki/GRUB_2#Setting_default_entry</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

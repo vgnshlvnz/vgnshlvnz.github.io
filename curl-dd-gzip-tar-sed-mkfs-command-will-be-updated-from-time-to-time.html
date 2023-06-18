@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"curl dd gzip tar sed mkfs command **will be updated from time to time"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This dd command will help you to backup large file/partition etc etc. Use with care! Stolen off stackoverflow (credits to the guy(s) who answered)..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/curl-dd-gzip-tar-sed-mkfs-command-will-be-updated-from-time-to-time.html" rel="bookmark"
+           title="Permalink to "curl dd gzip tar sed mkfs command **will be updated from time to time"">"curl dd gzip tar sed mkfs command **will be updated from time to time"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-15T00:00:00+00:00">
+                Published: Tue 15 August 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This dd command will help you to backup large file/partition etc etc. Use with care! Stolen off stackoverflow (credits to the guy(s) who answered)</p>
+<p>** I am still struggling to merge those split files into one huge file. If you have answer, post it to message boards</p>
+<p>tar --extract --verbose --file=<filename>.tar --to-stdout|gzip -1 -c|split -b1b -&gt; <filename>.gz.</p>
+<p>dd if=/dev/sdX status=progress obs=1024 conv=noerror,sync | gzip -1 -c | split -b 1GB - <directory\95path>/<filename>.<file\95extension>.gz</p>
+<h1>above command will rip a partition, probably huge partition into small gz. files of 1Gb in size, therefore, <em><strong>think before you copy &amp; paste</strong></em></h1>
+<p>tar --create --file <filename>.tar --verbose <filename/directory></p>
+<p>*before running 2nd command, set following variable:</p>
+<p>export SIZE=<code>du -sk &lt;folder_with_multiple_files&gt;/ | cut -f -1</code></p>
+<p>tar --create --verbose -f - <folder\95multiple\95file>/ | pv -p -s ${SIZE}k | bzip2 -c &gt; <combined\95file>_.<file\95extension>.tar.bz2</p>
+<p>sed:</p>
+<p>following command will add a text at the start of a line</p>
+<p>sed 's/<string>/<string\95to\95be\95placed\95infront> &amp;/' <file>.<file\95extension></p>
+<p>e.g: sed 's/^this_is_example.file.ext.*$/Yes, &amp;/' <file>.<file\95extension></p>
+<p>&amp; = to stop before start of the string</p>
+<p>sed -e 's/^<file\95name>.<file\95extension>.<file\95compression\95extension>.*$/<string\95to\95be\95added\95infront> &amp;/' -e 's/$/<string\95to\95be\95added\95at\95the\95end>/' output.txt | head --lines=192</p>
+<p>-e allows you to chain one or more sed commands together</p>
+<p>Note to self: If you are unsure of the flags used in the command(s), refer man pages, stackoverflow, stackexchange, superuser,serverfault, digitalocean,vultr, linoxide.</p>
+<p>mkfs (copied off GParted) mkfs.fat -F32 -v -l -n '128GB ''/dev/sdX'</p>
+<p>aforementioned command will format your {flash,usb,thumb,pen} drive into FAT32 partitioned drive. You will need to create an empty partition before using that mkfs command.</p>
+<p>time curl --location --basic --compressed --get --data-binary --ipv4 --no-keepalive --raw --progress-bar --max-filesize <FILESIZE\95IN\95BYTES> <URL>|dd of=/dev/sdb status=progress conv=noerror,sync</p>
+<p>time curl --location-trusted --compressed --get --data-binary --ipv4 --proto https --ssl --tlsv1.2 --no-keepalive --tcp-nodelay --raw --progress-bar --max-filesize 1671430144 &lt;&gt;|dd of=/dev/sdb bs=4096 count=1671430144 conv=noerror,sync oflag=dsync status=progress #################################################################### 100.0%</p>
+<p>408064+0 records in 408064+0 records out 1671430144 bytes (1.7 GB, 1.6 GiB) copied, 4602.7 s, 363 kB/s</p>
+<p>real 76m43.237s user 0m18.636s sys 0m15.988s</p>
+<p>Special Mention to our friend(s) at nixcraft/freebsd_handbook for his/her/their dedication</p>
+<p>Thank You.</p>
+<p>reference: https://stackoverflow.com/questions/24230117/how-to-add-a-before-any-line-containing-a-matching-pattern-in-bash</p>
+<p>https://stackoverflow.com/questions/8005114/fast-concatenation-of-multiple-gzip-files</p>
+<p>https://serverfault.com/questions/402588/combine-two-or-more-compressed-files</p>
+<p>https://stackoverflow.com/questions/8005114/fast-concatenation-of-multiple-gzip-files</p>
+<p>https://serverfault.com/questions/144411/how-do-i-see-du-in-gb-instead-of-mb-in-linux</p>
+<p>https://superuser.com/questions/168749/is-there-a-way-to-see-any-tar-progress-per-file</p>
+<p>https://robots.thoughtbot.com/input-output-redirection-in-the-shell</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

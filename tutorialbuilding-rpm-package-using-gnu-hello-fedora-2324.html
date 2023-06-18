@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[Tutorial]Building RPM package using GNU Hello - Fedora 23/24"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="[Tutorial]Building RPM package using GNU Hello - Fedora 23/24 This tutorial was written to guide users in creating RPM package using GNU Hello..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorialbuilding-rpm-package-using-gnu-hello-fedora-2324.html" rel="bookmark"
+           title="Permalink to "[Tutorial]Building RPM package using GNU Hello - Fedora 23/24"">"[Tutorial]Building RPM package using GNU Hello - Fedora 23/24"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-25T00:00:00+00:00">
+                Published: Mon 25 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>[Tutorial]Building RPM package using GNU Hello - Fedora 23/24</h1>
+<p>This tutorial was written to guide users in creating RPM package using GNU Hello source.</p>
+<ul>
+<li>1) run <code># dnf install fedora-packager @development-tools</code></li>
+<li>2) run <code># usermod -a -G mock</code></li>
+<li>3) run the command from user-space (hint: '$') <code>$ rpmdev-setuptree</code></li>
+<li>4) change directory into <code>~/rpmbuild/SOURCES</code> and download the source: <code>$ wget http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz</code></li>
+<li>5) change directory into <code>~/rpmbuild/SPECS</code> and run <code>rpmdev-newspec hello</code></li>
+<li>6) open ```hello.spec`` file in editor of your choice and dump following configuration:</li>
+</ul>
+<p>[code lang=text] Name: hello Version: 2.10 Release: 1%{?dist} Summary: The "Hello World" program from GNU</p>
+<p>License: GPLv3+ URL: http://ftp.gnu.org/gnu/%{name} Source0: http://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz</p>
+<p>BuildRequires: gettext</p>
+<p>Requires(post): info Requires(preun): info</p>
+<p>%description The "Hello World" program, done with all bells and whistles of a proper FOSS project, including configuration, build, internationalization, help files, etc.</p>
+<p>%prep %autosetup</p>
+<p>%build %configure make %{?_smp_mflags}</p>
+<p>%install %make_install %find_lang %{name} rm -f %{buildroot}/%{_infodir}/dir</p>
+<p>%post /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir || :</p>
+<p>%preun if [ $1 = 0 ] ; then /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir || : fi</p>
+<p>%files -f %{name}.lang %{_mandir}/man1/hello.1.* %{_infodir}/hello.info.* %{_bindir}/hello</p>
+<p>%doc AUTHORS ChangeLog NEWS README THANKS TODO %license COPYING</p>
+<p>%changelog * Mon Jul 25 2016 vgnshlvnz 2.10-1 - Initial version of the package [/code]</p>
+<ul>
+<li>7) run following command: <code>rpmbuild -ba hello.spec</code> This would start building source, binary and debugging packages. Should you see no errors, it simply means you have completed the process successfully.</li>
+</ul>
+<p>To make sure there are no warnings , errors, run following command: <code>$ rpmlint hello.spec ../SRPMS/hello* ../RPMS/*/hello*</code> If there are no warnings or errors, we've succeeded. Otherwise, use rpmlint -i or rpmlint -I to see a more verbose description of the rpmlint diagnostics.</p>
+<p>To check that the package build will succeed in the Fedora restricted build environment, check it with mock. The default mock configuration builds the package against Rawhide - the Fedora development branch. <code>mock --verbose ../SRPMS/hello-2.10-1.fc23.src.rpm</code></p>
+<p>Even if you run into warnings or errors, do not worry, go back to <code>RPMS</code> and <code>SRPMS</code> folders and install those RPMS manually. It should install successfully.</p>
+<p>Once it is installed, you will see <code>hello</code> program available in your path. Running <code>hello --version</code> will tell you if you have did the right thing (for now).</p>
+<p>Reference: 1) https://fedoraproject.org/wiki/How_to_create_a_GNU_Hello_RPM_package 2) https://fedoraproject.org/wiki/How_to_create_an_RPM_package</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

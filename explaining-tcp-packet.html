@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>Explaining TCP Packet</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Which RFCs cover all the aspects of a TCP packet? RFC 793 - Transmission Control Protocol: This is the fundamental RFC for TCP and describes the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/explaining-tcp-packet.html" rel="bookmark"
+           title="Permalink to Explaining TCP Packet">Explaining TCP Packet</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-06-16T00:00:00+00:00">
+                Published: Fri 16 June 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h2>Which RFCs cover all the aspects of a TCP packet?</h2>
+<ol>
+<li>
+<p>RFC 793 - Transmission Control Protocol: This is the fundamental RFC for TCP and describes the core protocol, including the format of the TCP header, the state machine, and the mechanisms for establishing and closing connections, transmitting data, and handling retransmissions.</p>
+</li>
+<li>
+<p>RFC 1122 - Requirements for Internet Hosts - Communication Layers: This RFC provides clarification and updates to RFC 793. It covers the requirements for all Internet hosts, including those related to TCP.</p>
+</li>
+<li>
+<p>RFC 1323 - TCP Extensions for High Performance: This RFC covers extensions to TCP for high-performance networks, such as windows scaling, timestamps, and protection against wrapped sequence numbers (PAWS).</p>
+</li>
+<li>
+<p>RFC 2018 - TCP Selective Acknowledgment Options: This RFC describes the use of Selective Acknowledgments (SACKs) to improve performance on lossy links.</p>
+</li>
+<li>
+<p>RFC 2581 - TCP Congestion Control: This RFC outlines the four congestion control algorithms (Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery) that are required to be implemented in TCP.</p>
+</li>
+<li>
+<p>RFC 5681 - TCP Congestion Control: This RFC obsoletes RFC 2581 and provides an updated description of the TCP congestion control algorithms.</p>
+</li>
+<li>
+<p>RFC 6824 - TCP Extensions for Multipath Operation with Multiple Addresses: This RFC describes extensions to TCP that enable the simultaneous use of multiple IP addresses/paths.</p>
+</li>
+<li>
+<p>RFC 7323 - TCP Extensions for High Performance: This RFC obsoletes RFC 1323 and provides updates to the windows scaling and timestamps extensions.</p>
+</li>
+</ol>
+<h2>Example TCP Header Format</h2>
+<p>TCP Header Format</p>
+<div class="highlight"><pre><span></span><code><span class="mf">0</span><span class="w">                   </span><span class="mf">1</span><span class="w">                   </span><span class="mf">2</span><span class="w">                   </span><span class="mf">3</span>
+<span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="mf">1</span>
+</code></pre></div>
+
+<p>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |          Source Port          |       Destination Port        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                        Sequence Number                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Acknowledgment Number                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Data |           |U|A|P|R|S|F|                               |
+   | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+   |       |           |G|K|H|T|N|N|                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Checksum            |         Urgent Pointer        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Options                    |    Padding    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             data                              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<div class="highlight"><pre><span></span><code>                        TCP Header Format
+</code></pre></div>
+
+<p>TBC ..</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

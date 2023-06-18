@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"RHEL RHCSA Container notes"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This article will serve as notes on container management. This article will not delve into containers in RHEL-like systems as it is up to the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/rhel-rhcsa-container-notes.html" rel="bookmark"
+           title="Permalink to "RHEL RHCSA Container notes"">"RHEL RHCSA Container notes"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-04-23T00:00:00+00:00">
+                Published: Sat 23 April 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This article will serve as notes on container management. This article will not delve into containers in RHEL-like systems as it is up to the reader to research about it. This article will see how to check container tools, inspect images, download and run. Also removing a container and images as well as how to generate root and rootless container which can be controlled via systemd. You can register for developer account with Redhat to access their RHEL machines and docker registry. This article is written based on Ashgar Ghori's updated book on preparing for RHEL RHCSA.</p>
+<p>Image Management</p>
+<ol>
+<li>Install necessary tools<br>
+<code>sudo dnf module install container-tools</code></li>
+<li>Login to <code>registry.redhat.io</code><br>
+<code>podman login registry.redhat.io</code></li>
+<li>Search, Examine, Download and Remove an Image<br>
+<code>podman search registry.redhat.io/rhel8/mysql</code><br>
+    This will provide a couple of output.</li>
+<li><code>skopeo inspect registry.redhat.io/rhel8/mysql-80</code><br>
+    Above command will inspect the images and list out versions available and other relevant information.</li>
+<li><code>podman pull docker://registry.redhat.io/rhel8/mysql-80</code><br>
+    This will download the latest <code>MySQL</code> image from provided url.</li>
+<li><code>podman images</code><br>
+    This will display the the images stored in localhost.</li>
+<li><code>podman inspect mysql-80</code><br>
+    This will show the image details in localhost</li>
+<li><code>podman rmi mysql-80</code><br>
+    This will remove the image from localhost, verify by running <code>podman images</code> and you will get empty result.  </li>
+</ol>
+<p>Basic Container Management</p>
+<p>Run, Interact and Remove a Named Container</p>
+<ol>
+<li><code>podman run -ti --name rhel8-base-os ubi8</code><br>
+    This will run a container named rhel8-base-os from the universal base image for RHEL8. <code>-ti</code> is for terminal and interaction. This basically means you will drop into the container's shell for interaction with the container. Go ahead and run a few commands. Type <code>exit</code> to quit the container</li>
+<li><code>podman exec rhel8-base-os cat /etc/redhat-release</code><br>
+    This will to execute the command <code>cat /etc/redhat-release</code> from the container we downloaded in current terminal. The key is the <code>exec</code> subcommand. This command will fail initially, so you need to start the container using <code>podman start rhel8-base-os</code> and then run the initial command.</li>
+<li><code>podman attach rhel8-base-os</code><br>
+    This command will connect to the container we created.</li>
+<li><code>podman rm rhel8-base-os</code> will delete the running container.</li>
+<li><code>podman run --rm ubi8 ls</code> will download Universal Base 8 image, run the container with commands passed and remove it.</li>
+</ol>
+<p>Advanced Container Management</p>
+<ol>
+<li><code>podman -dp 10000:80 --name httpd httpd-24</code> will map port 10000 to port 80 and run in detached mode. In order to run this command you will need to pull httpd-24 images from registry.redhat.io.</li>
+<li><code>podman port httpd</code> will show the port mapping for the container.</li>
+<li><code>podman stop httpd</code> will stop the container. You can verify the container stopped by issuing <code>podman ps -a</code>.</li>
+<li><code>podman run -it -e HISTSIZE -e SECRET="tryhackme" --name rhel8 ubi8</code> . This will set the environment variables for the container then run the container and fall into container's shell. You can then verify the environment variables set.</li>
+<li><code>podman run --name rhel8 -v /host_data:/container_data:Z -it ubi8</code> . Before running this command, create and give 777 permission for /host_data. the -v flag will attach a mount point to the container. The :Z will ensure that correct SELinux context is applied. View the /container_data in the container to see if it is created with correct SELinux type. You can also create a file in /container_data, exit and view the SELinux context in /host_data. This shows it is inherited.</li>
+<li><code>podman run --name rhel8 -v /host_data:/container_data2:Z -it ubi8</code> . This is to show that the data created during point 5 is persistent across containers.</li>
+</ol>
+<h5>Configure a Root container as a systemd Service</h5>
+<ol>
+<li><code>podman run -dt --name root-container ubi8</code> . This will run the container in detached mode.</li>
+<li><code>podman generate systemd --new --name root-container &gt; /etc/systemd/system/root-container.service</code> . This will generate required systemd configuration and store it in the directory specified. Now stop and remove the container using <code>podman</code> and run <code>systemctl daemon-reload</code>. Enable the container by running <code>systemctl enable --now root-container</code>. You can see the container running as systemd service by issuing <code>systemctl status root-container</code>. You can also restart the systemd service by issuing <code>systemctl restart root-container</code> .</li>
+</ol>
+<h5>Configure a Rootless Container as a systemd Service</h5>
+<p>This section assumes that you have created rootless container using podman command.</p>
+<ol>
+<li><code>mkdir ~/.config/systemd/user -p</code> . This is to create directory to store the service unit file.</li>
+<li><code>podman generate systemd --new --name rootless-container &gt; ~/.config/systemd/user/rootless-container.service</code> . This will create the service unit file under the directory we created earlier. Run <code>systemctl --user daemon-reload</code> to load all the user related systemd files. Now run <code>systemctl --user enable --now rootless-container</code> will enable and run the rootless container as systemd service confined to the user.</li>
+<li>The issue with rootless container is that as the user logs out the container will get stopped. In order to make it persistent, as in run the container even if the user has logged out run this command <code>loginctl enable-linger</code>.</li>
+</ol>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

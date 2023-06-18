@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[DISKPART] CREATE & FORMAT PARITION - WINDOWS"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This guide is written to assist users in creating partition for disk, usb drives etc. Assumption is made that you are comfortable in command-line..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/diskpart-create-format-parition-windows.html" rel="bookmark"
+           title="Permalink to "[DISKPART] CREATE & FORMAT PARITION - WINDOWS"">"[DISKPART] CREATE &amp; FORMAT PARITION - WINDOWS"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-18T00:00:00+00:00">
+                Published: Sun 18 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This guide is written to assist users in creating partition for disk, usb drives etc. Assumption is made that you are comfortable in command-line tasks and roughly understand the process of identifying partition, deletion, create new partition and format the partition.</p>
+<p>Start command-prompt as Administrator.</p>
+<p>Type <code>diskpart</code> and you will fall into the program's shell.</p>
+<p>Type <code>list disk</code> and the program will show you list of disks attached to operating system</p>
+<p>Type <code>select disk &amp;lt;NUMBER&amp;gt;</code> and you will select desired disk (USB stick in this case)</p>
+<p>Type <code>clean</code> to clean existing partitions in the drive</p>
+<p>Type <code>rescan</code> to scan the drive</p>
+<p>Type <code>create partition primary</code> to create empty partition with primary flag set.</p>
+<p>Type <code>list partition</code> will show you available partition in the disk</p>
+<p>Type <code>select partition &amp;lt;NUMBER&amp;gt;</code> and you will select partition required</p>
+<p>Type <code>active</code> to set the partition as active partition</p>
+<p>Type <code>format fs=&amp;lt;fat32/ntfs&amp;gt;</code> to format selected partition with appropriate filesystem type</p>
+<p>Type <code>assign</code> to assign the filesystem type to the partition</p>
+<p>Type <code>exit</code> to exit the program</p>
+<p>Resource: https://kb.iu.edu/d/bccm</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"FreeBSD-SFTP"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Update pkg to latest root@freebsd-sftp:~ # mkdir -p /usr/local/etc/pkg/repos root@freebsd-sftp:~ # vi /usr/local/etc/pkg/repos/FreeBSD.conf ```..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/freebsd-sftp.html" rel="bookmark"
+           title="Permalink to "FreeBSD-SFTP"">"FreeBSD-SFTP"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-09-26T00:00:00+00:00">
+                Published: Sun 26 September 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ol>
+<li>Update <code>pkg</code> to latest</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="nv">@freebsd</span><span class="o">-</span><span class="nl">sftp</span><span class="p">:</span><span class="o">~</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">repos</span>
+<span class="n">root</span><span class="nv">@freebsd</span><span class="o">-</span><span class="nl">sftp</span><span class="p">:</span><span class="o">~</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="n">vi</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">FreeBSD</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>```
+FreeBSD:<span class="w"> </span>{
+<span class="w">  </span>url:<span class="w"> </span>&quot;pkg+http://pkg.FreeBSD.org/<span class="cp">${</span><span class="n">ABI</span><span class="cp">}</span>/latest&quot;
+}
+```
+</code></pre></div>
+
+<ol>
+<li>FreeBSD update<br>
+<code>freebsd-update fetch install</code><br>
+<code>pkg</code> update<br>
+<code>pkg update -f</code> &amp;&amp; <code>pkg upgrade -f</code></li>
+<li>Firewall Setup - PF<br>
+<code>sysrc pf_enable=yes</code><br>
+<code>sysrc pf_flags=''</code><br>
+<code>sysrc pf_rules='/etc/pf.conf'</code><br>
+<code>sysrc pflog_enable=yes</code><br>
+<code>sysrc pflog_logfile='/var/log/pflog'</code><br>
+<code>sysrc pflog_flags=''</code><br>
+<code>service pf start</code><br>
+<code>service pflog start</code></li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="nx">To</span><span class="w"> </span><span class="nx">protect</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="nx">incase</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">front</span><span class="o">-</span><span class="nx">end</span><span class="w"> </span><span class="nx">breach</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">Author</span><span class="p">:</span><span class="w"> </span><span class="nx">vgnshlvnz</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">couple</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">website</span><span class="w"> </span><span class="nx">examples</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">DO</span><span class="w"> </span><span class="nx">NOT</span><span class="w"> </span><span class="nx">MODIFY</span><span class="w"> </span><span class="nx">THE</span><span class="w"> </span><span class="nx">FILE</span><span class="w"> </span><span class="nx">WITHOUT</span><span class="w"> </span><span class="nx">PERMISSION</span>
+
+<span class="err">#</span><span class="nx">Interface</span>
+<span class="nx">extif</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">em0</span><span class="err">&#39;</span>
+
+<span class="err">#</span><span class="nx">ICMP</span><span class="w"> </span><span class="nx">Types</span>
+<span class="nx">icmp_types</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{</span><span class="w"> </span><span class="nx">echoreq</span><span class="w"> </span><span class="nx">unreach</span><span class="p">}</span><span class="err">&#39;</span>
+
+<span class="err">#</span><span class="nx">RFC6890</span><span class="w"> </span><span class="nx">address</span><span class="w"> </span><span class="nx">block</span><span class="w"> </span><span class="nx">table</span>
+
+<span class="nx">table</span><span class="w"> </span><span class="p">&lt;</span><span class="nx">rfc6890</span><span class="p">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="o">/</span><span class="mi">8</span><span class="w"> </span><span class="mi">10</span><span class="o">/</span><span class="mi">8</span><span class="w"> </span><span class="m m-Double">100.6</span><span class="mi">4</span><span class="o">/</span><span class="mi">10</span><span class="w"> </span><span class="mi">127</span><span class="o">/</span><span class="mi">8</span><span class="w"> </span><span class="m m-Double">169.2</span><span class="mi">54</span><span class="o">/</span><span class="mi">16</span><span class="w">          </span>\
+<span class="w">                  </span><span class="m m-Double">172.1</span><span class="mi">6</span><span class="o">/</span><span class="mi">12</span><span class="w"> </span><span class="mi">192</span><span class="o">/</span><span class="mi">24</span><span class="w"> </span><span class="mi">192</span><span class="o">/</span><span class="mi">29</span><span class="w"> </span><span class="m m-Double">192.0.2</span><span class="o">/</span><span class="mi">24</span><span class="w"> </span><span class="m m-Double">192.88.9</span><span class="mi">9</span><span class="o">/</span><span class="mi">24</span><span class="w"> </span>\
+<span class="w">                  </span><span class="m m-Double">192.1</span><span class="mi">68</span><span class="o">/</span><span class="mi">16</span><span class="w"> </span><span class="m m-Double">198.1</span><span class="mi">8</span><span class="o">/</span><span class="mi">15</span><span class="w"> </span><span class="m m-Double">198.51.1</span><span class="mi">00</span><span class="o">/</span><span class="mi">24</span><span class="w"> </span><span class="m m-Double">203.0.1</span><span class="mi">13</span><span class="o">/</span><span class="mi">24</span><span class="w"> </span>\
+<span class="w">                  </span><span class="mi">240</span><span class="o">/</span><span class="mi">4</span><span class="w"> </span><span class="m m-Double">255.255.255.2</span><span class="mi">55</span><span class="o">/</span><span class="mi">32</span><span class="w"> </span><span class="p">}</span>
+
+<span class="err">#</span><span class="nx">Scrubbing</span><span class="w"> </span><span class="nx">traffic</span>
+<span class="nx">scrub</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">extif</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">random</span><span class="o">-</span><span class="nx">id</span><span class="w"> </span><span class="nx">min</span><span class="o">-</span><span class="nx">ttl</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="nx">set</span><span class="o">-</span><span class="nx">tos</span><span class="w"> </span><span class="mh">0x1</span><span class="nx">c</span><span class="w"> </span><span class="nx">fragment</span><span class="w"> </span><span class="nx">reassemble</span><span class="w"> </span><span class="nx">max</span><span class="o">-</span><span class="nx">mss</span><span class="w"> </span><span class="mi">1440</span>
+
+<span class="err">#</span><span class="nx">Skip</span><span class="w"> </span><span class="nx">Loopback</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">skip</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">lo0</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">debug</span><span class="w"> </span><span class="nx">urgent</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">block</span><span class="o">-</span><span class="nx">policy</span><span class="w"> </span><span class="nx">drop</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">loginterface</span><span class="w"> </span><span class="err">$</span><span class="nx">extif</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">state</span><span class="o">-</span><span class="nx">policy</span><span class="w"> </span><span class="k">if</span><span class="o">-</span><span class="nx">bound</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">fingerprints</span><span class="w"> </span><span class="s">&quot;/etc/pf.os&quot;</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">ruleset</span><span class="o">-</span><span class="nx">optimization</span><span class="w"> </span><span class="nx">none</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">optimization</span><span class="w"> </span><span class="nx">aggressive</span>
+
+<span class="err">#</span><span class="nx">RFC6890</span><span class="w"> </span><span class="nx">ruleset</span>
+<span class="nx">block</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="p">(</span><span class="nx">all</span><span class="p">,</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">pflog0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">egress</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="p">&lt;</span><span class="nx">rfc6890</span><span class="p">&gt;</span>
+<span class="nx">block</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="p">(</span><span class="nx">all</span><span class="p">,</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">pflog0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">egress</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="p">&lt;</span><span class="nx">rfc6890</span><span class="p">&gt;</span>
+
+<span class="err">#</span><span class="nx">Anti</span><span class="o">-</span><span class="nx">spoofing</span>
+<span class="nx">antispoof</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="err">$</span><span class="nx">extif</span>
+
+<span class="err">#</span><span class="nx">Block</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">connections</span>
+<span class="nx">block</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="p">(</span><span class="nx">all</span><span class="p">,</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">pflog0</span><span class="p">)</span>
+
+<span class="err">#</span><span class="nx">Allow</span><span class="w"> </span><span class="nx">SSH</span><span class="w"> </span><span class="k">in</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="p">(</span><span class="nx">all</span><span class="p">,</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">pflog0</span><span class="p">)</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">extif</span><span class="w">  </span><span class="nx">proto</span><span class="w"> </span><span class="nx">tcp</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="mi">22</span>
+
+<span class="err">#</span><span class="nx">Pass</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">SSH</span><span class="w"> </span><span class="nx">DNS</span><span class="w"> </span><span class="nx">NTP</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">WEB</span><span class="w"> </span><span class="nx">SERVICES</span>
+<span class="nx">pass</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="p">{</span><span class="nx">tcp</span><span class="p">,</span><span class="w"> </span><span class="nx">udp</span><span class="p">}</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="p">{</span><span class="mi">22</span><span class="p">,</span><span class="mi">53</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="mi">443</span><span class="p">}</span>
+
+<span class="err">#</span><span class="nx">Allow</span><span class="w"> </span><span class="nx">ICMP</span><span class="w"> </span><span class="nx">echorequest</span>
+<span class="nx">pass</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="nx">icmp</span><span class="w"> </span><span class="nx">icmp</span><span class="o">-</span><span class="k">type</span><span class="w"> </span><span class="err">$</span><span class="nx">icmp_types</span>
+</code></pre></div>
+
+<ol>
+<li>
+<p>Setup Disks<br>
+    Create a pool with mirror</p>
+</li>
+<li>
+<p><code>zpool create zstorage mirror &lt;disk&gt;</code><br>
+    Create <code>/home/</code> directories</p>
+</li>
+<li><code>zfs create zstorage/home</code></li>
+<li><code>zfs create zstorage/home/&lt;USERNAME&gt;</code></li>
+</ol>
+<p>Set quota and refquota for the directories</p>
+<ul>
+<li><code>zfs set quota=&lt;size&gt; zstorage/home/&lt;USERNAME&gt;</code></li>
+<li>
+<p><code>zfs set refquota=&lt;size&gt; zstorage/home/&lt;USERNAME&gt;</code></p>
+</li>
+<li>
+<p>Setting appropriate permissions</p>
+</li>
+<li>
+<p><code>chown root:sftp /home/&lt;USERNAME&gt;</code></p>
+</li>
+<li>
+<p><code>chown &lt;USERNAME&gt;:sftp /home/&lt;USERNAME&gt;/uploads</code></p>
+</li>
+<li>
+<p>Set up SSH to act as SFTP server</p>
+</li>
+<li>
+<p><code>vi /etc/ssh/sshd_config</code></p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Match Group sftp
+ChrootDirectory /home/%u
+X11Forwarding no
+AllowTcpForwarding no
+ForceCommand internal-sftp
+</code></pre></div>
+
+<ol>
+<li>
+<p>Set up ClamAV</p>
+</li>
+<li>
+<p><code>pkg install clamav</code></p>
+</li>
+<li>Insert following into <code>rc.conf</code></li>
+</ol>
+<div class="highlight"><pre><span></span><code>clamav_clamd_enable=YES
+clamav_freshclam_enable=YES
+</code></pre></div>
+
+<ul>
+<li><code>service clamav-freshclam onestart</code></li>
+<li><code>/usr/local/bin/freshclam</code></li>
+<li><code>service clamav-clamd onestart</code></li>
+<li>
+<p>Precaution: run <code>/usr/local/bin/freshclam</code> after starting <code>clamd</code></p>
+</li>
+<li>
+<p>Snort Installation &amp; Configuration</p>
+</li>
+<li>
+<p><code>pkg install snort</code></p>
+</li>
+<li><code>sed -i '' '/^include \$RULE_PATH\/.*.rules$/d' /usr/local/etc/snort/snort.conf</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="o">-</span><span class="w"> </span><span class="n">ipvar</span><span class="w"> </span><span class="n">HOME_NET</span><span class="w"> </span><span class="p">[</span><span class="n">YOU_NEED_TO_SET_HOME_NET_IN_snort</span><span class="o">.</span><span class="n">conf</span><span class="p">]</span>
+<span class="o">-</span><span class="w"> </span><span class="n">ipvar</span><span class="w"> </span><span class="n">EXTERNAL_NET</span><span class="w"> </span><span class="n">any</span>
+<span class="o">+</span><span class="w"> </span><span class="n">ipvar</span><span class="w"> </span><span class="n">HOME_NET</span><span class="w"> </span><span class="p">[</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span><span class="p">]</span>
+<span class="o">+</span><span class="w"> </span><span class="n">ipvar</span><span class="w"> </span><span class="n">EXTERNAL_NET</span><span class="w"> </span><span class="o">!$</span><span class="n">HOME_NET</span>
+<span class="o">-</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">WHITE_LIST_PATH</span><span class="w"> </span><span class="o">../</span><span class="n">rules</span>
+<span class="o">-</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">BLACK_LIST_PATH</span><span class="w"> </span><span class="o">../</span><span class="n">rules</span>
+<span class="o">+</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">WHITE_LIST_PATH</span><span class="w"> </span><span class="n">rules</span>
+<span class="o">+</span><span class="w"> </span><span class="k">var</span><span class="w"> </span><span class="n">BLACK_LIST_PATH</span><span class="w"> </span><span class="n">rules</span>
+<span class="o">-</span><span class="w"> </span><span class="c1"># output unified2: filename merged.log, limit 128, nostamp, mpls_event_types, vlan_event_types</span>
+<span class="o">+</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="n">unified2</span><span class="p">:</span><span class="w"> </span><span class="n">filename</span><span class="w"> </span><span class="n">merged</span><span class="o">.</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">mpls_event_types</span><span class="p">,</span><span class="w"> </span><span class="n">vlan_event_types</span>
+<span class="o">+</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">$</span><span class="n">RULE_PATH</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">rules</span>
+<span class="o">+</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">$</span><span class="n">RULE_PATH</span><span class="o">/</span><span class="n">snort</span><span class="o">.</span><span class="n">rules</span>
+</code></pre></div>
+
+<ul>
+<li><code>cp /usr/local/etc/pulledpork/pulledpork.conf.sample /usr/local/etc/pulledpork/pulledpork.conf</code></li>
+<li><code>mkdir /usr/local/etc/snort/so_rules</code></li>
+<li><code>mkdir /usr/local/etc/snort/rules/iplists</code></li>
+<li><code>touch /usr/local/etc/snort/rules/local.rules</code></li>
+<li><code>cp /usr/local/etc/snort/preproc_rules/sensitive-data.rules-sample /usr/local/etc/snort/preproc_rules/sensitive-data.rules</code></li>
+<li><code>touch /usr/local/etc/snort/rules/white_list.rules</code></li>
+<li><code>touch /usr/local/etc/snort/rules/black_list.rules</code></li>
+</ul>
+<p>Configure Pulledpork</p>
+<ul>
+<li><code>grep -Ev '^$|^#' /usr/local/etc/pulledpork/pulledpork.conf</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">rule_url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">snort</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">reg</span><span class="o">-</span><span class="n">rules</span><span class="o">/|</span><span class="n">snortrules</span><span class="o">-</span><span class="n">snapshot</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="o">|</span><span class="n">XXXX</span>
+<span class="n">rule_url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s3</span><span class="o">.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">snort</span><span class="o">-</span><span class="n">org</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">rules</span><span class="o">/</span><span class="n">community</span><span class="o">/|</span><span class="n">community</span><span class="o">-</span><span class="n">rules</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span><span class="o">|</span><span class="n">Community</span>
+<span class="n">rule_url</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">labs</span><span class="o">.</span><span class="n">snort</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">feeds</span><span class="o">/</span><span class="n">ip</span><span class="o">-</span><span class="n">filter</span><span class="o">.</span><span class="n">blf</span><span class="o">|</span><span class="n">IPBLACKLIST</span><span class="o">|</span><span class="n">open</span>
+<span class="n">rule_url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">snort</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">reg</span><span class="o">-</span><span class="n">rules</span><span class="o">/|</span><span class="n">opensource</span><span class="o">.</span><span class="n">gz</span><span class="o">|</span><span class="n">XXXX</span>
+<span class="n">ignore</span><span class="o">=</span><span class="n">deleted</span><span class="o">.</span><span class="n">rules</span><span class="p">,</span><span class="n">experimental</span><span class="o">.</span><span class="n">rules</span><span class="p">,</span><span class="n">local</span><span class="o">.</span><span class="n">rules</span>
+<span class="n">temp_path</span><span class="o">=/</span><span class="n">tmp</span>
+<span class="n">rule_path</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">rules</span><span class="o">/</span><span class="n">snort</span><span class="o">.</span><span class="n">rules</span>
+<span class="n">local_rules</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">rules</span><span class="o">/</span><span class="n">local</span><span class="o">.</span><span class="n">rules</span>
+<span class="n">sid_msg</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">sid</span><span class="o">-</span><span class="n">msg</span><span class="o">.</span><span class="n">map</span>
+<span class="n">sid_msg_version</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">sid_changelog</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">sid_changes</span><span class="o">.</span><span class="n">log</span>
+<span class="n">sorule_path</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">so_rules</span><span class="o">/</span>
+<span class="n">snort_path</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">snort</span>
+<span class="n">config_path</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">snort</span><span class="o">.</span><span class="n">conf</span>
+<span class="n">distro</span><span class="o">=</span><span class="n">FreeBSD</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="mi">0</span>
+<span class="n">black_list</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">rules</span><span class="o">/</span><span class="n">iplists</span><span class="o">/</span><span class="n">default</span><span class="o">.</span><span class="n">blacklist</span>
+<span class="n">IPRVersion</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">snort</span><span class="o">/</span><span class="n">rules</span><span class="o">/</span><span class="n">iplists</span>
+<span class="n">snort_control</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">snort_control</span>
+<span class="n">version</span><span class="o">=</span><span class="mf">0.7</span><span class="o">.</span><span class="mi">0</span>
+</code></pre></div>
+
+<p>Grab all the rules</p>
+<ul>
+<li><code>pulledpork.pl -c /usr/local/etc/pulledpork/pulledpork.conf -l</code></li>
+<li><code>snort -A console -q -c /usr/local/etc/snort/snort.conf -i em0</code></li>
+</ul>
+<p>Insert into <code>rc.conf</code> following lines</p>
+<ul>
+<li><code>snort_enable="YES"</code></li>
+<li><code>snort_interface="em0"</code></li>
+</ul>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

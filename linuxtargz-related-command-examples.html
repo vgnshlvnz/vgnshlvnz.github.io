@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Linux|.tar.gz related command examples"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="You can play following commands using URL: https://www.phrack.org/archives/tgz/ To download archives, you can use download manager or following..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/linuxtargz-related-command-examples.html" rel="bookmark"
+           title="Permalink to "Linux|.tar.gz related command examples"">"Linux|.tar.gz related command examples"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-19T00:00:00+00:00">
+                Published: Wed 19 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>You can play following commands using URL: https://www.phrack.org/archives/tgz/</p>
+<p>To download archives, you can use download manager or following loop:</p>
+<p>[code lang=text] for i in {1..69}</p>
+<p>do</p>
+<p>wget http://phrack.org/archive/tgz/phrack$i.tar.gz</p>
+<p>done</p>
+<p>[/code]</p>
+<p>List contents of tar.gz archive</p>
+<blockquote>
+<p>tar tvf archive.tar.gz tar ztvf archive.tar.gz</p>
+</blockquote>
+<p>Extract contents from tar.gz archive</p>
+<blockquote>
+<p>tar xvzf archive.tar.gz</p>
+</blockquote>
+<p>Extract particular file from tar.gz archive</p>
+<blockquote>
+<p>tar zxvf archive.tar.gz ./<filename></p>
+</blockquote>
+<p>List particular file from archive from remote url</p>
+<blockquote>
+<p>curl -s <URL> | tar tvzf - ./<filename></p>
+</blockquote>
+<p>Extract particular file from archive from remote url</p>
+<blockquote>
+<p>curl -s <URL> | tar zxvf - ./<filename></p>
+</blockquote>
+<p>Extract particular file from archive from remote url, print to terminal</p>
+<blockquote>
+<p>curl -s <URL> | tar zxvf - ./<filename> | xargs cat <filename></p>
+</blockquote>
+<p>Source: https://unix.stackexchange.com/questions/34008/find-a-file-within-a-tar-gz-archive https://unix.stackexchange.com/questions/61461/how-to-extract-specific-files-from-tar-gz https://askubuntu.com/questions/168795/how-do-i-extract-a-specific-file-from-a-tar-archive https://www.cyberciti.biz/faq/linux-unix-extracting-specific-files/ https://askubuntu.com/questions/168795/how-do-i-extract-a-specific-file-from-a-tar-archive http://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples https://www.cyberciti.biz/faq/linux-unix-bsd-xargs-construct-argument-lists-utility/</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

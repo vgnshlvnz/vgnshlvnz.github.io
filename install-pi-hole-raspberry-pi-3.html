@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Install pi-hole - raspberry pi 3"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Install PiHole - Raspberry Pi 3 The installation may fail, work. Suppose it does not work, visit discource.pi-hole.net for troubleshooting by the..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/install-pi-hole-raspberry-pi-3.html" rel="bookmark"
+           title="Permalink to "Install pi-hole - raspberry pi 3"">"Install pi-hole - raspberry pi 3"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-09-07T00:00:00+00:00">
+                Published: Fri 07 September 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>Install PiHole - Raspberry Pi 3 The installation may fail, work. Suppose it does not work, visit discource.pi-hole.net for troubleshooting by the devs. Update &amp; Upgrade (if there is) $apt-get update $apt-get upgrade</p>
+<p>change raspi hostname $hostnamectl set-hostname <YOUR\95HOSTNAME></p>
+<p>ip command - set a default router <GATEWAY\95ADDR> $ip route add default via <ROUTER\95ADDR> route command - set a default router <GATEWAY\95ADDR> $route add default gw <ROUTER\95ADDR></p>
+<p>set static ip address - edit /etc/network/interfaces</p>
+<blockquote>
+<p>&gt; auto lo iface lo inet loopback</p>
+</blockquote>
+<p>allow-hotplug eth0 iface eth0 inet static address 192.168.1.100 network 192.168.1.0 broadcast 192.168.1.255 netmask 255.255.255.0 gateway 192.168.1.254 dns-nameservers 74.82.42.42 77.88.8.8</p>
+<blockquote>
+<p>&gt;</p>
+</blockquote>
+<p>Allow port 53,67,80,443 - refer /etc/services for daemons $iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT $iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT $iptables -A INPUT -p tcp -m tcp --dport 53 -j ACCEPT $iptables -A INPUT -p udp -m udp --dport 53 -j ACCEPT $iptables -A INPUT -p udp -m udp --dport 67 -j ACCEPT restart networking service $sudo systemctl restart networking or $sudo service networking restart</p>
+<p>if there is any problem - use following command to get overview of the issue $sudo journalctl -xe</p>
+<p>verify new ip address - $sudo ip a show see new routing table - $sudo ip r</p>
+<p>Install Pi-Hole $curl -sSL https://install.pi-hole.net | bash</p>
+<p>initial installation via above script may not work, in that case you need to do following: #edit /etc/resolv.conf - manually input DNS address of your choice $cd /etc/.pihole/ $pihole checkout master $pihole -r # select reconfigure setting - leave rest of the settings as it is - should work thereafter</p>
+<p>reference: various discourse.pi-hole.net, ubuntu forums, nixcraft &amp; etc etc</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

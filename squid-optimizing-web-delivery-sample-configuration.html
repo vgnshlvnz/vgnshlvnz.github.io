@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Squid [Optimizing Web Delivery] + [Sample Configuration]"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="SQUID Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more. It reduces bandwidth and improves response times by caching and..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/squid-optimizing-web-delivery-sample-configuration.html" rel="bookmark"
+           title="Permalink to "Squid [Optimizing Web Delivery] + [Sample Configuration]"">"Squid [Optimizing Web Delivery] + [Sample Configuration]"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-03-07T00:00:00+00:00">
+                Published: Fri 07 March 2014
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p><strong>SQUID</strong></p>
+<p>Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more. It reduces bandwidth and improves response times by caching and reusing frequently-requested web pages. Squid has extensive access controls and makes a great server accelerator. It runs on most available operating systems, including Windows and is licensed under the GNU GPL.</p>
+<p>Squid is used by hundreds of Internet Providers world-wide to provide their users with the best possible web access. Squid optimises the data flow between client and server to improve performance and caches frequently-used content to save bandwidth. Squid can also route content requests to servers in a wide variety of ways to build cache server hierarchies which optimise network throughput.</p>
+<p>Thousands of web-sites around the Internet use Squid to drastically increase their content delivery. Squid can reduce your server load and improve delivery speeds to clients. Squid can also be used to deliver content from around the world - copying only the content being used, rather than inefficiently copying everything. Finally, Squid's advanced content routing configuration allows you to build content clusters to route and load balance requests via a variety of web servers.</p>
+<p>[The Squid systems] are currently running at a hit-rate of approximately 75%, effectively quadrupling the capacity of the Apache servers behind them. This is particularly noticeable when a large surge of traffic arrives directed to a particular page via a web link from another site, as the caching efficiency for that page will be nearly 100%.  - Wikimedia Deployment Information.</p>
+<p><strong>WHY SQUID</strong></p>
+<p>(Or.. "Why should I bother with web caching? Can't I just buy more bandwidth?")</p>
+<p>The developers of the HTTP protocol identified early on that there was going to be exponential growth in content and, concerned with distribution mechanisms, added powerful caching primitives.</p>
+<p>These primitives allow content developers and distributors to hint to servers and end-user applications how content should be validated, revalidated and cached. This had the effect of dramatically reducing the amount of bandwidth required to serve content and improved user response times.</p>
+<p>Squid is one of the projects which grew out of the initial content distribution and caching work in the mid-90s. It has grown to include extra features such as powerful access control, authorization, logging, content distribution/replication, traffic management and shaping and more. It has many, many work-arounds, new and old, to deal with incomplete and incorrect HTTP implementations.</p>
+<p>Squid allows Internet Providers to save on their bandwidth through content caching. Cached content means data is served locally and users will see this through faster download speeds with frequently-used content.</p>
+<p>A well-tuned proxy server (even without caching!) can improve user speeds purely by optimising TCP flows. Its easy to tune servers to deal with the wide variety of latencies found on the internet - something that desktop environments just aren't tuned for.</p>
+<p>Squid allows ISPs to avoid needing to spend large amounts of money on upgrading core equipment and transit links to cope with ever-demanding content growth. It also allows ISPs to prioritise and control certain web content types where dictacted by technical or economic reasons.</p>
+<p>Squid is one of the oldest content accelerators, used by thousands of websites around the world to ease the load on their servers. Frequently-seen content is cached by Squid and served to the end-client with only a fraction of the application server load needed normally. Setting up an accelerator in front of an existing website is almost always a quick and simple task with immediate benefits.</p>
+<p>Squid makes it easy for content distributors and streaming media developers to distribute content worldwide. CDN providers can buy cheap PC hardware running Squid and deploy in strategic locations around the internet to serve enormous amounts of data cheaply and efficiently. A large number of companies have deployed servers running Squid in the past in exactly this manner.</p>
+<p>Sample Configuration Files Link: https://drive.google.com/folderview?id=0B3dg9tqW9N18Y3pWMkR1eVhzLW8&amp;usp=sharing</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

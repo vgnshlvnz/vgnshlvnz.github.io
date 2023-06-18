@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"dns-resolution"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="DNS Resolution Checking Script This script is meant to be used once you have delegated your nameservers to the ones you control. It will take a..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/dns-resolution.html" rel="bookmark"
+           title="Permalink to "dns-resolution"">"dns-resolution"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2021-08-03T00:00:00+00:00">
+                Published: Tue 03 August 2021
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>DNS Resolution Checking Script</h1>
+<p>This script is meant to be used once you have delegated your nameservers to the ones you control. It will take a while to have it delegated so this small script is to help you check if the resolution is successful. The output of the script will produce exit codes following the commands executed. At the end of successful run of the command, it will create a file with the domain name.</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+
+<span class="nv">domain</span><span class="o">=</span><span class="s2">&quot;&lt;INSERT_YOUR_FQDN&quot;</span>
+<span class="nv">aname_resolve</span><span class="o">=</span><span class="k">$(</span>/usr/bin/host<span class="w"> </span><span class="nv">$domain</span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;NR==2{print $5}&#39;</span><span class="k">)</span>
+<span class="nv">dns_refused</span><span class="o">=</span><span class="s2">&quot;5(REFUSED)&quot;</span>
+<span class="nv">resolve_success</span><span class="o">=</span><span class="k">$(</span>/usr/bin/touch<span class="w"> </span>/root/<span class="nv">$domain</span><span class="k">)</span>
+
+<span class="k">while</span><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$aname_resolve</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$dns_refused</span><span class="w">  </span><span class="o">]</span>
+<span class="k">do</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;fail&#39;</span>
+<span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">         </span><span class="k">if</span><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="w">         </span><span class="k">then</span>
+<span class="w">                </span><span class="nv">$resolve_success</span>
+<span class="w">         </span><span class="k">fi</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;script failed&#39;</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>Add a <code>cronjob</code> and you’re good to go.</p>
+<p>Feel free to modify.</p>
+<p>For more information visit this <a href="https://github.com/vgnshlvnz/sh-freebsd-scripts">link</a></p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

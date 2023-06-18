@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[UNIX/FreeBSD] Compile & Install kernel, @world (optional) - 11.2-RELEASE"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="GENERAL NOTE This article is written for 11.2-RELEASE. This is the production release. There are other releases such as -STABLE, -CURRENT. Kindly..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/unixfreebsd-compile-install-kernel-world-optional-112-release.html" rel="bookmark"
+           title="Permalink to "[UNIX/FreeBSD] Compile & Install kernel, @world (optional) - 11.2-RELEASE"">"[UNIX/FreeBSD] Compile &amp; Install kernel, @world (optional) - 11.2-RELEASE"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-09T00:00:00+00:00">
+                Published: Fri 09 November 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>GENERAL NOTE</h1>
+<p>This article is written for 11.2-RELEASE. This is the production release. There are other releases such as -STABLE, -CURRENT. Kindly read through official documentation on the differences between these releases and how,where you can use these releases. This article also assumes that you have perquisite as follows:</p>
+<ul>
+<li>Unix/Linux command-line fundamentals</li>
+<li>Unix/Linux installation procedures such as disk partitioning</li>
+</ul>
+<p>Updating @world set provide latest tools to compile the kernel. It is advisable to compile &amp; install @world set before doing anything with kernel.</p>
+<p>This article will guide you on updating FreeBSD source files, build &amp; install @world set [optional] and finally the kernel. This article will guide you in compiling the kernel, then the @world set. FreeBSD,unlike GNU/Linux, has monolithic kernel, which forms the operating system. Several assumptions made, such as release type, cpu type etc etc. For more information, <strong>Google</strong> how FreeBSD differs from Linux.</p>
+<h3>Source File Update</h3>
+<p>In order to update source files, you need to determine FreeBSD version you are running. Following command will print out version and patch applied to the system.</p>
+<ul>
+<li><code>#uname -r</code></li>
+</ul>
+<p>e.g:</p>
+<p><code>11.2-RELEASE-p4</code></p>
+<p>where 11.2 is the version, RELEASE is the release type (STABLE,CURRENT etc) and p4 is the patch level applied to the system. If you would like to patch the system to latest patches, following command will do the trick:</p>
+<ul>
+<li>``#freebsd-update fetch install``</li>
+</ul>
+<p>While <code>freebsd-update</code> known to work for GENERIC kernel configuration, I have made assumption such that user-modified kernel configuration will be named as GENERIC to get patch update.</p>
+<p>Following list of commands will help you update source files, located in /usr/src.</p>
+<p>-<code>#svn --trust-server-cert --non-interactive checkout https://svn.FreeBSD.org/base/releng/11.2 /usr/src</code> - This will fetch latest revision of 11.2-RELEASE source files</p>
+<p>-<code>svn --trust-server-cert --non-interactive update /usr/src</code> - This will update /usr/src to latest revision since <code>svn checkout</code> command</p>
+<h3>Optional</h3>
+<p>This is completely optional to update FreeBSD's port tree. FreeBSD ports tree is like a package manager RPM for FreeBSD. Following commands will fetch,install &amp; update Ports Tree.</p>
+<p>-<code>#svn --trust-server-cert --non-interactive checkout https://svn.FreeBSD.org/ports/head /usr/ports</code></p>
+<p>-<code>#svn --trust-server-cert --non-interactive update /usr/ports</code></p>
+<h2>Build &amp; Install @world [Optional]</h2>
+<p>Make sure you have updated <code>/usr/src</code> before proceeding. Following commands will build &amp; install new world into the system.</p>
+<p>-<code>#make buildworld installworld</code></p>
+<h3>Optional</h3>
+<p>If you know number of cores your processfor has, you can pass in option <code>-j&amp;lt;NUM_OF_PROCESS&amp;gt;</code>. For e.g:</p>
+<p>-<code>#make -j2 buildworld installworld</code></p>
+<p>Once build process is complete, you can reboot your machine and proceed to compile &amp; install the kernel.</p>
+<h2>Compile &amp; Install Kernel</h2>
+<p>To compile <code>i386</code> system, you need to have have related configuration files in <code>/usr/src/sys/i386/conf</code> directory, which is the GENERIC file. The file has configuration for kernel &amp; drivers which the system will load up. Below configuration file is for you to try out. I have redacted some configurations because they are not needed. If you would like to know which kernel modules are loaded, you can try following commands:</p>
+<ul>
+<li><code>#pciconf -lv</code> - This is useful when you want to build driver-specific kernel options</li>
+<li><code>#kldstat -v</code> - This command shows all loaded modules in the kernel</li>
+<li>view the boot log <code>dmesg</code> file in log folder</li>
+</ul>
+<p>[code lang=text] # # GENERIC -- Generic kernel configuration file for FreeBSD/i386 # # For more information on this file, please read the config(5) manual page, # and/or the handbook section on Kernel Configuration Files: # # http://www.FreeBSD.org/doc/en_US.ISO8859-1/books/handbook/kernelconfig-config.html # # The handbook is also available locally in /usr/share/doc/handbook # if you've installed the doc distribution, otherwise always see the # FreeBSD World Wide Web server (http://www.FreeBSD.org/) for the # latest information. # # An exhaustive list of options and more detailed explanations of the # device lines is also present in the ../../conf/NOTES and NOTES files. # If you are in doubt as to the purpose or necessity of a line, check first # in NOTES. # # $FreeBSD: releng/11.2/sys/i386/conf/GENERIC 323770 2017-09-19 16:51:51Z jpaetzel $ machine i386 cpu I486_CPU cpu I586_CPU cpu I686_CPU ident GENERIC</p>
+<p>makeoptions DEBUG=-g # Build kernel with gdb(1) debug symbols makeoptions WITH_CTF=1 # Run ctfconvert(1) for DTrace support</p>
+<p>options SCHED_ULE # ULE scheduler options PREEMPTION # Enable kernel thread preemption options INET # InterNETworking options INET6 # IPv6 communications protocols options IPSEC # IP (v4/v6) security options IPSEC_SUPPORT # Allow kldload of ipsec and tcpmd5 options TCP_OFFLOAD # TCP offload options SCTP # Stream Control Transmission Protocol options FFS # Berkeley Fast Filesystem options SOFTUPDATES # Enable FFS soft updates support options UFS_ACL # Support for access control lists options UFS_DIRHASH # Improve performance on big directories options UFS_GJOURNAL # Enable gjournal-based UFS journaling options QUOTA # Enable disk quotas for UFS options MD_ROOT # MD is a potential root device options NFSCL # Network Filesystem Client options NFSD # Network Filesystem Server options NFSLOCKD # Network Lock Manager options NFS_ROOT # NFS usable as /, requires NFSCL options MSDOSFS # MSDOS Filesystem options CD9660 # ISO 9660 Filesystem options PROCFS # Process filesystem (requires PSEUDOFS) options PSEUDOFS # Pseudo-filesystem framework options GEOM_PART_GPT # GUID Partition Tables. options GEOM_RAID # Soft RAID functionality. options GEOM_LABEL # Provides labelization options COMPAT_FREEBSD4 # Compatible with FreeBSD4 options COMPAT_FREEBSD5 # Compatible with FreeBSD5 options COMPAT_FREEBSD6 # Compatible with FreeBSD6 options COMPAT_FREEBSD7 # Compatible with FreeBSD7 options COMPAT_FREEBSD9 # Compatible with FreeBSD9 options COMPAT_FREEBSD10 # Compatible with FreeBSD10 options SCSI_DELAY=5000 # Delay (in ms) before probing SCSI options KTRACE # ktrace(1) support options STACK # stack(9) support options SYSVSHM # SYSV-style shared memory options SYSVMSG # SYSV-style message queues options SYSVSEM # SYSV-style semaphores options _KPOSIX_PRIORITY_SCHEDULING # POSIX P1003_1B real-time extensions options PRINTF_BUFR_SIZE=128 # Prevent printf output being interspersed. options KBD_INSTALL_CDEV # install a CDEV entry in /dev options HWPMC_HOOKS # Necessary kernel hooks for hwpmc(4) options AUDIT # Security event auditing options CAPABILITY_MODE # Capsicum capability mode options CAPABILITIES # Capsicum capabilities options MAC # TrustedBSD MAC Framework options KDTRACE_HOOKS # Kernel DTrace hooks options DDB_CTF # Kernel ELF linker loads CTF data options INCLUDE_CONFIG_FILE # Include this file in kernel options RACCT # Resource accounting framework options RACCT_DEFAULT_TO_DISABLED # Set kern.racct.enable=0 by default options RCTL # Resource limits</p>
+<p># Debugging support. Always need this: options KDB # Enable kernel debugger support. options KDB_TRACE # Print a stack trace for a panic.</p>
+<p># To make an SMP kernel, the next two lines are needed options SMP # Symmetric MultiProcessor Kernel device apic # I/O APIC options EARLY_AP_STARTUP</p>
+<p># CPU frequency control device cpufreq</p>
+<p># Bus support. device acpi device pci # ATA controllers device ahci # AHCI-compatible SATA controllers device ata # Legacy ATA/SATA controllers options ATA_STATIC_ID</p>
+<p># ATA/SCSI peripherals device scbus # SCSI bus (required for ATA/SCSI) device ch # SCSI media changers device da # Direct Access (disks) device sa # Sequential Access (tape etc) device cd # CD device pass # Passthrough device (direct ATA/SCSI access)</p>
+<p># atkbdc0 controls both the keyboard and the PS/2 mouse device atkbdc # AT keyboard controller device atkbd # AT keyboard device psm # PS/2 mouse</p>
+<p>device kbdmux # keyboard multiplexer</p>
+<p>device vga # VGA video card driver options VESA # Add support for VESA BIOS Extensions (VBE)</p>
+<p>device splash # Splash screen and screen saver support</p>
+<p># syscons is the default console driver, resembling an SCO console device sc options SC_PIXEL_MODE # add support for the raster text mode</p>
+<p># vt is the new video console driver device vt device vt_vga</p>
+<p>device agp # support several AGP chipsets</p>
+<p># Power management support (see NOTES for more options) device apm # Add suspend/resume support for the i8254. device pmtimer</p>
+<p># PCCARD (PCMCIA) support # PCMCIA and cardbus bridge support device cbb # cardbus (yenta) bridge device pccard # PC Card (16-bit) bus device cardbus # CardBus (32-bit) bus</p>
+<p># Serial (COM) ports device uart # Generic UART driver</p>
+<p># Parallel port device ppc device ppbus # Parallel port bus (required) device lpt # Printer device ppi # Parallel port interface device #device vpo # Requires scbus and da</p>
+<p>device puc # Multi I/O cards and multi-channel UARTs</p>
+<p># PCI Ethernet NICs. device em # Intel PRO/1000 Gigabit Ethernet Family</p>
+<p># Pseudo Devices device loop # Network loopback device random # Entropy device device padlock_rng # VIA Padlock RNG device rdrand_rng # Intel Bull Mountain RNG device ether # Ethernet support device vlan # 802.1Q VLAN support device tun # Packet tunnel. device md # Memory "disks" device gif # IPv6 and IPv4 tunneling device firmware # firmware assist module</p>
+<p># The `bpf' device enables the Berkeley Packet Filter. # Be aware of the administrative consequences of enabling this! # Note that 'bpf' is required for DHCP. device bpf # Berkeley packet filter</p>
+<p># USB support options USB_DEBUG # enable debug msgs device uhci # UHCI PCI-&gt;USB interface device ohci # OHCI PCI-&gt;USB interface device ehci # EHCI PCI-&gt;USB interface (USB 2.0) device xhci # XHCI PCI-&gt;USB interface (USB 3.0) device usb # USB Bus (required) device ukbd # Keyboard device umass # Disks/Mass storage - Requires scbus and da</p>
+<p># VirtIO support device virtio # Generic VirtIO bus (required) device virtio_pci # VirtIO PCI device device vtnet # VirtIO Ethernet device device virtio_blk # VirtIO Block device device virtio_balloon # VirtIO Memory Balloon device</p>
+<p># The crypto framework is required by IPSEC device crypto # Required by IPSEC device aesni</p>
+<p>[/code]</p>
+<p>Save above configuration as GENERIC under <code>/usr/src/sys/i386/conf</code> directory. You can choose to change <code>ident</code> from GENERIC to name of your choice. Once you're done, type following command from <code>/usr/src</code> directory to build &amp; install the kernel:</p>
+<p>-<code>#make -j2 TARGET_ARCH=i386 buildkernel installkernel KERNCONF=GENERIC</code></p>
+<p>Above command will use <code>make</code> program to <code>buildkernel</code> &amp; <code>installkernel</code>. Option <code>-j&amp;lt;NUM&amp;gt;</code> set number of parallel builds to set. Option <code>KERNCONF=GENERIC</code> states the configuration GENERIC to be used. Option <code>TARGET_ARCH=i386</code> will build &amp; install kernel for target architecture. Suppose you have <code>amd64</code> machine, you could set <code>TARGET_ARCH=amd64</code> .</p>
+<p>Once above process is complete, reboot your machine and you will boot into newly baked kernel.</p>
+<p><code>uname -a</code> should show slightly different output when you build &amp; install world and kernel set.</p>
+<p>This guide is written for people who are new to FreeBSD. It is a working guide produced using 2 Core, 512MB RAM virtual machine.</p>
+<p>Resource: FreeBSD Handbook, nixcraft blog. Google them.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

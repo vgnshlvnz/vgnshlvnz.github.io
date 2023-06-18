@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Microsoft - Virtual Hard Disk attach/detach using powershell"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="You can create Virtual Hard Disk by accessing diskmgmt.msc and attach as if it is actual hard disk drive. Only difference is it is virtual. It..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/microsoft-virtual-hard-disk-attachdetach-using-powershell.html" rel="bookmark"
+           title="Permalink to "Microsoft - Virtual Hard Disk attach/detach using powershell"">"Microsoft - Virtual Hard Disk attach/detach using powershell"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-07-21T00:00:00+00:00">
+                Published: Fri 21 July 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>You can create Virtual Hard Disk by accessing <code>diskmgmt.msc</code> and attach as if it is actual hard disk drive. Only difference is it is virtual. It should be easy to move those files around, from one computer to another.</p>
+<p>Note: Be sure to try this with appropriate user permissions</p>
+<p>To create new virtual hard disk:</p>
+<ul>
+<li>you need to open up ```diskmgmt.msc```</li>
+<li>click on ```Create```. You will see two options, ```Create VHD``` and ```Attach VHD```</li>
+<li>Create new virtual hard disk. You can choose standard ```VHD``` or ```VHDX```.</li>
+<li>Set the size and allocation options. Here you can set it to expand dynamically or fixed size.</li>
+<li>Once you are done with vhd creation, you need to initialize it according to your hard disk partition type.</li>
+<li>Now you can attach the vhd file you have created earlier</li>
+</ul>
+<p>To attach/detach vhd, I will be using powershell with administrative rights. Make sure you have absolute path of the vhd file.</p>
+<p>Commands:</p>
+<p>Mount VHD</p>
+<blockquote>
+<p>Mount-VHD -path "<vhd\95absolute\95path>"</p>
+</blockquote>
+<p>Unmount VHD</p>
+<blockquote>
+<p>Dismount-VHD -path "vhd_absolute_path"</p>
+</blockquote>
+<p>where absolute path:</p>
+<blockquote>
+<p>C:\Users\users\sample.vhd</p>
+</blockquote>
+<p>Absolute path describes actual path to a file in a file system.</p>
+<p>Source:</p>
+<p>https://technet.microsoft.com/en-us/bb738381.aspx https://www.top-password.com/blog/mount-and-unmount-vhd-vhdx-from-command-line/ http://www.coffeecup.com/help/articles/absolute-vs-relative-pathslinks/</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

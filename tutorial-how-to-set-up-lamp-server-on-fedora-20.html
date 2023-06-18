@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[TUTORIAL] HOW TO SET UP LAMP SERVER ON FEDORA 20"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="WHAT IS LAMP? LAMP is an acronym for Linux, Apache, MySQL (or MariaDB) and PHP/Perl/Python. It is a software bundle composed entirely of free and..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/tutorial-how-to-set-up-lamp-server-on-fedora-20.html" rel="bookmark"
+           title="Permalink to "[TUTORIAL] HOW TO SET UP LAMP SERVER ON FEDORA 20"">"[TUTORIAL] HOW TO SET UP LAMP SERVER ON FEDORA 20"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-07-18T00:00:00+00:00">
+                Published: Fri 18 July 2014
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p><strong>WHAT IS LAMP?</strong></p>
+<p><strong>LAMP</strong> is an acronym for <strong>Linux</strong>, <strong>Apache</strong>, <strong>MySQL</strong> (or <strong>MariaDB</strong>) and <strong>PHP</strong>/<strong>Perl</strong>/<strong>Python</strong>. It is a software bundle composed entirely of free and open source software used for building dynamic websites and acts as local web server on your PC. On <strong>Windows</strong> system, <strong>WAMP</strong> is used instead.</p>
+<p>This post assumes that user is working on a Linux environment. For this tutorial , I will be using Fedora 20.</p>
+<p><strong>First</strong> we are going to set up <strong>Apache</strong></p>
+<blockquote>
+<p>"[root@localhost vravichandran]# yum install httpd"</p>
+<p>"[root@localhost vravichandran]# systemctl enable httpd.service"</p>
+<p>"[root@localhost vravichandran]# systemctl start httpd.service"</p>
+</blockquote>
+<p>Once you're done with steps above, open up your favorite browser, type <em>localhost</em> / <em>your ip-address</em> . You should see Fedora Test Page.</p>
+<p><strong>TAKENOTE:</strong></p>
+<p>Apache’s default document root is /var/www/html on Fedora, and the configuration file is /etc/httpd/conf/httpd.conf. Additional configurations are stored in the /etc/httpd/conf.d/ directory.</p>
+<p><strong>Second</strong>, we are going to set up <strong>PHP5</strong></p>
+<blockquote>
+<p>"[root@localhost vravichandran]# yum install php"</p>
+<p>"[root@localhost vravichandran]# systemctl restart httpd.service"</p>
+</blockquote>
+<p>To make sure php installation is successful, try this</p>
+<blockquote>
+<p>"[root@localhost vravichandran]# vim /var/www/html/info.php"</p>
+</blockquote>
+<p>Once you have opened the file, put this into the file, save and quit</p>
+<blockquote>
+<p>"&lt;?php</p>
+<p>phpinfo();</p>
+<p>?&gt;"</p>
+</blockquote>
+<p>Now open your favorite browser, type <em>localhost/info.php</em> and press enter. You should be able to see a page with php information.</p>
+<p><strong>Third</strong>, we are going to set up <strong>MySQL Database</strong></p>
+<blockquote>
+<p>"[root@localhost vravichandran]# yum install mysql mysql-server"</p>
+<p>"[root@localhost vravichandran]# systemctl enable mariadb.service"</p>
+</blockquote>
+<p><strong>TAKENOTE:</strong></p>
+<p>MySQL is now replaced by MariaDB. Make sure you're aware of what you're installing, if <em>mariadb.service</em> throws error, try <em>mysqld.service.</em></p>
+<p><strong>Next</strong>, we are going to configure <strong>MySQL Database</strong></p>
+<blockquote>
+<p>"[root@localhost vravichandran]# mysql_secure_installation"</p>
+<p>"Enter current password for root (enter for none):" // <em>if you haven't set any root password</em></p>
+<p>"Set root password? [Y/n] Y"</p>
+<p>"New password: <em>[enter your desired password]</em>"</p>
+<p><em>"Re-enter new password:"</em></p>
+<p>"Remove anonymous users? [Y/n] Y"</p>
+<p>"Disallow root login remotely? [Y/n] Y"</p>
+<p>"Remove test database and access to it? [Y/n] Y"</p>
+<p>"Reload privilege tables now? [Y/n] Y"</p>
+</blockquote>
+<p><strong>Next</strong> we are going to set up <strong>PHP Modules</strong></p>
+<blockquote>
+<p>"[root@localhost src]# yum install php-mysqlnd php-mssql php-opcache"</p>
+</blockquote>
+<p><strong>Forth</strong>, we are going to set up <strong>phpMyAdmin</strong></p>
+<blockquote>
+<p>"[root@localhost src]# yum install phpmyadmin"</p>
+</blockquote>
+<p><strong>Next,</strong> we are going to configure <strong>phpMyAdmin</strong></p>
+<blockquote>
+<p>"[root@localhost vravichandran]# vim /etc/httpd/conf.d/phpMyAdmin.conf "</p>
+</blockquote>
+<p>comment out according to the text below [Has to be exactly the same]</p>
+<blockquote>
+<p>*************************************************************</p>
+<p># phpMyAdmin - Web based MySQL browser written in php # # Allows only localhost by default # # But allowing phpMyAdmin to anyone other than localhost should be considered # dangerous unless properly secured by SSL</p>
+<p>Alias /phpMyAdmin /usr/share/phpMyAdmin Alias /phpmyadmin /usr/share/phpMyAdmin</p>
+<p><Directory /usr/share/phpMyAdmin/> # <IfModule mod\95authz\95core.c> # # Apache 2.4 # <RequireAny> # Require ip 127.0.0.1 # Require ip ::1 # </RequireAny> # </IfModule> # <IfModule !mod\95authz\95core.c> # # Apache 2.2 # Order Deny,Allow # Deny from All # Allow from 127.0.0.1 # Allow from ::1 # </IfModule> Require all granted </Directory></p>
+<p>*************************************************************</p>
+</blockquote>
+<p>Once you're done with the editing , restart your apache</p>
+<blockquote>
+<p>"[root@localhost vravichandran]# systemctl restart httpd.service"</p>
+</blockquote>
+<p>Now, open your favorite browser, type <em>localhost / [your machine ip-addr]/phpmyadmin/ ,</em> a small box will pop up asking for username and password, enter according to what you have entered during <em>mysql_secure_installation .</em></p>
+<p>Voila! You have successfully installed LAMP STACK! Enjoy!</p>
+<p>P.S: This guide is based on Fedora 20 .</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

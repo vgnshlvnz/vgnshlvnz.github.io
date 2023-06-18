@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"PF - FreeBSD, Solaris Firewall working configuration"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="PF is a complete, full-featured firewall that appeared since FreeBSD 5.3. It has optional support for ALTQ (Alternate Queuing) which provides QoS..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/pf-freebsd-solaris-firewall-working-configuration.html" rel="bookmark"
+           title="Permalink to "PF - FreeBSD, Solaris Firewall working configuration"">"PF - FreeBSD, Solaris Firewall working configuration"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-12-09T00:00:00+00:00">
+                Published: Sun 09 December 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>PF is a complete, full-featured firewall that appeared since FreeBSD 5.3. It has optional support for ALTQ (Alternate Queuing) which provides QoS (Quality of Service). Visit <a href="https://www.freebsd.org/doc/handbook/firewalls-pf.html">here</a> for more details.</p>
+<p>Below configuration should work for typical 2-NIC set up.</p>
+<div class="highlight"><pre><span></span><code><span class="err">#################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Packet</span><span class="w"> </span><span class="nx">Firewall</span><span class="w"> </span><span class="nx">Ruleset</span><span class="w"> </span><span class="err">####</span>
+<span class="err">#################################</span>
+
+<span class="err">###################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Variables</span><span class="w"> </span><span class="err">####</span>
+<span class="err">###################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">External</span><span class="w"> </span><span class="kd">interface</span>
+<span class="nx">ext_if</span><span class="p">=</span><span class="s">&quot;CHANGEME&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Internal</span><span class="w"> </span><span class="kd">interface</span>
+<span class="nx">int_if</span><span class="p">=</span><span class="s">&quot;CHANGEME&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Follow</span><span class="w"> </span><span class="nx">RFC1918</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">don</span><span class="err">&#39;</span><span class="nx">t</span><span class="w"> </span><span class="nx">route</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">non</span><span class="o">-</span><span class="nx">routable</span><span class="w"> </span><span class="nx">IPs</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">http</span><span class="p">:</span><span class="c1">//www.iana.org/assignments/ipv4-address-space</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">http</span><span class="p">:</span><span class="c1">//rfc.net/rfc1918.html</span>
+<span class="nx">nonroute</span><span class="p">=</span><span class="w"> </span><span class="s">&quot;{ 0.0.0.0/8, 20.20.20.0/24, 127.0.0.0/8, 169.254.0.0/16,</span>
+<span class="s">        172.16.0.0/12, 192.0.2.0/24, 192.168.0.0/16, 224.0.0.0/3,</span>
+<span class="s">        255.255.255.255 }&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Set</span><span class="w"> </span><span class="nx">allowed</span><span class="w"> </span><span class="nx">ICMP</span><span class="w"> </span><span class="nx">types</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">Blocking</span><span class="w"> </span><span class="nx">ICMP</span><span class="w"> </span><span class="nx">entirely</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nx">bad</span><span class="w"> </span><span class="nx">practice</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">will</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="nx">things</span><span class="p">,</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">FreeBSD</span><span class="w"> </span><span class="nx">does</span><span class="w"> </span><span class="nx">include</span><span class="w"> </span><span class="nx">rate</span><span class="w"> </span><span class="nx">limiting</span><span class="w"> </span><span class="nx">by</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">mitigate</span><span class="w"> </span><span class="nx">attacks</span><span class="p">.</span>
+<span class="nx">icmp_types</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;{ 0, 3, 4, 8, 11, 12 }&quot;</span>
+
+<span class="err">####################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Options</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">optimizations</span><span class="w"> </span><span class="err">#####</span>
+<span class="err">####################################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Set</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">logging</span><span class="w"> </span><span class="p">(</span><span class="nx">statistics</span><span class="p">)</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">loginterface</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Drop</span><span class="w"> </span><span class="nx">states</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">fast</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">possible</span><span class="w"> </span><span class="nx">without</span><span class="w"> </span><span class="nx">having</span><span class="w"> </span><span class="nx">excessively</span><span class="w"> </span><span class="nx">low</span><span class="w"> </span><span class="nx">timeouts</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">optimization</span><span class="w"> </span><span class="nx">aggressive</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Block</span><span class="w"> </span><span class="nx">policy</span><span class="p">,</span><span class="w"> </span><span class="nx">either</span><span class="w"> </span><span class="nx">silently</span><span class="w"> </span><span class="nx">drop</span><span class="w"> </span><span class="nx">packets</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="nx">tell</span><span class="w"> </span><span class="nx">sender</span><span class="w"> </span><span class="nx">that</span><span class="w"> </span><span class="nx">request</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nx">blocked</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">block</span><span class="o">-</span><span class="nx">policy</span><span class="w"> </span><span class="k">return</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Don</span><span class="err">&#39;</span><span class="nx">t</span><span class="w"> </span><span class="nx">bother</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">process</span><span class="w"> </span><span class="p">(</span><span class="nx">filter</span><span class="p">)</span><span class="w"> </span><span class="nx">following</span><span class="w"> </span><span class="nx">interfaces</span><span class="w"> </span><span class="nx">such</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">loopback</span><span class="p">:</span>
+<span class="nx">set</span><span class="w"> </span><span class="nx">skip</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">lo0</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Scrub</span><span class="w"> </span><span class="nx">traffic</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">special</span><span class="w"> </span><span class="nx">exception</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">game</span><span class="w"> </span><span class="nx">consoles</span><span class="w"> </span><span class="nx">such</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">PS3</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">PS4</span><span class="w"> </span><span class="p">(</span><span class="nx">NAT</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="nx">vs</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">scrub</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">CHANGEME</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="nx">no</span><span class="o">-</span><span class="nx">df</span><span class="w"> </span><span class="nx">random</span><span class="o">-</span><span class="nx">id</span><span class="w"> </span><span class="nx">fragment</span><span class="w"> </span><span class="nx">reassemble</span>
+<span class="nx">scrub</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">all</span>
+
+<span class="err">#######################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">NAT</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">Proxies</span><span class="w"> </span><span class="err">####</span>
+<span class="err">#######################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Enable</span><span class="w"> </span><span class="nx">NAT</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">tell</span><span class="w"> </span><span class="nx">pf</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">change</span><span class="w"> </span><span class="nx">ports</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">needed</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">Add</span><span class="w"> </span><span class="nx">special</span><span class="w"> </span><span class="nx">exception</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">game</span><span class="w"> </span><span class="nx">consoles</span><span class="w"> </span><span class="nx">such</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">PS3</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">PS4</span><span class="w"> </span><span class="p">(</span><span class="nx">NAT</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="nx">vs</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">ie</span><span class="w"> </span><span class="nx">static</span><span class="o">-</span><span class="nx">port</span><span class="w"> </span><span class="nx">mapping</span><span class="p">.</span><span class="w"> </span><span class="nx">Do</span><span class="w"> </span><span class="nx">NOT</span><span class="w"> </span><span class="nx">enable</span><span class="w"> </span><span class="nx">both</span><span class="w"> </span><span class="nx">rules</span><span class="p">.</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">nat</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="p">:</span><span class="nx">network</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="nx">ext_if</span><span class="p">)</span><span class="w"> </span><span class="nx">static</span><span class="o">-</span><span class="nx">port</span>
+<span class="nx">nat</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="p">:</span><span class="nx">network</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="nx">ext_if</span><span class="p">)</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Redirect</span><span class="w"> </span><span class="nx">ftp</span><span class="w"> </span><span class="nx">connections</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">ftp</span><span class="o">-</span><span class="nx">proxy</span>
+<span class="nx">rdr</span><span class="w"> </span><span class="nx">pass</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="nx">tcp</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="p">:</span><span class="nx">network</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="mi">21</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="m m-Double">127.0.0.1</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="mi">8021</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Enable</span><span class="w"> </span><span class="nx">ftp</span><span class="o">-</span><span class="nx">proxy</span><span class="w"> </span><span class="p">(</span><span class="nx">active</span><span class="w"> </span><span class="nx">connections</span><span class="p">)</span>
+<span class="nx">nat</span><span class="o">-</span><span class="nx">anchor</span><span class="w"> </span><span class="s">&quot;ftp-proxy/*&quot;</span>
+<span class="nx">rdr</span><span class="o">-</span><span class="nx">anchor</span><span class="w"> </span><span class="s">&quot;ftp-proxy/*&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Enable</span><span class="w"> </span><span class="nx">UPnP</span><span class="w"> </span><span class="p">(</span><span class="nx">requires</span><span class="w"> </span><span class="nx">miniupnpd</span><span class="p">,</span><span class="w"> </span><span class="nx">game</span><span class="w"> </span><span class="nx">consoles</span><span class="w"> </span><span class="nx">needs</span><span class="w"> </span><span class="nx">this</span><span class="p">)</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">rdr</span><span class="o">-</span><span class="nx">anchor</span><span class="w"> </span><span class="s">&quot;miniupnpd&quot;</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Anchors</span><span class="w"> </span><span class="nx">needs</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">be</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span><span class="nx">after</span><span class="w"> </span><span class="nx">nat</span><span class="o">/</span><span class="nx">rdr</span><span class="o">-</span><span class="nx">anchor</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">Same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nx">above</span><span class="w"> </span><span class="nx">regarding</span><span class="w"> </span><span class="nx">miniupnpd</span>
+<span class="nx">anchor</span><span class="w"> </span><span class="s">&quot;ftp-proxy/*&quot;</span>
+<span class="err">#</span><span class="w"> </span><span class="nx">anchor</span><span class="w"> </span><span class="s">&quot;miniupnpd&quot;</span>
+
+<span class="err">################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Rules</span><span class="w"> </span><span class="nx">inbound</span><span class="w"> </span><span class="p">(</span><span class="nx">int_if</span><span class="p">)</span><span class="w"> </span><span class="err">####</span>
+<span class="err">################################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Pass</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">everything</span><span class="w"> </span><span class="nx">incl</span><span class="w"> </span><span class="nx">multicast</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="m m-Double">239.0.0.0</span><span class="o">/</span><span class="mi">8</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">keep</span><span class="w"> </span><span class="nx">state</span>
+
+<span class="err">#################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Rules</span><span class="w"> </span><span class="nx">outbound</span><span class="w"> </span><span class="p">(</span><span class="nx">int_if</span><span class="p">)</span><span class="w"> </span><span class="err">####</span>
+<span class="err">#################################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Pass</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">everything</span><span class="w"> </span><span class="nx">incl</span><span class="w"> </span><span class="nx">multicast</span>
+<span class="nx">pass</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">any</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="m m-Double">239.0.0.0</span><span class="o">/</span><span class="mi">8</span>
+<span class="nx">pass</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">int_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">keep</span><span class="w"> </span><span class="nx">state</span>
+
+<span class="err">################################</span>
+<span class="err">####</span><span class="w"> </span><span class="nx">Rules</span><span class="w"> </span><span class="nx">inbound</span><span class="w"> </span><span class="p">(</span><span class="nx">ext_if</span><span class="p">)</span><span class="w"> </span><span class="err">####</span>
+<span class="err">################################</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Drop</span><span class="w"> </span><span class="nx">packets</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">non</span><span class="o">-</span><span class="nx">routable</span><span class="w"> </span><span class="nx">addresses</span><span class="w"> </span><span class="nx">immediately</span>
+<span class="nx">block</span><span class="w"> </span><span class="nx">drop</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="err">$</span><span class="nx">nonroute</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">any</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Allow</span><span class="w"> </span><span class="nx">DHCP</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="nx">udp</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="nx">ext_if</span><span class="p">)</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">67</span><span class="p">,</span><span class="w"> </span><span class="mi">68</span><span class="w"> </span><span class="p">}</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Allow</span><span class="w"> </span><span class="nx">ICMP</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="nx">icmp</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">icmp</span><span class="o">-</span><span class="k">type</span><span class="w"> </span><span class="err">$</span><span class="nx">icmp_types</span>
+
+<span class="err">#</span><span class="w"> </span><span class="nx">Allow</span><span class="w"> </span><span class="nx">FTPs</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">connect</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">FTP</span><span class="o">-</span><span class="nx">proxy</span>
+<span class="nx">pass</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nx">quick</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="err">$</span><span class="nx">ext_if</span><span class="w"> </span><span class="nx">inet</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="nx">tcp</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="nx">ext_if</span><span class="p">)</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="nx">ftp</span><span class="o">-</span><span class="nx">data</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="nx">proxy</span>
+</code></pre></div>
+
+<p>Above configuration is based on FreeBSD forum reply by user <code>diizzy</code>. Visit following <a href="https://forums.freebsd.org/threads/generic-nat-firewall-pf-config-template.60144/">link</a> to read the forum.</p>
+<p>Resource:</p>
+<p>https://www.freebsd.org/doc/handbook/firewalls-pf.html</p>
+<p>https://forums.freebsd.org/threads/generic-nat-firewall-pf-config-template.60144/</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

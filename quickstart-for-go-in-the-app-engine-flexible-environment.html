@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[Quickstart] For Go in the App Engine Flexible Environment"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="This quickstart shows you how to create a small App Engine application that displays a short message. Before you begin Before running this sample,..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/quickstart-for-go-in-the-app-engine-flexible-environment.html" rel="bookmark"
+           title="Permalink to "[Quickstart] For Go in the App Engine Flexible Environment"">"[Quickstart] For Go in the App Engine Flexible Environment"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-07-11T00:00:00+00:00">
+                Published: Mon 11 July 2016
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>This quickstart shows you how to create a small App Engine application that displays a short message.</p>
+<h2>Before you begin</h2>
+<p>Before running this sample, take the following steps:</p>
+<ul>
+<li>
+<p>1) Select or create a Cloud Platform Console project. <a href="https://console.cloud.google.com/project?_ga=1.243600902.2004985784.1467629203">Go To The Projects Page</a></p>
+</li>
+<li>
+<p>2) Enable billing for your project. <a href="https://support.google.com/cloud/answer/6293499#enable-billing">Enable Billing</a></p>
+</li>
+<li>
+<p>3) <a href="https://git-scm.com/">Download and install git</a></p>
+</li>
+<li>
+<p>4) <a href="https://cloud.google.com/sdk/docs/">Download The Google Cloud SDK</a></p>
+</li>
+</ul>
+<p>This quickstart assumes that you are familiar with the Go programming language and that you have <a href="https://golang.org/dl/">installed Go</a>.</p>
+<h2>Download the Hello World app</h2>
+<p>We've created a simple Hello World app for Go so you can quickly get a feel for deploying an app to Google Cloud Platform. Follow these steps to download Hello World to your local machine.</p>
+<p>Download the sample app and navigate into the app directory:</p>
+<ul>
+<li>1) Get the Hello World sample app and its dependencies:</li>
+</ul>
+<p>[code lang=text] go get -u -d github.com/GoogleCloudPlatform/golang-samples/docs/managed_vms/helloworld [/code]</p>
+<ul>
+<li>2) Change to the directory that contains the sample code:</li>
+</ul>
+<p>[code lang=text] cd $GOPATH/src/github.com/GoogleCloudPlatform/golang-samples/docs/managed_vms/helloworld [/code]</p>
+<h1>Run Hello World on your local machine</h1>
+<p>To run the Hello World app on your local computer:</p>
+<ul>
+<li>
+<p>1) Start a local web server: <code>go run helloworld.go</code></p>
+</li>
+<li>
+<p>2) In your web browser, enter the following address: <code>http://localhost:8080</code></p>
+</li>
+</ul>
+<p>You can see the <strong><em>Hello World</em></strong> message from the sample app displayed in the page. In your terminal window, press <strong><em>Ctrl+C</em></strong> to exit the web server.</p>
+<h1>Deploy and run Hello World on App Engine</h1>
+<p>To deploy your app to the App Engine flexible environment, you need to have a Google Cloud Platform Console project.</p>
+<p><strong>Create a project in the Google Cloud Platform Console.</strong></p>
+<ul>
+<li>
+<p>1) In the Cloud Platform Console, go to the Projects page and select or create a new project. <a href="https://console.cloud.google.com/project?_ga=1.171765539.2004985784.1467629203">GO TO THE PROJECTS PAGE</a></p>
+</li>
+<li>
+<p>2) Enable billing for your project. <a href="https://support.google.com/cloud/answer/6293499#enable-billing">ENABLE BILLING</a></p>
+</li>
+<li>
+<p>3) Note the Project ID, since it is used for configuration and deployment.</p>
+</li>
+</ul>
+<p><strong>Deploy the app to App Engine</strong></p>
+<ul>
+<li>
+<p>1) Deploy the Hello World Go app. Use the <a href="https://godoc.org/google.golang.org/appengine/cmd/aedeploy">aedeploy tool</a>, which will correctly assemble an app's dependencies in the same way that the <code>go</code> tool does.</p>
+<ul>
+<li>
+<p>a) Install the aedeploy tool: <code>go get google.golang.org/appengine/cmd/aedeploy</code></p>
+</li>
+<li>
+<p>b) Deploy your app by prefixing a gcloud app deploy command with aedeploy. <code>aedeploy gcloud preview app deploy</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>This time, the page that displays the Hello World message is delivered by a web server running on an App Engine instance.</p>
+<p><strong>Congratulations!</strong> You've deployed your first Go app to App Engine flexible environment!</p>
+<p>To view your application in the web browser run: <code>gcloud app browse</code></p>
+<p>You can read logs from the command line by running: <code>gcloud app logs read</code></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

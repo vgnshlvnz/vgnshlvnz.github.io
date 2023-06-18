@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"[FreeBSD] MySQL Backup"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="[FreeBSD] MySQL Backup This article is adapted from SpinupWP - How to Set Up MySQL Incremental Backups. By end of this article, you should be able..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/freebsd-mysql-backup.html" rel="bookmark"
+           title="Permalink to "[FreeBSD] MySQL Backup"">"[FreeBSD] MySQL Backup"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2022-06-28T00:00:00+00:00">
+                Published: Tue 28 June 2022
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>[FreeBSD] MySQL Backup</h1>
+<p>This article is adapted from <a href="https://spinupwp.com/incremental-mysql-backups/">SpinupWP</a> - How to Set Up MySQL Incremental Backups.</p>
+<p>By end of this article, you should be able to set up Incremental backup for your MySQL instance and restore the database. Please read aforementioned article on snapshot backup and incremental backup.</p>
+<p>This article assumes you are running MySQL in a FreeBSD system planning for effective backup process. -- edit <code>`/usr/local/etc/mysql/my.cnf`</code> with following entries.</p>
+<div class="highlight"><pre><span></span><code>log-bin = mysql-bin
+binlog-format = row
+expire_logs_days = 7
+server-id = 1
+</code></pre></div>
+
+<h5>Restart your MySQL instance.</h5>
+<p>-- To check if the settings have been applied , log into your MySQL instance with the root user, and run following MySQL commands:</p>
+<div class="highlight"><pre><span></span><code><span class="n">show</span><span class="w"> </span><span class="n">binary</span><span class="w"> </span><span class="n">logs</span><span class="p">;</span>
+<span class="n">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="s1">&#39;server_id&#39;</span><span class="p">;</span>
+<span class="n">show</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="s1">&#39;expire_logs_days&#39;</span><span class="p">;</span>
+<span class="n">show</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="s1">&#39;binlog_format&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<h5>Create First Full Backup</h5>
+<p>Create a backup directory and run following command:</p>
+<p><code>`mysqldump --set-gtid-purged=OFF --flush-logs --delete-master-logs --single-transaction --all-databases -uroot -p&lt;PASSWORD&gt; &gt; /mnt/backup/databaseSQLBackup/$(date +%d-%m-%Y_%H-%M-%S)_databases.sql`</code></p>
+<p>This will dump your database in a SQL statement.</p>
+<p>It is important to understand what this command is doing.</p>
+<ul>
+<li>The --flush-logs option flushes the MySQL server log files and starts writing a new binary log file.</li>
+<li>The <code>`--delete-master-logs`` `option deletes any old binary log files. If you are using a version of MySQL after 8.0.26, you should use` ``--delete-source-logs`` `instead, as` ``--delete-master-logs`</code> was deprecated in MySQL 8.0.26.</li>
+<li>The <code>`--single-transaction`</code> option is needed if you have tables that use the InnoDB storage engine.</li>
+<li>
+<p>The <code>`--all-databases`</code> option tells the command to dump all databases.</p>
+<p>You will notice that binary logs has changed in <code>`/var/db/mysql/`</code>.</p>
+</li>
+</ul>
+<h5>Backup Binary Logs</h5>
+<p>It is best to first <strong>flush the binary logs</strong>, to do this log into your MySQL instance and run the following commands:</p>
+<ul>
+<li><code>`FLUSH BINARY LOGS;`</code> If you inspect the contents of the <code>`/var/db/mysql`</code> directory, you will see new log file created.</li>
+</ul>
+<p>Now we back up all the files that are not the current binary log file.</p>
+<p>After copying the relevant binary log files, we need to delete them from the log directory. This is to ensure that we do not duplicate already backed up data the next time we copy the binary log files. We can use the PURGE BINARY LOGS statement, which deletes all the binary log files listed in the log index file prior to the specified log file name or date. In our case we want to delete all the binary log files except the current one, so we log into the MySQL server and run the following command:</p>
+<ul>
+<li><code>`PURGE BINARY LOGS TO '&lt;CURRENT_BINARY_LOGFILE&gt;';`</code></li>
+</ul>
+<p>If we inspect the contents of the <code>`/var/db/mysql`</code> directory, we will see that the log file we copied has been deleted.</p>
+<h5>Restore from Binary Logs</h5>
+<p>To restore the binary logs from a specific point in time, we first need to restore the most recent full backup: <code>`mysql -u root -p&lt;PASSWORD&gt; &lt; /mnt/backup/databaseSQLBackup/$(date +%d-%m-%Y_%H-%M-%S)_databases.sql`</code></p>
+<p>Now we can restore the binary logs we copied after the last full backup. We do this by using the <code>`mysqlbinlog`` `utility to view the log data for the specific database, and piping that output to the` ``mysql`</code> utility for the database in question.</p>
+<ul>
+<li><code>`mysqlbinlog --no-defaults mysql-bin.&lt;VERSION&gt; | mysql -u root -p&lt;PASSWORD&gt;`</code></li>
+</ul>
+<p><strong>Note</strong> Following script was obtained from SpinupWP website, adapt to your FreeBSD MySQL instance</p>
+<p>Given that these commands are run as the root user from the terminal, it’s also possible to automate all of this with a batch script. At the same time, we’d want to allow the script to back up multiple possible binary log files.</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># set up the date variable</span>
+<span class="nv">NOW</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d%H%M%S<span class="k">)</span>
+<span class="nv">BINLOG_BACKUP</span><span class="o">=</span><span class="si">${</span><span class="nv">NOW</span><span class="si">}</span>_binlog.tar.gz
+
+<span class="c1"># set up the database credentials</span>
+<span class="nv">DB_USER</span><span class="o">=</span>root
+<span class="nv">DB_PASSWORD</span><span class="o">=</span>root_password
+
+<span class="c1"># binary log files directory path</span>
+<span class="nv">BINLOGS_PATH</span><span class="o">=</span>/var/log/mysql/
+
+<span class="c1"># flush the current log and start writing to a new binary log file</span>
+mysql<span class="w"> </span>-u<span class="nv">$DB_USER</span><span class="w"> </span>-p<span class="nv">$DB_PASSWORD</span><span class="w"> </span>-E<span class="w"> </span>--execute<span class="o">=</span><span class="s1">&#39;FLUSH BINARY LOGS;&#39;</span><span class="w"> </span>mysql
+
+<span class="c1"># get a list of all binary log files</span>
+<span class="nv">BINLOGS</span><span class="o">=</span><span class="k">$(</span>mysql<span class="w"> </span>-u<span class="nv">$DB_USER</span><span class="w"> </span>-p<span class="nv">$DB_PASSWORD</span><span class="w"> </span>-E<span class="w"> </span>--execute<span class="o">=</span><span class="s1">&#39;SHOW BINARY LOGS;&#39;</span><span class="w"> </span>mysql<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Log_name<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s/Log_name://g&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s/^[[:space:]]*//&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;s/[[:space:]]*$//&#39;</span><span class="k">)</span>
+
+<span class="c1"># get the most recent binary log file</span>
+<span class="nv">BINLOG_CURRENT</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BINLOGS</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span>-1<span class="sb">`</span>
+
+<span class="c1"># get list of binary logs to be backed up (everything except the most recent one)</span>
+<span class="nv">BINLOGS_FOR_BACKUP</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BINLOGS</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span>-1<span class="sb">`</span>
+
+<span class="c1"># create a list of the full paths to the binary logs to be backed up</span>
+<span class="nv">BINLOGS_FULL_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BINLOGS_FOR_BACKUP</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span>%<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$BINLOGS_PATH</span>%<span class="sb">`</span>
+
+<span class="c1"># compress the list of binary logs to be backed up into an archive in the backup location</span>
+tar<span class="w"> </span>-czvf<span class="w"> </span>/sites/backups/<span class="nv">$BINLOG_BACKUP</span><span class="w"> </span><span class="nv">$BINLOGS_FULL_PATH</span>
+
+<span class="c1"># delete the binary logs that have been backed up</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$BINLOG_CURRENT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span>%<span class="w"> </span>mysql<span class="w"> </span>-u<span class="nv">$DB_USER</span><span class="w"> </span>-p<span class="nv">$DB_PASSWORD</span><span class="w"> </span>-E<span class="w"> </span>--execute<span class="o">=</span><span class="s1">&#39;PURGE BINARY LOGS TO &quot;%&quot;;&#39;</span><span class="w"> </span>mysql
+</code></pre></div>
+
+<p>By now you can set up cronjob to automate the backup of the database SQL and Binary log files.</p>
+<p>Reference: <a href="https://spinupwp.com/incremental-mysql-backups/">https://spinupwp.com/incremental-mysql-backups/</a></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

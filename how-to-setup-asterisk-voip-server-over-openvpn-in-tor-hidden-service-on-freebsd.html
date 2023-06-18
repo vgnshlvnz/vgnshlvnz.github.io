@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"How To setup Asterisk VoIP server over OpenVPN in Tor hidden service on FreeBSD"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="First create OpenSSL CA with easy-rsa or OpenSSL for OpenVPN. This is OpenVPN server configuration file: tls-server port 1194 proto tcp dev tun ca..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/how-to-setup-asterisk-voip-server-over-openvpn-in-tor-hidden-service-on-freebsd.html" rel="bookmark"
+           title="Permalink to "How To setup Asterisk VoIP server over OpenVPN in Tor hidden service on FreeBSD"">"How To setup Asterisk VoIP server over OpenVPN in Tor hidden service on FreeBSD"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-02-18T00:00:00+00:00">
+                Published: Sun 18 February 2018
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p>First create OpenSSL CA with easy-rsa or OpenSSL for OpenVPN.</p>
+<p>This is OpenVPN server configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="n">tls</span><span class="o">-</span><span class="n">server</span>
+<span class="n">port</span><span class="w"> </span><span class="mi">1194</span>
+<span class="n">proto</span><span class="w"> </span><span class="n">tcp</span>
+<span class="n">dev</span><span class="w"> </span><span class="n">tun</span>
+<span class="n">ca</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">ca</span><span class="o">.</span><span class="n">crt</span>
+<span class="n">cert</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+<span class="n">key</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+<span class="n">dh</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">dh2048</span><span class="o">.</span><span class="n">pem</span>
+<span class="n">topology</span><span class="w"> </span><span class="n">subnet</span>
+<span class="n">server</span><span class="w"> </span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="w"> </span><span class="mf">255.255</span><span class="o">.</span><span class="mf">0.0</span>
+<span class="n">ifconfig</span><span class="o">-</span><span class="n">pool</span><span class="o">-</span><span class="n">persist</span><span class="w"> </span><span class="n">ipp</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">keepalive</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">120</span>
+<span class="n">cipher</span><span class="w"> </span><span class="n">AES</span><span class="o">-</span><span class="mi">256</span><span class="o">-</span><span class="n">CBC</span>
+<span class="nb">max</span><span class="o">-</span><span class="n">clients</span><span class="w"> </span><span class="mi">100</span>
+<span class="n">persist</span><span class="o">-</span><span class="n">key</span>
+<span class="n">persist</span><span class="o">-</span><span class="n">tun</span>
+<span class="n">status</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">openvpn</span><span class="o">-</span><span class="n">status</span><span class="o">.</span><span class="n">log</span>
+<span class="nb">log</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">openvpn</span><span class="o">.</span><span class="n">log</span>
+<span class="nb">log</span><span class="o">-</span><span class="n">append</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">openvpn</span><span class="o">-</span><span class="n">append</span><span class="o">.</span><span class="n">log</span>
+<span class="n">verb</span><span class="w"> </span><span class="mi">3</span>
+<span class="n">auth</span><span class="w"> </span><span class="n">SHA512</span>
+</code></pre></div>
+
+<p>This is OpenVPN client configuration file:</p>
+<div class="highlight"><pre><span></span><code>client
+dev tun
+proto tcp
+remote svntrqfgsa7jgnpm.onion 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+ca /home/norbert/new/ca.crt
+cert /home/norbert/new/demo-norbert.crt
+key /home/norbert/new/demo-norbert.key
+cipher AES-256-CBC
+auth SHA512
+verb 3
+socks-proxy 127.0.0.1 9050
+remote-cert-tls server
+</code></pre></div>
+
+<p>This is Asterisk sip.conf configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[general]</span>
+<span class="na">transport</span><span class="o">=</span><span class="s">udp</span>
+<span class="na">port</span><span class="o">=</span><span class="s">5060</span>
+<span class="na">bindaddr</span><span class="o">=</span><span class="s">10.0.0.1</span>
+<span class="na">disallow</span><span class="o">=</span><span class="s">all</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">ulaw</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">alaw</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">gsm</span>
+<span class="na">directmedia</span><span class="o">=</span><span class="s">no</span>
+<span class="na">nat</span><span class="o">=</span><span class="s">yes</span>
+<span class="na">localnet</span><span class="o">=</span><span class="s">10.0.0.0/255.255.0.0</span>
+
+<span class="na">[friends_internal](!)</span>
+<span class="na">type</span><span class="o">=</span><span class="s">friend</span>
+<span class="na">host</span><span class="o">=</span><span class="s">dynamic</span>
+<span class="na">context</span><span class="o">=</span><span class="s">from-internal</span>
+<span class="na">disallow</span><span class="o">=</span><span class="s">all</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">ulaw</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">alaw</span>
+<span class="na">allow</span><span class="o">=</span><span class="s">gsm</span>
+
+<span class="na">[demo-alice](friends_internal)</span>
+<span class="na">secret</span><span class="o">=</span><span class="s">password</span>
+
+<span class="na">[demo-bob](friends_internal)</span>
+<span class="na">secret</span><span class="o">=</span><span class="s">password</span>
+
+<span class="na">[demo-norbert](friends_internal)</span>
+<span class="na">secret</span><span class="o">=</span><span class="s">password</span>
+</code></pre></div>
+
+<p>This is Asterisk extensions.conf configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[from-internal]</span>
+<span class="na">exten</span><span class="o">=</span><span class="s">&gt;6001,1,Dial(SIP/demo-alice,20)</span>
+<span class="na">exten</span><span class="o">=</span><span class="s">&gt;6002,1,Dial(SIP/demo-bob,20)</span>
+</code></pre></div>
+
+<p>This is Tor hidden service server torrc configuration file:</p>
+<div class="highlight"><pre><span></span><code>HiddenServiceDir /usr/local/torhs/winternight/
+HiddenServicePort 1194 127.0.0.1:1194
+</code></pre></div>
+
+<p>This is Tor client configuration file:</p>
+<div class="highlight"><pre><span></span><code>SOCKSPort 9050
+</code></pre></div>
+
+<p>Based on: https://forums.freebsd.org/threads/how-to-setup-asterisk-voip-server-over-openvpn-in-tor-hidden-service-on-freebsd-system.59190/</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

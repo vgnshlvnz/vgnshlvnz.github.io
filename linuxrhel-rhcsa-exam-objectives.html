@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Linux/RHEL - RHCSA Exam Objectives"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="# RHEL - RHCSA Exam Objectives RHCSA exam candidates should be able to accomplish the tasks below without assistance. These have been grouped into..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/linuxrhel-rhcsa-exam-objectives.html" rel="bookmark"
+           title="Permalink to "Linux/RHEL - RHCSA Exam Objectives"">"Linux/RHEL - RHCSA Exam Objectives"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2023-03-10T00:00:00+00:00">
+                Published: Fri 10 March 2023
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <p># RHEL - RHCSA Exam Objectives</p>
+<p>RHCSA exam candidates should be able to accomplish the tasks below without assistance. These have been grouped into several categories.</p>
+<p>Understand and use essential tools</p>
+<p>- Access a shell prompt and issue commands with correct syntax - Use input-output redirection (&gt;, &gt;&gt;, |, 2&gt;, etc.) - Use grep and regular expressions to analyze text - Access remote systems using SSH - Log in and switch users in multiuser targets - Archive, compress, unpack, and uncompress files using tar, star, gzip, and bzip2 -- Answer: - `-j` - Compresses a tarball with bzip2 - `-z` - Compresses a tarball with gzip - create a gzip compressed tarball under for - `tar czf /tmp/home.tar.gz /home` - create a bzip2 compressed tarball under for - `tar -cjf /tmp/home.tar.bz2 /home` - list the content of gzip-compressed archive without uncompressing it - `tar -tf /tmp/home.tar.gz` - Extract files from gzip-compressed archive tarball in the current directory - `tar -xf /tmp/home.tar.` - Extract files other than current directory - `tar -xf /tmp/home.tar. -C /tmp` - Create and edit text files - Create, delete, copy, and move files and directories -- Answer: - `touch ` - create file - `mkdir ` - create directory - `mkdir -p ` - create parent directory - `rm -rf ` - to delete a file - `mv ` - move a file to new file - `cp ` - copies file to new file - - Create empty file and display the long listing including the inode number - `ls -li ` - - Create hard and soft links - List, set, and change standard ugo/rwx permissions - Locate, read, and use system documentation including man, info, and files in /usr/share/doc</p>
+<p>Create simple shell scripts</p>
+<p>- Conditionally execute code (use of: if, test, [], etc.) - Use Looping constructs (for, etc.) to process file, command line input - Process script inputs ($1, $2, etc.) - Processing output of shell commands within a script - Processing shell command exit codes</p>
+<p>Operate running systems</p>
+<p>- Boot, reboot, and shut down a system normally - Boot systems into different targets manually - Interrupt the boot process in order to gain access to a system -- Answer 1: - reboot the server to console - edit grub, find the line that starts with `linux` include `rd.break` at the end and boot the machine - chroot `chroot /sysroot` - mount the filesystem `mount -o remount,rw /` - change the password - `touch .autorelabel` - reboot the system -- Answer 2: - edit grub, look for `ro`, replace it with `rw init=sysroot/bin/sh` - `chroot sysroot` - `passwd` - `touch /.autorelabel` - reboot - Identify CPU/memory intensive processes and kill processes - Adjust process scheduling - Manage tuning profiles - Locate and interpret system log files and journals - Preserve system journals - Start, stop, and check the status of network services - Securely transfer files between systems</p>
+<p>Configure local storage</p>
+<p>- List, create, delete partitions on MBR and GPT disks - check the disklabel type if it is MBR or GPT disk -- Answer 1: - `blkid` - will get you UUID of attached disks - `lsblk` - will show you attached disks and block devices - `partprobe` - will show you partition changes - `fdisk -l` - list of disks and partition - `fdisk /dev/sdX` - start fdisk with physical disk - `o` - create new DOS partition table - `g` - create new GPT partition table - `p` - print the partition table - `n` - create new partition - `e` - for logical partition - `w` - write partition - `d` - delete partition - `l` - list file system types - `t` - change partition type - `gdisk /dev/sdX` - start the disk with gpt-disk program - `n` - new partition - `L` - list file system types - `w` - write changes - `gdisk -l /dev/sdX` - show information -- Answer 2: - Using a combination of parted and fdisk - `parted /dev/sdX print` - take note of the error, the disk label is not set - `parted /dev/sdX mklabel msdos/gpt` - set disklabel - `parted /dev/sdX mkpart primary/extended 1 101m` - create a 100mb primary partition with position starting from 1MB (beginning of the disk) - `parted /dev/sdX rm 1` - removes partition 1 -- GPT disk - gdisk procedure - `gdisk /dev/sdX` - start `gdisk` with a empty disk or MBR disk - `o` - assign `gpt` partition table type - `p` - verify `GUID` partition table creation - `n` - create partition of selected size with default type "Linux filesystem" - `w` - write the changes - `d1` - delete partition number 1, use `d` if you have multiple partitions - Virtual Data Optimiser (VDO) steps -- Answer: - `dnf install -y vdo kmod-kvdo` - install VDO and it's kernel module - `systemctl --now enable vdo` - start and enable VDO - `systemctl status vdo` - check if the service is running - `vdo create --name vdo-vol1 --device /dev/sdX --vdoLogicalSize 16G --vdoSlabSize 128` - create a vdo volume with logical size and slab size (slab is the size of the increment by which vdo volumes grow) - `vdo list` - list the new volume - `lsblk` - use `lsblk` to list the vdo volume - `vdostats --hu` - usage status of the volumes - `vdostats --verbose` - show detailed statistics for the volume including configuration option - `vdo status --name vdo-vol` - show detailed statistics for the volume including configuration options - `vdo status --name vdo-vol | grep -i compression` - shows if compression is enabled - `vdo status --name vdo-vol1 | grep -i deduplication` - shows if deduplication is enabled - `vdo remove --name vdo-vol1` - removes the volume - Create and remove physical volumes -- Answer: - `parted /dev/sdX mklabel msdos/gpt` - make partition table - `parted /dev/sdX mkpart primary m` - create partition - `parted /dev/sdX set 1 lvm on` - set `lvm` flag on - `pvcreate /dev/sdX -v` - create new physical volume, can be multiple devices - `pvs/pvdisplay` - view physical volumes - `pvremove /dev/sdX` - remove physical volume, can be multiple devices - `parted /dev/sdX rm ` - remove partition - Assign physical volumes to volume groups -- Answer: - `vgcreate -v -s /dev/sdX` - create volume group, assign PE size and add physical volumes to the volume group - `vgs/vgdisplay` - view volume groups - Create and delete logical volumes -- Answer: - `lvcreate -vL ` - create a logical volume with desired size from selected volume group - `-L` is to specify in size in MB, GB - `lvcreate -l -n ` - create a logical volume with LE and a custom name - - Configure systems to mount file systems at boot by universally unique ID (UUID) or label - Add new partitions and logical volumes, and swap to a system non-destructively</p>
+<p>Create and configure file systems</p>
+<p>- Create, mount, unmount, and use vfat, ext4, and xfs file systems - Mount and unmount network file systems using NFS - Extend existing logical volumes - Create and configure set-GID directories for collaboration - Configure disk compression - Manage layered storage - Diagnose and correct file permission problems</p>
+<p>Deploy, configure, and maintain systems</p>
+<p>- Schedule tasks using at and cron - Start and stop services and configure services to start automatically at boot - Configure systems to boot into a specific target automatically -- Answer: - systemctl set-default multi-user.target - - Configure time service clients -- Answer: - timedatectl set-timezone "Asia/Kuala_Lumpur" - timedatectl set-ntp yes - check if "chrony" is installed and running - check "chrony.conf" if ntp server is set - Install and update software packages from Red Hat Network, a remote repository, or from the local file system -- Answer: - dnf config-manager --add-repo - "dnf update" - to make sure the system picks up the repo - Work with package module streams - Modify the system bootloader</p>
+<p>Manage basic networking</p>
+<p>- Configure `hostname` -- Answer: - Open the file `/etc/hostname` and enter FQDN. Close the file and `hostname` daemon by issuing: `systemctl restart systemd-hostnamed`. To verify, type `hostname`. The changes would have take place. Log off and on again, and your prompt would have changed. - You can also do the following command, `hostnamectl set-hostname `. As usual, log out and in you will see the prompt changed. - This is utilizing `nmcli` command, use the following command: `nmcli general hostname ` - Configure IPv4 and IPv6 addresses -- Answer: - check active interface using "ifconfig" - nmcli connection show - nmcli connection modify +ip4.address - nmcli connection modify ipv6.method manual ipv6.addresses - nmcli connection reload - nmcli connection show - Configure hostname resolution - Configure network services to start automatically at boot - Restrict network access using firewall-cmd/firewall - Enable packet forwarding -- Answer: - edit /etc/sysctl.conf - add "net.ipv4.ip_forward=1" and save the file. - check "cat /proc/sys/net/ipv4/ip_forward" after reboot</p>
+<p>Manage users and groups</p>
+<p>- Create, delete, and modify local user accounts - - Answer: - Create local user account - `useradd ` - Delete local user account - `userdel ` - Modify local user account - `usermod -l -d -s /sbin/nologin -u 2000 ` - Change passwords and adjust password aging for local user accounts -- Answer: - Set password aging parameters for to mindays (`-m`) 7, max days (`-M`) 28, and warndays (`-W`) 5 - - Create, delete, and modify local groups and group memberships - Configure superuser access</p>
+<p>Manage security</p>
+<p>- Configure firewall settings using firewall-cmd/firewalld - Create and use file access control lists - Configure key-based authentication for SSH - Set enforcing and permissive modes for SELinux - - Answer: edit `/etc/selinux/config`, `SELINUX` insert `PERMISSIVE` or `ENFORCING`. To disable it, put in `DISABLED`. Reboot the system. To enable/disable `SELinux`, you can use `setenforce `. - List and identify SELinux file and process context - Restore default file contexts - Use boolean settings to modify system SELinux settings - Diagnose and address routine SELinux policy violations</p>
+<p>Manage containers</p>
+<p>- Find and retrieve container images from a remote registry -- Answer: - `podman search ` - to search for containers in redhat, docker. - `podman pull ` - to pull a image - `podman images` - to list images in local repository - Inspect container images -- Answer: - `podman inspect ` - Provides Dockerfile output - `skopeo inspect ` - Allows to inspect the image without downloading the image. - Perform container management using commands such as podman and skopeo -- Answer: - Perform basic container management such as running, starting, stopping, and listing running containers -- Answer: - `podman run ` - run the image in a container directly on the system - `podman run -dt -p 8080:80/tcp ` - run the container in detached terminal and port forwarding - `podman ps` - list currently running container - `podman ps -a` - list all containers that has ran - `podman stop ` - stop a container - `podman logs ` - view logs of the container - `podman top ` - view running processes in container - `podman start ` - start stopped container - `podman rm ` - remove a container</p>
+<p>- Run a service inside a container - - `vim Dockerfile` - open up Dockerfile ~~~ FROM registry.access.redhat.com/ubi8/ubi-init RUN yum -y install;yum clean all;systemctl enable httpd; RUN echo "Successful Web Server Test" &gt; /var/www/html/index.html RUN mkdir /etc/systemd/system/httpd.service.d/;echo -e '[Service]\nRestart=always' &gt; /etc/systemd/system/httpd.service.d/httpd.service EXPOSE 80 ~~~ - `podman build -t .` - `podman run -d --name -p 80:80 `</p>
+<p>- Configure a container to start automatically as a systemd service -- Answer: - `setsebool -P container_manage_cgroup on` - Turn on SELinux context for managing containers using `systemd` - `podman run -d --name -p 8080:80 httpd` - Run a container with detached and port forwarding - `vi /etc/systemd/.service` ~~~ [Unit] Description= Wants=syslog.service</p>
+<p>[Service] Restart=always ExecStart=/usr/bin/podman start -a ExecStop=/usr/bin/podman stop -t 2</p>
+<p>[Install] WantedBy=multi-user.target ~~~ - - - `systemctl daemon-reload` - - `systemctl start .service` - - `systemctl enable .service`</p>
+<p>- Attach persistent storage to a container - `podman run -d --privileged -it -v :/mnt /bin/bash`</p>
+<p>&gt; Written with [StackEdit](https://stackedit.io/).</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

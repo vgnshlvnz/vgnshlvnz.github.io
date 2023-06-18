@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Snort 3 on FreeBSD 11.4-RELEASE"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content=""blog-posts" tags: "freebsd" "ids" "ips" "snort3" SNORT 3 on FreeBSD 11.4-RELEASE note: This article was achieved on a FreeBSD 11.4-RELEASE host..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/snort-3-on-freebsd-114-release.html" rel="bookmark"
+           title="Permalink to "Snort 3 on FreeBSD 11.4-RELEASE"">"Snort 3 on FreeBSD 11.4-RELEASE"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-09-13T00:00:00+00:00">
+                Published: Sun 13 September 2020
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <ul>
+<li>"blog-posts"
+tags: </li>
+<li>"freebsd"</li>
+<li>"ids"</li>
+<li>"ips"</li>
+<li>"snort3"</li>
+</ul>
+<hr>
+<h1>SNORT 3 on FreeBSD 11.4-RELEASE</h1>
+<p><strong>note</strong>: This article was achieved on a FreeBSD 11.4-RELEASE host parked in the cloud. This guide should work for anyone who is willing to put in their commitment to work. Make sure your FreeBSD host is up to date in terms of the kernel, and the userland and its applications.</p>
+<p>Snort is not alien to the tech world. A lot of the people in the west are versed in Snort application and it’s configurations and detection, so it is wise to learn from them.</p>
+<p>Snort is a IDS (Intrusion Detection System) developed some good Samaritans all over the world. We will delve into installing the dependencies from <code>pkg</code> then <code>git clone</code> the Snort 3 installation to perform our installation.</p>
+<h2>Conventions</h2>
+<p>The following conventions are used for installing and configuring Snort. Snort install prefix <code>/usr/local/snort</code> Rules directory <code>/usr/local/snort/rules</code> AppID directory <code>/usr/local/snort/appid</code> IP Reputation lists directory <code>/usr/local/snort/intel</code> Logging directory <code>/var/log/snort</code> Snort Extra Plugins directory <code>/usr/local/snort/extra</code></p>
+<h2>Installing Dependencies</h2>
+<p>Now we are going to install necessary dependencies required by Snort to work. Following commands will achieve in installing necessary dependencies for Snort to work.</p>
+<blockquote>
+<p><code>#pkg install git flex bison gcc cmake libdnet libpcap hwloc pcre luajit lua53 pkgconf libdaq hyperscan cpputest flatbuffers libiconv lzlib e2fsprogs-libuuid google-perftools</code></p>
+</blockquote>
+<p>Once the dependencies installed, we can focus on building Snort from source via <code>git</code>.</p>
+<h2>Download &amp; Build Snort 3</h2>
+<p>Now we are going to clone the latest available <code>git</code> version of Snort 3 to our directory of choice and build it.</p>
+<p>In order to clone the <code>git</code> of Snort 3, run following command:</p>
+<blockquote>
+<p><code>#git clone https://github.com/snort3/snort3.git</code></p>
+</blockquote>
+<p>Next go into the cloned directory and issue following commands to configure and build Snort 3 for us:</p>
+<blockquote>
+<p><code># ./configure_cmake.sh --prefix=/usr/local/snort</code> <code>make -j 2</code></p>
+</blockquote>
+<p>Once the build is complete, we can now proceed to install Snort 3 issuing following commands in <code>sources/snort3/build</code>:</p>
+<blockquote>
+<p><code>#make install</code></p>
+</blockquote>
+<p>To verify the installation, as in verify if the Snort 3 installation linked to the libraries we installed earlier, we can run the command listed below:</p>
+<blockquote>
+<p><code>#ldd /usr/local/snort/bin/snort</code></p>
+</blockquote>
+<h2>Install Snort 3 Plug-Ins for Additional Capabilities</h2>
+<p>Now we are going to install Snort 3 plug-ins for additional capabilities. To clone it’s repositories via <code>git</code>:</p>
+<blockquote>
+<p><code>#git clone https://github.com/snort3/snort3_extra.git</code></p>
+</blockquote>
+<p>Now enter cloned directory and issue following commands to build and install Snort 3 Plug-Ins:</p>
+<blockquote>
+<p><code>#setenv PKG_CONFIG_PATH /usr/local/snort/lib/pkgconfig</code> <code>./configure_cmake.sh --prefix=/usr/local/snort/extra</code></p>
+</blockquote>
+<p>Now change to <code>build</code> directory, build and install Snort 3 extras:</p>
+<blockquote>
+<p><code>#make</code> <code>#make install</code></p>
+</blockquote>
+<h2>Configuring Snort 3</h2>
+<h3>Configuring Global Paths for Rules, AppID &amp; IP Reputation</h3>
+<p>Now we are going to configure global paths for rules from Snort, AppID from Snort and IP reputation Cisco. To start create directories from following command:</p>
+<blockquote>
+<p><code>#mkdir -p /usr/local/snort/{rules,appid,intel}</code></p>
+</blockquote>
+<h4>Snort Rules</h4>
+<p>By default for Snort 3, Snort have default rule-set that you can download for Snort. For that you need <code>oinkcode</code> for you to download the rule-set. To obtain a <code>oinkcode</code>, kindly register for an account and explore Snort website for free members. Following instructions will download the Snort rules and place them in rules directory.</p>
+<blockquote>
+<p><code>#fetch 'https://www.snort.org/rules/snortrules-snapshot-3000.tar.gz?oinkcode=&lt;YOUR_OINKCODE&gt;' -o snortrules-snapshot-3000.tar.gz</code> <code>#tar xf snortrules-snapshot-3000.tar.gz</code> <code>#cp rules/*.rules /usr/local/snort/rules/</code></p>
+</blockquote>
+<h4>OpenID</h4>
+<p>Download and extract the OpenAppID package, extract the <code>odp/</code> to <code>appid</code> directory:</p>
+<blockquote>
+<p><code>#fetch &lt;LATEST_APPID_PACKAGE_URL&gt; -o &lt;LATEST_APPID_PACKAGE_URL&gt;.tar.gz</code> <code>#tar xvzf &lt;LATEST_APPID_PACKAGE_URL&gt;.tar.gz</code> <code>#mv odp/ /usr/local/snort/appid/</code></p>
+</blockquote>
+<h4>IP Reputation</h4>
+<p>Now we are going to install IP reputation list to our Snort installation. The IP Reputation Black List is generated by Talos Security so we download the black list and move it to our directory:</p>
+<blockquote>
+<p><code>#fetch https://www.talosintelligence.com/documents/ip-blacklist</code> <code>#mv ip-blacklist /usr/local/snort/intel/</code></p>
+</blockquote>
+<p>We also generate empty file for IP Whitelist by issuing following command:</p>
+<blockquote>
+<p><code>#touch /usr/local/snort/intel/ip-whitelist</code></p>
+</blockquote>
+<h3>Actual configuration</h3>
+<p>Here we are going to perform actual configuration related to Snort 3. Open following file <code>snort_defaults.lua</code> and look for <code>default path</code> as described below:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">---------------------------------------------------------------------------</span>
+<span class="nb">--</span><span class="c"> default paths</span>
+<span class="nb">---------------------------------------------------------------------------</span>
+<span class="nb">--</span><span class="c"> Path to your rules files (this can be a relative path)</span>
+
+<span class="c">RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/rules&#39;</span>
+<span class="c">BUILTIN_RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/builtin_rules&#39;</span>
+<span class="c">PLUGIN_RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/so_rules&#39;</span>
+
+<span class="nb">--</span><span class="c"> If you are using reputation preprocessor set these</span>
+<span class="c">WHITE_LIST_PATH = &#39;</span><span class="nt">..</span><span class="c">/lists&#39;</span>
+<span class="c">BLACK_LIST_PATH = &#39;</span><span class="nt">..</span><span class="c">/lists&#39;</span>
+</code></pre></div>
+
+<p>To following configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">---------------------------------------------------------------------------</span>
+<span class="nb">--</span><span class="c"> default paths</span>
+<span class="nb">---------------------------------------------------------------------------</span>
+<span class="nb">--</span><span class="c"> Path to your rules files (this can be a relative path)</span>
+
+<span class="c">RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/rules&#39;</span>
+<span class="c">BUILTIN_RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/builtin_rules&#39;</span>
+<span class="c">PLUGIN_RULE_PATH = &#39;</span><span class="nt">..</span><span class="c">/so_rules&#39;</span>
+
+<span class="nb">--</span><span class="c"> If you are using reputation preprocessor set these</span>
+<span class="c">WHITE_LIST_PATH = &#39;</span><span class="nt">..</span><span class="c">/</span><span class="nt">..</span><span class="c">/intel&#39;</span>
+<span class="c">BLACK_LIST_PATH = &#39;</span><span class="nt">..</span><span class="c">/</span><span class="nt">..</span><span class="c">/intel&#39;</span>
+</code></pre></div>
+
+<h4>Setting HOME_NET &amp; EXTERNAL_NET</h4>
+<p>Next set the home net to your desired net from <code>snort.lua</code>. Especially if you have jail environment with networking, change it from:</p>
+<blockquote>
+<p><code>-- setup the network addresses you are protecting</code> <code>HOME_NET = 'any'</code></p>
+</blockquote>
+<p>To following:</p>
+<blockquote>
+<p><code>-- setup the network addresses you are protecting</code> <code>HOME_NET = [[ 10.0.0.0/8 &lt;YOUR_PUBLIC_IP&gt; ]]</code></p>
+</blockquote>
+<h5>ips Module</h5>
+<p>The inclusion of Snort rules files (.rules) occurs within the ips module. Using the snort.lua copied from the Snort rules tarball, the inclusion of the rules is already configured. As a result, the changes to the ips module are minimal and involves enabling decoder and inspector alerts with the option --enable_built_rules, and explicitly defining the ips policy to tap mode. The ips policy governs Snort’s operational mode (tap, inline, and inline-test). Edit in Snort Lua configuration files. Change following from</p>
+<div class="highlight"><pre><span></span><code><span class="n">ips = { -- use this to enable decoder and inspector alerts --enable_builtin_rules = true, </span>
+<span class="n">    -- use include for rules files; be sure to set your path -- note that rules files can include other rules files --include = &#39;snort3_community.rules&#39; </span>
+<span class="n">    -- The following include syntax is only valid for BUILD_243 (13-FEB-2018) and later </span>
+<span class="n">    -- RULE_PATH is typically set in snort_defaults.lua rules = [[ include $RULE_PATH/snort3-app-detect.rules include $RULE_PATH/snort3-browser-chrome.rules ..... </span>
+<span class="n">    --include $RULE_PATH/snort3-sql.rules include $RULE_PATH/snort3-x11.rules ]] }</span>
+</code></pre></div>
+
+<p>To the following:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ips = { mode = tap, </span>
+<span class="n">-- use this to enable decoder and inspector alerts enable_builtin_rules = true, </span>
+<span class="n">-- use include for rules files; be sure to set your path </span>
+<span class="n">-- note that rules files can include other rules files </span>
+<span class="n">--include = &#39;snort3_community.rules&#39; </span>
+<span class="n">-- The following include syntax is only valid for BUILD_243 (13-FEB-2018) and later </span>
+<span class="n">-- RULE_PATH is typically set in snort_defaults.lua rules = [[ include $RULE_PATH/snort3-app-detect.rules include $RULE_PATH/snort3-browser-chrome.rules ..... include $RULE_PATH/snort3-sql.rules include $RULE_PATH/snort3-x11.rules ]] </span>
+<span class="n">}</span>
+</code></pre></div>
+
+<h4>reputation Inspector</h4>
+<p>The reputation inspector is disabled (commented) by default. Uncomment its section and change the values of the <code>--blacklist</code> and <code>--whitelist</code> variables to point to the paths IP address lists.</p>
+<p>Change from:</p>
+<div class="highlight"><pre><span></span><code><span class="o">--</span>[[<span class="w"> </span><span class="nv">reputation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>{<span class="w"> </span>
+<span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="nv">one</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">both</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">these</span>,<span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nv">uncomment</span><span class="w"> </span><span class="nv">reputation</span><span class="w"> </span>
+<span class="w">    </span><span class="o">--</span><span class="nv">blacklist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;blacklist file name with ip lists&#39;</span><span class="w"> </span>
+<span class="w">    </span><span class="o">--</span><span class="nv">whitelist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;whitelist file name with ip lists&#39;</span><span class="w"> </span>}<span class="w"> </span><span class="o">--</span>
+]]
+</code></pre></div>
+
+<p>Change to:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">reputation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>{<span class="w"> </span>
+<span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="nv">one</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">both</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">these</span>,<span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nv">uncomment</span><span class="w"> </span><span class="nv">reputation</span><span class="w"> </span>
+<span class="w">    </span><span class="nv">blacklist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">BLACK_LIST_PATH</span><span class="w"> </span>..<span class="w"> </span><span class="s1">&#39;/ip-blacklist&#39;</span>,<span class="w"> </span>
+<span class="w">    </span><span class="nv">whitelist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">WHITE_LIST_PATH</span><span class="w"> </span>..<span class="w"> </span><span class="s1">&#39;/ip-whitelist&#39;</span><span class="w"> </span>}
+</code></pre></div>
+
+<h4>file_id &amp; file_log Inspectors</h4>
+<p>This allows Snort to identify the type of a file traversing a network stream via the file magic headers. The file_id inspector supports HTTP, SMTP, IMAP, POP3, FTP, and SMB protocols. Taking advantage of the file_id inspector involves:</p>
+<ul>
+<li>Including the file magic rules. This step is completed in the default form of the inspector.</li>
+<li>Configuring the inspector and define the policy.</li>
+<li>Enabling the inspector logging to generate file events.</li>
+</ul>
+<p>The default configuration of the file_id inspector is expanded as follows:</p>
+<div class="highlight"><pre><span></span><code>file_id = { file_rules = file_magic }
+</code></pre></div>
+
+<p>Leave it as it is.</p>
+<p>Next configuration will be enabling event loggging for the inspector. This is accomplished with the file_log inspector at the end of the configuration file. This inspector has two Boolean options that allow logging of packet and system time of file events.</p>
+<div class="highlight"><pre><span></span><code>file_log = { log_pkt_time = true, log_sys_time = false }
+</code></pre></div>
+
+<h4>data_log Inspector</h4>
+<p>The data_log plugin is available via the extra plugins installed in an earlier step. The data_log is a passive inspector plugin that does not alter data flowing through Snort, instead, it allows for logging additional network data it is subscribed to within Snort 3 processing workflow. The inspector can be used to log HTTP request or response headers. Recall in Snort 2.X this was possible using the log_uri and log_hostname configuration options of the http_inspect preprocessor. These two options are no long part of Snort 3 http_inspect inspector, and the data_log inspector allows for capturing additional data. The captured data is stored into the log file data.log within Snort’s configured logging directory. In order to enable the data_log inspector, the inspector must be defined in snort.lua. The below example configuration will log both HTTP request headers into the data_log file and limit the size of the log file to 100MB before a new log file is generated.</p>
+<div class="highlight"><pre><span></span><code>data_log = { key = &#39;http_request_header_event&#39;, limit = 100 }
+</code></pre></div>
+
+<h4>logger Module</h4>
+<p>There are various logger modules available in Snort 3 either natively or via the extra plugins. Loggers are disabled (commented) by default. For this guide, the alert_fast logger will be used. Enabling this logger is accomplished by uncommenting its section and configuring it to allow logging to a file. By default Snort uses /var/log/snort for saving log files. This can also be specified at run time using the -l flag. Change from:</p>
+<div class="highlight"><pre><span></span><code>--alert_fast = { } 
+</code></pre></div>
+
+<p>Change to:</p>
+<div class="highlight"><pre><span></span><code>alert_fast = { file = true } 
+</code></pre></div>
+
+<p>After the configuration is completed, create the log directory for Snort as mentioned earlier.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># mkdir -p /var/log/snort</span>
+</code></pre></div>
+
+<h3>Running against an interface</h3>
+<p>Snort can be run against a listening interface via the -i flag while specifying the capture network interface. <code># /usr/local/snort/bin/snort -c /usr/local/snort/etc/snort/snort.lua -i vtnet0 -l /var/log/snort --plugin-path /usr/local/snort/extra -k none</code></p>
+<h2>REFERENCES</h2>
+<p><a href="https://snort-org-site.s3.amazonaws.com/production/document_files/files/000/000/176/original/Snort_3_on_FreeBSD_11.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAIXACIED2SPMSC7GA%2F20200907%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20200907T142014Z&amp;X-Amz-Expires=172800&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=fa2556c234e7ce74ba3169ec3134105435e34cfc2e41b499155ee3ae068da63c">Snort 3 on FreeBSD 11</a></p>
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

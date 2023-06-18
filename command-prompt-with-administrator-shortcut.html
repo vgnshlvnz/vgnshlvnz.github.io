@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>"Command Prompt with Administrator shortcut"</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+        <meta name="description" content="Command Prompt with Administrator privileges shortcut This quickstart shows you how to create a command prompt (cmd) with administrator privileges..." />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog</a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/content.html">content</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/command-prompt-with-administrator-shortcut.html" rel="bookmark"
+           title="Permalink to "Command Prompt with Administrator shortcut"">"Command Prompt with Administrator shortcut"</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-01-23T00:00:00+00:00">
+                Published: Mon 23 January 2017
+        </abbr>
+
+<p>In <a href="/category/content.html">content</a>.</p>
+
+</footer><!-- /.post-info -->      <h1>Command Prompt with Administrator privileges shortcut</h1>
+<p>This quickstart shows you how to create a command prompt (cmd) with administrator privileges shortcut in your desktop.</p>
+<p>To create a shortcut, on your desktop, <code>right click</code> then, select <code>new</code>. It show expand to another view with bunch of options. Select <code>Shortcut</code>.</p>
+<p>You will get a window asking you to locate the file. Here, you'd need to locate Windows Powershell . Below table is the location of Windows Powershell for 32bit &amp; 64bit.</p>
+<p><strong>Powershell Executables File System Locations on 64-bit Windows</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32-bit (x86) PowerShell executable</td>
+<td>%SystemRoot%\SysWOW64\WindowsPowerShell\v1.0\powershell.exe</td>
+</tr>
+<tr>
+<td>64-bit (x64) Powershell executable</td>
+<td>%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Powershell Executables File System Locations on 32-bit Windows</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32-bit (x86) PowerShell executable</td>
+<td>%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe</td>
+</tr>
+</tbody>
+</table>
+<p>You can navigate to the directories mentioned above by copy pasting the location on windows file explorer.</p>
+<p>Once you have copy pasted the location of the file in the box, click <code>Next</code> . It will ask you to insert a name for the shortcut you're about to create. Give it a name. You will see newly created shortcut in your desktop. Now, right click on the shortcut you have created earlier and select <code>Properties</code>.</p>
+<p>You will get a windows with bunch of tabs such as <code>General</code>, <code>Shortcut</code> etc. In <code>Shortcut</code>, you will see <code>Target</code>. In <code>Target</code> box, after the <code>powershell.exe</code> paste following code <code>-Command "Start-Process cmd -Verb RunAs"</code></p>
+<p>It should look like this: <code>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "Start-Process cmd -Verb RunAs"</code></p>
+<p>Click on <code>Apply</code> and <code>OK</code> . You're done. When you double click on the shortcut , you will get Command Prompt with Administrator Privileges.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
