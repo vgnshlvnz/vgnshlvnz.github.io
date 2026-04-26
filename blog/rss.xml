@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+<title>Blog</title>
+<link>http://localhost:8000/</link>
+<description>Here's where you can find my own writings.</description>
+<image>
+  <url></url>
+  <title>Blog</title>
+  <link>http://localhost:8000/</link>
+</image>
+
+<item>
+<title>My adventure with Claude Code</title>
+<link>http://localhost:8000/blog/Claude-Code/</link>
+<guid>http://localhost:8000/blog/Claude-Code/</guid>
+<description>
+<![CDATA[
+<p>
+manpageblog I have been used Claude Code for quite some time now. Like before openclaw? I used to have $100 plan back then. Models back then were quite 'dumb' however they tend to get harness like work done properly. Eversince Claude subscription was used with OpenClaw, Anthropic had to crack down on addtional, 'dumb' usage and charge them separately. While this move is welcomed, people should prefer using their opensource models hosted elsewhere because it obviously hurts other users relying on the platform. So far I have done countless number of applications with Claude Code and it is not about marketablity of the product rather the joy of using it for a long term. First of all, you don't own the code so you wouldn't know what is exactly happening under the hood. Even if you have all figured out, touching one end of the product will have ripple effects&nbsp;<a href="http://localhost:8000/blog/Claude-Code/">...</a>
+</p>
+<p><a href="http://localhost:8000/blog/Claude-Code/">Read More</a></p>
+]]>
+</description>
+<pubDate>Mon, 27 Apr 2026 00:00:00 +0000</pubDate>
+</item>
+
+
+</channel>
+</rss>

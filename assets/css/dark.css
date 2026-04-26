@@ -1,0 +1,9 @@
+/* Theme: Dark */
+:root {
+    --main-text-color: #d3d3d3;
+    --main-bg-color: #000;
+    --links-color: #d3d3d3;
+}
+
+a:link, a:visited,
+a:hover, a:active { text-decoration: underline dotted !important; }

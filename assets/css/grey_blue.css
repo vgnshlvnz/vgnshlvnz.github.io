@@ -1,0 +1,9 @@
+/* Theme: Grey Blue */
+:root {
+    --main-text-color: #6082b6;
+    --main-bg-color: #3d3d3d;
+    --links-color: #6082b6;
+}
+
+a:link, a:visited,
+a:hover, a:active { text-decoration: underline dotted !important; }
