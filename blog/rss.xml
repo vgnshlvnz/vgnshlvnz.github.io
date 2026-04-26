@@ -12,6 +12,20 @@
 </image>
 
 <item>
+<title>Howto Setup your own blog in Github with custom domain</title>
+<link>http://localhost:8000/blog/Howto-setup-your-own-blog/</link>
+<guid>http://localhost:8000/blog/Howto-setup-your-own-blog/</guid>
+<description>
+<![CDATA[
+<p>
+For this purpose I have picked Github because of several things. First of all is that it renders markdown files better than any competitor out there. Besides that, they allow seamless integration of custom domain to Github Pages. Basically there are many ways of hosting one's website. You could choose bloated WordPress or go for something easy to maintain and recyclable. Make sure you have cloned Manpageblog from Github. Before you set up anything else, make sure you have created a repository in Github. Follow the instructions in the Github page, and set up the site. Make sure to edit blog.conf to make changes as you'd wish. Now commit the code to the repository you have created earlier. Next, make sure your custom domain is tied to cloudflare free tier platform because it allows easy DNS management like nobody else in this planet. Once you have all that prepared, link&nbsp;<a href="http://localhost:8000/blog/Howto-setup-your-own-blog/">...</a>
+</p>
+<p><a href="http://localhost:8000/blog/Howto-setup-your-own-blog/">Read More</a></p>
+]]>
+</description>
+<pubDate>Mon, 27 Apr 2026 00:00:00 +0000</pubDate>
+</item>
+<item>
 <title>My adventure with Claude Code</title>
 <link>http://localhost:8000/blog/Claude-Code/</link>
 <guid>http://localhost:8000/blog/Claude-Code/</guid>
